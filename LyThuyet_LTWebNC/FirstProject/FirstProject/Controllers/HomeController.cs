@@ -23,7 +23,7 @@ public class HomeController : Controller
         DateTime hour = DateTime.Now;
         String viewModel = hour.ToString();
         return View("MyView", viewModel);
-        //fsdahjggfajajgdsghjafdsasgfjdh
+        //fsdahjggfajajgdsghjafdsasgfjdh PHANCODETEST1
     }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
