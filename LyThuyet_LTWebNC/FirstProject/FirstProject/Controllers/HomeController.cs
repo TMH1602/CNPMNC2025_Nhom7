@@ -23,7 +23,11 @@ public class HomeController : Controller
         DateTime hour = DateTime.Now;
         String viewModel = hour.ToString();
         return View("MyView", viewModel);
+<<<<<<< Updated upstream
         //fsdahjggfajajgdsghjafdsasgfjdh
+=======
+        //rsadhjfasghfahjgadsfghjadsf
+>>>>>>> Stashed changes
     }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
