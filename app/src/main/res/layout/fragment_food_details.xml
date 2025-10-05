@@ -52,5 +52,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Xem giỏ hàng" />
+        <Button
+            android:id="@+id/btnAddToCompare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thêm vào so sánh"
+            android:layout_marginTop="8dp"
+            />
+        <Button
+            android:id="@+id/btnViewComparison"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xem so sánh"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"  />
     </LinearLayout>
 </ScrollView>
