@@ -1,0 +1,13 @@
+/* Custom styles for FastFoodCompareApp */
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #fff8f0; }
+.dish-card { border-radius: 12px; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.08); background: white; }
+.dish-image { height:180px; object-fit:cover; width:100%; display:block; }
+.badge-price { font-weight:700; font-size:1.05rem; }
+.compare-row { display:flex; gap:1rem; flex-wrap:wrap; }
+.dish-card .body { padding:12px; }
+.highlight { border: 2px solid #ff6b35; }
+.metric { font-size:0.95rem; color:#555; }
+.controls { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
+@media (max-width:768px) {
+    .compare-row { flex-direction:column; }
+}

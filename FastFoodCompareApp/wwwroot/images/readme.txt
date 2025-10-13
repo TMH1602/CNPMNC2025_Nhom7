@@ -1,0 +1,1 @@
+Place your dish images here: burger.jpg, friedchicken.jpg, fries.jpg, salad.jpg, pizza.jpg

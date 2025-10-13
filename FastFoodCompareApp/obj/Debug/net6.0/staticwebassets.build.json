@@ -1,0 +1,846 @@
+{
+  "Version": 1,
+  "Hash": "cKszKJigkumSruqWdYYv5+3qXr0KUdqjgj6ehTRhkCY=",
+  "Source": "FastFoodCompareApp",
+  "BasePath": "_content/FastFoodCompareApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "FastFoodCompareApp\\wwwroot",
+      "Source": "FastFoodCompareApp",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\css\\site.css",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "css/site#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "cfi6fhdf20",
+      "Integrity": "OHqKz4CyekX6LI6iZo5T3FucHMDiWjM4CovU6yRqRrA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\images\\burger.jpg",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "images/burger#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yosdg72a6h",
+      "Integrity": "fgGLzmllGz3avs2LF+FEGsIkSx9icEufg7uy6Bidbis=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\burger.jpg"
+    },
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\images\\friedchicken.jpg",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "images/friedchicken#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "o6ol3hn4kb",
+      "Integrity": "UFsb1zR9i3vH9+lx2aAYpb53FJqeqhXPXR6GNjFye3Y=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\friedchicken.jpg"
+    },
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\images\\fries.jpg",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "images/fries#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "3mnz1n8q84",
+      "Integrity": "S7/aiquDT/EQps/0+OGbodTrV0fjZX5idJvHCBULQPw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\fries.jpg"
+    },
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\images\\pizza.jpg",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "images/pizza#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "2vhx7f4sw2",
+      "Integrity": "rhsuPf1jiWVA+vNQE//xj8Q06AKTA4XMOMD9ezDCZ4A=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\pizza.jpg"
+    },
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\images\\placeholder.png",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "images/placeholder#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5ipweew5fc",
+      "Integrity": "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\placeholder.png"
+    },
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\images\\readme.txt",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "images/readme#[.{fingerprint}]?.txt",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "cpdaj7s9v6",
+      "Integrity": "4NJlnjDn8HAL66UxUsA1EhRGxYGD0TDVnCIRGGuRbtk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\readme.txt"
+    },
+    {
+      "Identity": "D:\\FastFoodCompareApp\\wwwroot\\images\\salad.jpg",
+      "SourceId": "FastFoodCompareApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FastFoodCompareApp\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareApp",
+      "RelativePath": "images/salad#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "xgznk9qlim",
+      "Integrity": "UUvO7LtVKKB5YZWQfosUcPcCVMDbH3fv/ITV+AaYAwA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\salad.jpg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "css/site.cfi6fhdf20.css",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "686"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OHqKz4CyekX6LI6iZo5T3FucHMDiWjM4CovU6yRqRrA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 05:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "cfi6fhdf20"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-OHqKz4CyekX6LI6iZo5T3FucHMDiWjM4CovU6yRqRrA="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.css",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "686"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OHqKz4CyekX6LI6iZo5T3FucHMDiWjM4CovU6yRqRrA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 05:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-OHqKz4CyekX6LI6iZo5T3FucHMDiWjM4CovU6yRqRrA="
+        }
+      ]
+    },
+    {
+      "Route": "images/burger.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\burger.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "132004"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fgGLzmllGz3avs2LF+FEGsIkSx9icEufg7uy6Bidbis=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:49:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-fgGLzmllGz3avs2LF+FEGsIkSx9icEufg7uy6Bidbis="
+        }
+      ]
+    },
+    {
+      "Route": "images/burger.yosdg72a6h.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\burger.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "132004"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fgGLzmllGz3avs2LF+FEGsIkSx9icEufg7uy6Bidbis=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:49:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yosdg72a6h"
+        },
+        {
+          "Name": "label",
+          "Value": "images/burger.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fgGLzmllGz3avs2LF+FEGsIkSx9icEufg7uy6Bidbis="
+        }
+      ]
+    },
+    {
+      "Route": "images/friedchicken.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\friedchicken.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "124258"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UFsb1zR9i3vH9+lx2aAYpb53FJqeqhXPXR6GNjFye3Y=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:50:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-UFsb1zR9i3vH9+lx2aAYpb53FJqeqhXPXR6GNjFye3Y="
+        }
+      ]
+    },
+    {
+      "Route": "images/friedchicken.o6ol3hn4kb.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\friedchicken.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "124258"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UFsb1zR9i3vH9+lx2aAYpb53FJqeqhXPXR6GNjFye3Y=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:50:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "o6ol3hn4kb"
+        },
+        {
+          "Name": "label",
+          "Value": "images/friedchicken.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-UFsb1zR9i3vH9+lx2aAYpb53FJqeqhXPXR6GNjFye3Y="
+        }
+      ]
+    },
+    {
+      "Route": "images/fries.3mnz1n8q84.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\fries.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "207366"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"S7/aiquDT/EQps/0+OGbodTrV0fjZX5idJvHCBULQPw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:50:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3mnz1n8q84"
+        },
+        {
+          "Name": "label",
+          "Value": "images/fries.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-S7/aiquDT/EQps/0+OGbodTrV0fjZX5idJvHCBULQPw="
+        }
+      ]
+    },
+    {
+      "Route": "images/fries.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\fries.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "207366"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"S7/aiquDT/EQps/0+OGbodTrV0fjZX5idJvHCBULQPw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:50:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-S7/aiquDT/EQps/0+OGbodTrV0fjZX5idJvHCBULQPw="
+        }
+      ]
+    },
+    {
+      "Route": "images/pizza.2vhx7f4sw2.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\pizza.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "25670"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rhsuPf1jiWVA+vNQE//xj8Q06AKTA4XMOMD9ezDCZ4A=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:51:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "2vhx7f4sw2"
+        },
+        {
+          "Name": "label",
+          "Value": "images/pizza.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-rhsuPf1jiWVA+vNQE//xj8Q06AKTA4XMOMD9ezDCZ4A="
+        }
+      ]
+    },
+    {
+      "Route": "images/pizza.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\pizza.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "25670"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rhsuPf1jiWVA+vNQE//xj8Q06AKTA4XMOMD9ezDCZ4A=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:51:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-rhsuPf1jiWVA+vNQE//xj8Q06AKTA4XMOMD9ezDCZ4A="
+        }
+      ]
+    },
+    {
+      "Route": "images/placeholder.5ipweew5fc.png",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\placeholder.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "0"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 05:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5ipweew5fc"
+        },
+        {
+          "Name": "label",
+          "Value": "images/placeholder.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="
+        }
+      ]
+    },
+    {
+      "Route": "images/placeholder.png",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\placeholder.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "0"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 05:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="
+        }
+      ]
+    },
+    {
+      "Route": "images/readme.cpdaj7s9v6.txt",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\readme.txt",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "90"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/plain"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4NJlnjDn8HAL66UxUsA1EhRGxYGD0TDVnCIRGGuRbtk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 05:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "cpdaj7s9v6"
+        },
+        {
+          "Name": "label",
+          "Value": "images/readme.txt"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-4NJlnjDn8HAL66UxUsA1EhRGxYGD0TDVnCIRGGuRbtk="
+        }
+      ]
+    },
+    {
+      "Route": "images/readme.txt",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\readme.txt",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "90"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/plain"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4NJlnjDn8HAL66UxUsA1EhRGxYGD0TDVnCIRGGuRbtk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 05:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4NJlnjDn8HAL66UxUsA1EhRGxYGD0TDVnCIRGGuRbtk="
+        }
+      ]
+    },
+    {
+      "Route": "images/salad.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\salad.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "247377"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UUvO7LtVKKB5YZWQfosUcPcCVMDbH3fv/ITV+AaYAwA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:51:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-UUvO7LtVKKB5YZWQfosUcPcCVMDbH3fv/ITV+AaYAwA="
+        }
+      ]
+    },
+    {
+      "Route": "images/salad.xgznk9qlim.jpg",
+      "AssetFile": "D:\\FastFoodCompareApp\\wwwroot\\images\\salad.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "247377"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UUvO7LtVKKB5YZWQfosUcPcCVMDbH3fv/ITV+AaYAwA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 12:51:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "xgznk9qlim"
+        },
+        {
+          "Name": "label",
+          "Value": "images/salad.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-UUvO7LtVKKB5YZWQfosUcPcCVMDbH3fv/ITV+AaYAwA="
+        }
+      ]
+    }
+  ]
+}
