@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApplication1</name>
+    </assembly>
+    <members>
+        <member name="T:MyFastFoodApi.Controllers.MenuController">
+            <summary>
+            Controller dùng để quản lý các món ăn/sản phẩm trong thực đơn, sử dụng Entity Framework Core.
+            </summary>
+        </member>
+        <member name="M:MyFastFoodApi.Controllers.MenuController.GetProductById(System.Int32)">
+            <param name="id">ID của món ăn (ví dụ: 1).</param>
+            <returns>Thông tin Product hoặc HTTP 404 Not Found.</returns>
+        </member>
+        <member name="M:MyFastFoodApi.Controllers.MenuController.AddProduct(WebApplication1.Models.Product)">
+            <param name="newProduct">Đối tượng Product mới cần thêm (Không cần điền Id).</param>
+            <returns>Món ăn vừa được tạo cùng với ID mới và HTTP 201 Created.</returns>
+        </member>
+        <member name="M:MyFastFoodApi.Controllers.MenuController.UpdateProduct(System.Int32,WebApplication1.Models.Product)">
+            <param name="id">ID của món ăn cần sửa (ví dụ: 1).</param>
+            <param name="updatedProduct">Đối tượng Product với thông tin mới.</param>
+            <returns>HTTP 204 No Content nếu thành công hoặc HTTP 404 Not Found.</returns>
+        </member>
+        <member name="M:MyFastFoodApi.Controllers.MenuController.DeleteProduct(System.Int32)">
+            <param name="id">ID của món ăn cần xóa (ví dụ: 1).</param>
+            <returns>HTTP 204 No Content nếu thành công hoặc HTTP 404 Not Found.</returns>
+        </member>
+        <member name="T:WebApplication1.Controllers.RegisterController">
+            <summary>
+            Controller dùng để xử lý các yêu cầu đăng ký người dùng mới.
+            </summary>
+        </member>
+        <member name="T:WebApplication1.Controllers.RegisterController.RegisterRequest">
+            <summary>
+            Model dữ liệu được gửi lên trong yêu cầu đăng ký.
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Controllers.RegisterController.RegisterRequest.Email">
+            <summary>
+            Tên người dùng hoặc Email (phải là duy nhất).
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Controllers.RegisterController.RegisterRequest.Password">
+            <summary>
+            Mật khẩu (yêu cầu độ dài tối thiểu).
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Controllers.RegisterController.RegisterRequest.ConfirmPassword">
+            <summary>
+            Xác nhận lại mật khẩu.
+            </summary>
+        </member>
+        <member name="T:WebApplication1.Controllers.RegisterController.RegisterResponse">
+            <summary>
+            Model dữ liệu trả về sau khi xử lý đăng ký.
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Controllers.RegisterController.RegisterResponse.IsSuccess">
+            <summary>
+            Trạng thái thành công của yêu cầu.
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Controllers.RegisterController.RegisterResponse.Message">
+            <summary>
+            Thông báo chi tiết về kết quả.
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Controllers.RegisterController.RegisterResponse.UserId">
+            <summary>
+            ID người dùng mới được tạo.
+            </summary>
+        </member>
+        <member name="M:WebApplication1.Controllers.RegisterController.Register(WebApplication1.Controllers.RegisterController.RegisterRequest)">
+            <param name="request">Thông tin đăng ký (Email, Password, ConfirmPassword).</param>
+            <returns>HTTP 201 Created nếu thành công, hoặc HTTP 400 Bad Request nếu thất bại.</returns>
+        </member>
+        <member name="T:WebApplication1.Data.ApplicationDbContext">
+            <summary>
+            Context cho Entity Framework Core, đại diện cho session kết nối với Database.
+            </summary>
+        </member>
+        <member name="T:WebApplication1.Data.DbInitializer">
+            <summary>
+            Chứa logic để khởi tạo dữ liệu mẫu (seed data) cho Database.
+            </summary>
+        </member>
+        <member name="T:WebApplication1.Models.User">
+            <summary>
+            Entity đại diện cho một tài khoản người dùng trong cơ sở dữ liệu.
+            </summary>
+        </member>
+        <member name="T:WebApplication1.Models.Product">
+            <summary>
+            Model đại diện cho một món ăn/sản phẩm trong cơ sở dữ liệu.
+            </summary>
+        </member>
+    </members>
+</doc>
