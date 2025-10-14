@@ -21,24 +21,12 @@
       "PackagePath": "staticwebassets\\images\\burger.jpg"
     },
     {
-      "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\friedchicken.jpg",
-      "PackagePath": "staticwebassets\\images\\friedchicken.jpg"
-    },
-    {
       "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\fries.jpg",
       "PackagePath": "staticwebassets\\images\\fries.jpg"
     },
     {
       "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
       "PackagePath": "staticwebassets\\images\\pizza.jpg"
-    },
-    {
-      "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\placeholder-ad.jpg",
-      "PackagePath": "staticwebassets\\images\\placeholder-ad.jpg"
-    },
-    {
-      "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\placeholder.png",
-      "PackagePath": "staticwebassets\\images\\placeholder.png"
     },
     {
       "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\salad.jpg",
