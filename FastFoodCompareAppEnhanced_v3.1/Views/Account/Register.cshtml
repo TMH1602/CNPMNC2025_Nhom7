@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="auth-card">
+    <div class="auth-hero">
+        <h2>Tạo tài khoản mới</h2>
+        <p class="small-muted">Nhanh chóng, đơn giản và miễn phí</p>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <form method="post" asp-action="Register">
+        <div class="mb-3">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" class="form-control" name="fullname" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tên đăng nhập</label>
+            <input type="text" class="form-control" name="username" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mật khẩu</label>
+            <input type="password" class="form-control" name="password" required />
+        </div>
+        <button type="submit" class="btn btn-gradient w-100">Đăng ký</button>
+    </form>
+
+    <div class="mt-3 text-center">
+        <span>Đã có tài khoản? <a href="@Url.Action("Login","Account")" class="signup-link">Đăng nhập</a></span>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+@model IEnumerable<FastFoodCompareAppEnhanced_v3_1.Models.Dish>
+
+<h2 class="mb-3">Thực đơn - So sánh món ăn nhanh</h2>
+
+<div class="mb-3">
+    <img src="/images/banner.jpg" onerror="this.src='/images/placeholder-ad.jpg'" class="w-100 ad-banner" alt="Ad banner" />
+</div>
+
+<div class="mb-3 d-flex flex-wrap gap-3 align-items-center">
+    <span class="me-3"><strong>Giá trung bình:</strong> @ViewBag.AvgPrice.ToString("C")</span>
+    <span class="me-3"><strong>Calories trung bình:</strong> @((double)ViewBag.AvgCalories).ToString("N0") kcal</span>
+    @if(ViewBag.BestValue != null) {
+        <span class="me-3 badge bg-success">Best value: @ViewBag.BestValue.Name</span>
+    }
+    @if(ViewBag.HighestRating != null) {
+        <span class="me-3 badge bg-warning text-dark">Top rated: @ViewBag.HighestRating.Name (@ViewBag.HighestRating.Rating)</span>
+    }
+</div>
+
+<form id="compareForm" method="get" action="@Url.Action("Compare","Menu")">
+    <div class="row compare-row">
+        @foreach(var d in Model)
+        {
+            var ratio = d.Price / (d.Calories == 0 ? 1 : d.Calories);
+            <div class="col-md-4 col-lg-3 mb-3">
+                <div class="dish-card">
+                    <img src="@d.ImageUrl" alt="@d.Name" class="dish-image" onerror="this.src='/images/placeholder.png'"/>
+                    <div class="body">
+                        <h5>@d.Name <span class="badge bg-light text-dark badge-price">@d.Price.ToString("C")</span></h5>
+                        <p class="metric">Calories: <strong>@d.Calories</strong> kcal</p>
+                        <p class="metric">Rating: <strong>@d.Rating</strong>/5</p>
+                        <p class="metric">Value (price/cal): @ratio.ToString("N4")</p>
+
+                        <div class="controls mt-2">
+                            <input type="checkbox" name="ids" value="@d.Id" id="c@d.Id" />
+                            <label for="c@d.Id" class="mb-0"> Chọn để so sánh</label>
+
+                            <a href="@Url.Action("Compare","Menu", new { ids = d.Id })" class="btn btn-sm btn-outline-primary ms-auto">So sánh đơn</a>
+
+                            <form asp-controller="Cart" asp-action="Add" method="post" class="ms-2 d-inline">
+                                <input type="hidden" name="id" value="@d.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">🛒 Thêm vào giỏ</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-gradient mt-3">So sánh các món đã chọn</button>
+</form>
+
+<script>
+    // assemble ids into comma-separated list for Compare action
+    document.getElementById('compareForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const checks = Array.from(document.querySelectorAll('input[name="ids"]:checked'));
+        if (checks.length < 2) {
+            alert('Vui lòng chọn ít nhất 2 món để so sánh.');
+            return;
+        }
+        const ids = checks.map(c => c.value).join(',');
+        window.location = '@Url.Action("Compare","Menu")' + '?ids=' + ids;
+    });
+</script>

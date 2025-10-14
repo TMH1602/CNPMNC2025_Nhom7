@@ -1,0 +1,73 @@
+@model List<FastFoodCompareAppEnhanced_v3_1.Models.CartItem>
+
+<h2>🛒 Giỏ hàng của bạn</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info mt-4">Giỏ hàng trống. Hãy thêm món ăn từ menu!</div>
+}
+else
+{
+    <table class="table table-bordered mt-3">
+        <thead class="table-light">
+            <tr>
+                <th>Hình ảnh</th>
+                <th>Tên món</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.ImageUrl" width="80" onerror="this.src='/images/placeholder.png'"/></td>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <div class="cart-qty">
+                            <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@item.DishId" />
+                                <button type="button" class="qty-btn btn-decrease" data-id="@item.DishId">−</button>
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control qty-input d-inline" style="width:80px; display:inline-block;" />
+                                <button type="button" class="qty-btn btn-increase" data-id="@item.DishId">+</button>
+                                <button type="submit" class="btn btn-sm btn-primary ms-2">Cập nhật</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td>@item.Total.ToString("C")</td>
+                    <td><a href="@Url.Action("Remove","Cart", new { id=item.DishId })" class="btn btn-sm btn-danger">Xóa</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-end">
+        <h4>Tổng cộng: @ViewBag.Total.ToString("C")</h4>
+        <a href="@Url.Action("Clear","Cart")" class="btn btn-outline-danger mt-2">Xóa toàn bộ</a>
+        <a href="@Url.Action("Index","Menu")" class="btn btn-primary mt-2">Tiếp tục mua hàng</a>
+    </div>
+}
+
+@section Scripts {
+<script>
+document.querySelectorAll('.btn-decrease').forEach(btn=>{
+    btn.addEventListener('click', ()=> {
+        const id = btn.dataset.id;
+        const input = btn.parentElement.querySelector('input[name="quantity"]');
+        let v = parseInt(input.value || '1');
+        if (v>1) input.value = v-1;
+    });
+});
+document.querySelectorAll('.btn-increase').forEach(btn=>{
+    btn.addEventListener('click', ()=> {
+        const id = btn.dataset.id;
+        const input = btn.parentElement.querySelector('input[name="quantity"]');
+        let v = parseInt(input.value || '1');
+        input.value = v+1;
+    });
+});
+</script>
+}
