@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "H/5SnjzL2mI=",
+  "dgSpecHash": "YvdBf7S45O4=",
   "success": true,
-  "projectFilePath": "D:\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
+  "projectFilePath": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LENOVO\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.0\\microsoft.entityframeworkcore.6.0.0.nupkg.sha512",
     "C:\\Users\\LENOVO\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.0\\microsoft.entityframeworkcore.abstractions.6.0.0.nupkg.sha512",

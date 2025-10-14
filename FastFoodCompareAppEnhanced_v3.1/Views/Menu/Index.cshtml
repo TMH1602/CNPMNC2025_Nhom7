@@ -22,7 +22,7 @@
         @foreach(var d in Model)
         {
             var ratio = d.Price / (d.Calories == 0 ? 1 : d.Calories);
-            <div class="col-md-4 col-lg-3 mb-3">
+            <div class="col-md-4 col-lg-4 mb-4">
                 <div class="dish-card">
                     <img src="@d.ImageUrl" alt="@d.Name" class="dish-image" onerror="this.src='/images/placeholder.png'"/>
                     <div class="body">

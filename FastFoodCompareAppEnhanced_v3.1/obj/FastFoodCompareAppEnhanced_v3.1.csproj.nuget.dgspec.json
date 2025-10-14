@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj": {}
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj": {}
   },
   "projects": {
-    "D:\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
         "projectName": "FastFoodCompareAppEnhanced_v3.1",
-        "projectPath": "D:\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
         "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
-        "outputPath": "D:\\FastFoodCompareAppEnhanced_v3.1\\obj\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\FastFoodCompareAppEnhanced_v3.1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
