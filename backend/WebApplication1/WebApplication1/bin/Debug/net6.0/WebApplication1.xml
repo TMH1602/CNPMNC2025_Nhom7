@@ -14,12 +14,12 @@
             <returns>Thông tin Product hoặc HTTP 404 Not Found.</returns>
         </member>
         <member name="M:MyFastFoodApi.Controllers.MenuController.AddProduct(WebApplication1.Models.Product)">
-            <param name="newProduct">Đối tượng Product mới cần thêm (Không cần điền Id).</param>
+            <param name="newProduct">Đối tượng Product mới cần thêm (bao gồm ImageUrl, không cần Id).</param>
             <returns>Món ăn vừa được tạo cùng với ID mới và HTTP 201 Created.</returns>
         </member>
         <member name="M:MyFastFoodApi.Controllers.MenuController.UpdateProduct(System.Int32,WebApplication1.Models.Product)">
             <param name="id">ID của món ăn cần sửa (ví dụ: 1).</param>
-            <param name="updatedProduct">Đối tượng Product với thông tin mới.</param>
+            <param name="updatedProduct">Đối tượng Product với thông tin mới (bao gồm ImageUrl).</param>
             <returns>HTTP 204 No Content nếu thành công hoặc HTTP 404 Not Found.</returns>
         </member>
         <member name="M:MyFastFoodApi.Controllers.MenuController.DeleteProduct(System.Int32)">

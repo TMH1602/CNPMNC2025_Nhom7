@@ -893,6 +893,11 @@
             "maxLength": 50,
             "type": "string",
             "nullable": true
+          },
+          "imageUrl": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

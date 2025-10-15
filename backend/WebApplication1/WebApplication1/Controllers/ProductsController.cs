@@ -60,9 +60,10 @@ namespace MyFastFoodApi.Controllers
 
         // ====================================================================
         // ENDPOINT: THÊM MỚI (POST)
+        // Đã cập nhật để nhận ImageUrl qua JSON body
         // ====================================================================
 
-        /// <param name="newProduct">Đối tượng Product mới cần thêm (Không cần điền Id).</param>
+        /// <param name="newProduct">Đối tượng Product mới cần thêm (bao gồm ImageUrl, không cần Id).</param>
         /// <returns>Món ăn vừa được tạo cùng với ID mới và HTTP 201 Created.</returns>
         [HttpPost] // Route: /api/Menu
         [ProducesResponseType(typeof(Product), StatusCodes.Status201Created)]
@@ -82,16 +83,17 @@ namespace MyFastFoodApi.Controllers
             await _context.SaveChangesAsync();
             // Sau khi lưu thành công, EF Core tự động gán Id được sinh ra từ DB vào newProduct
 
-            // Trả về HTTP 201 Created 
+            // Trả về HTTP 201 Created 
             return CreatedAtAction(nameof(GetProductById), new { id = newProduct.Id }, newProduct);
         }
 
         // ====================================================================
         // ENDPOINT: CẬP NHẬT (PUT)
+        // Đã cập nhật để xử lý ImageUrl
         // ====================================================================
 
         /// <param name="id">ID của món ăn cần sửa (ví dụ: 1).</param>
-        /// <param name="updatedProduct">Đối tượng Product với thông tin mới.</param>
+        /// <param name="updatedProduct">Đối tượng Product với thông tin mới (bao gồm ImageUrl).</param>
         /// <returns>HTTP 204 No Content nếu thành công hoặc HTTP 404 Not Found.</returns>
         [HttpPut("{id}")] // Route: /api/Menu/{id}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -117,9 +119,8 @@ namespace MyFastFoodApi.Controllers
             existingProduct.Price = updatedProduct.Price;
             existingProduct.Description = updatedProduct.Description;
             existingProduct.Category = updatedProduct.Category;
-
-            // Đảm bảo Id trong body khớp với Id trong route
-            // (EF Core sẽ tự động biết phải UPDATE entity nào nhờ vào tracking)
+            // *** Cập nhật trường ImageUrl ***
+            existingProduct.ImageUrl = updatedProduct.ImageUrl;
 
             // 3. Lưu thay đổi vào Database
             await _context.SaveChangesAsync();

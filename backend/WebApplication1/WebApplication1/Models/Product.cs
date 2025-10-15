@@ -24,5 +24,8 @@ namespace WebApplication1.Models
 
         [MaxLength(50)]
         public string? Category { get; set; }
+
+        [MaxLength(300)] 
+        public string? ImageUrl { get; set; }
     }
 }

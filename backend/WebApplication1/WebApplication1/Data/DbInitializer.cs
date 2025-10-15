@@ -20,31 +20,152 @@ namespace WebApplication1.Data
                 {
                     var products = new Product[]
                     {
-                        new Product { Name = "Gà Rán Giòn Tan (1M)", Price = 59000m, Description = "Gà rán giòn tan, chuẩn vị. (1 Miếng)", Category = "Gà" },
-                        new Product { Name = "Combo Gà Vui Vẻ", Price = 99000m, Description = "2 Gà rán + 1 Khoai tây chiên cỡ vừa + 1 Nước ngọt.", Category = "Combo" },
-                        new Product { Name = "Burger Bò Phô Mai", Price = 75000m, Description = "Thịt bò Úc, phô mai tan chảy, sốt đặc biệt.", Category = "Burger" },
-                        new Product { Name = "Khoai Tây Chiên Lắc", Price = 35000m, Description = "Khoai tây chiên, lắc phô mai hoặc rong biển.", Category = "Món phụ" },
-                        new Product { Name = "Pepsi/Coca-Cola (L)", Price = 25000m, Description = "Nước ngọt cỡ lớn.", Category = "Đồ uống" },
-                        new Product { Name = "Kem Vani", Price = 20000m, Description = "Kem mát lạnh vị Vani.", Category = "Tráng miệng" },
-                        new Product { Name = "Salad Gà Nướng", Price = 85000m, Description = "Ức gà nướng, rau xanh tươi, sốt Caesar.", Category = "Salad" },
-                        new Product { Name = "Mì Ý Sốt Bò Bằm", Price = 110000m, Description = "Mì Ý chuẩn vị, sốt bò bằm đậm đà.", Category = "Mì Ý" },
-                        new Product { Name = "Cơm Gà Xối Mỡ", Price = 79000m, Description = "Cơm dẻo, gà xối mỡ giòn rụm.", Category = "Cơm" },
-                        new Product { Name = "Combo Gia Đình", Price = 250000m, Description = "4 Gà + 2 Burger + Khoai lớn + 4 Nước.", Category = "Combo" },
-                        new Product { Name = "Burger Cá Hồi", Price = 120000m, Description = "Thịt cá hồi áp chảo, rau xà lách tươi.", Category = "Burger" },
-                        new Product { Name = "Bánh Mì Kẹp Thịt", Price = 45000m, Description = "Bánh mì nướng giòn, nhân thịt heo/gà tùy chọn.", Category = "Bánh Mì" },
-                        new Product { Name = "Nước Cam Ép", Price = 30000m, Description = "Cam tươi 100%, không đường.", Category = "Đồ uống" },
-                        new Product { Name = "Gà Popcorn", Price = 45000m, Description = "Thịt gà viên chiên giòn, sốt chấm.", Category = "Gà" },
-                        new Product { Name = "Khoai Tây Nghiền", Price = 28000m, Description = "Khoai tây nghiền mịn, sốt gravy.", Category = "Món phụ" },
-                        new Product { Name = "Súp Nấm", Price = 40000m, Description = "Súp kem nấm hương thơm ngon.", Category = "Súp" },
-                        new Product { Name = "Pizza Hải Sản", Price = 180000m, Description = "Pizza cỡ vừa, tôm, mực, phô mai Mozzarella.", Category = "Pizza" },
-                        new Product { Name = "Trà Sữa Matcha", Price = 50000m, Description = "Trà sữa vị Matcha truyền thống.", Category = "Đồ uống" },
-                        new Product { Name = "Burger Phô Mai 2 Tầng", Price = 115000m, Description = "2 miếng thịt bò, 2 lớp phô mai dày.", Category = "Burger" },
-                        new Product { Name = "Phở Bò Tái", Price = 65000m, Description = "Phở truyền thống, thịt bò tái.", Category = "Khác" }
+                        new Product {
+                            Name = "Gà Rán Giòn Tan (1M)",
+                            Price = 59000m,
+                            Description = "Gà rán giòn tan, chuẩn vị. (1 Miếng)",
+                            Category = "Gà",
+                            ImageUrl = "https://res.cloudinary.com/du42rq1ki/image/upload/v1760536853/friedchicken_kv1wd3.jpg" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Combo Gà Vui Vẻ",
+                            Price = 99000m,
+                            Description = "2 Gà rán + 1 Khoai tây chiên cỡ vừa + 1 Nước ngọt.",
+                            Category = "Combo",
+                            ImageUrl = "https://res.cloudinary.com/du42rq1ki/image/upload/v1760536853/friedchicken_kv1wd3.jpg" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Burger Bò Phô Mai",
+                            Price = 75000m,
+                            Description = "Thịt bò Úc, phô mai tan chảy, sốt đặc biệt.",
+                            Category = "Burger",
+                            ImageUrl = "https://res.cloudinary.com/du42rq1ki/image/upload/v1760536853/burger_uwn0wn.jpg" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Khoai Tây Chiên Lắc",
+                            Price = 35000m,
+                            Description = "Khoai tây chiên, lắc phô mai hoặc rong biển.",
+                            Category = "Món phụ",
+                            ImageUrl = "https://res.cloudinary.com/du42rq1ki/image/upload/v1760536853/fries_ohsugr.jpg" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Pepsi/Coca-Cola (L)",
+                            Price = 25000m,
+                            Description = "Nước ngọt cỡ lớn.",
+                            Category = "Đồ uống",
+                            ImageUrl = "URL_CLOUDINARY_NUOC_NGOT" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Kem Vani",
+                            Price = 20000m,
+                            Description = "Kem mát lạnh vị Vani.",
+                            Category = "Tráng miệng",
+                            ImageUrl = "URL_CLOUDINARY_KEM_VANI" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Salad Gà Nướng",
+                            Price = 85000m,
+                            Description = "Ức gà nướng, rau xanh tươi, sốt Caesar.",
+                            Category = "Salad",
+                            ImageUrl = "https://res.cloudinary.com/du42rq1ki/image/upload/v1760536853/salad_yj8omu.jpg" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Mì Ý Sốt Bò Bằm",
+                            Price = 110000m,
+                            Description = "Mì Ý chuẩn vị, sốt bò bằm đậm đà.",
+                            Category = "Mì Ý",
+                            ImageUrl = "URL_CLOUDINARY_MI_Y" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Cơm Gà Xối Mỡ",
+                            Price = 79000m,
+                            Description = "Cơm dẻo, gà xối mỡ giòn rụm.",
+                            Category = "Cơm",
+                            ImageUrl = "URL_CLOUDINARY_COM_GA" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Combo Gia Đình",
+                            Price = 250000m,
+                            Description = "4 Gà + 2 Burger + Khoai lớn + 4 Nước.",
+                            Category = "Combo",
+                            ImageUrl = "URL_CLOUDINARY_COMBO_GIA_DINH" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Burger Cá Hồi",
+                            Price = 120000m,
+                            Description = "Thịt cá hồi áp chảo, rau xà lách tươi.",
+                            Category = "Burger",
+                            ImageUrl = "URL_CLOUDINARY_BURGER_CA_HOI" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Bánh Mì Kẹp Thịt",
+                            Price = 45000m,
+                            Description = "Bánh mì nướng giòn, nhân thịt heo/gà tùy chọn.",
+                            Category = "Bánh Mì",
+                            ImageUrl = "URL_CLOUDINARY_BANH_MI" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Nước Cam Ép",
+                            Price = 30000m,
+                            Description = "Cam tươi 100%, không đường.",
+                            Category = "Đồ uống",
+                            ImageUrl = "URL_CLOUDINARY_NUOC_CAM" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Gà Popcorn",
+                            Price = 45000m,
+                            Description = "Thịt gà viên chiên giòn, sốt chấm.",
+                            Category = "Gà",
+                            ImageUrl = "URL_CLOUDINARY_GA_POPCORN" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Khoai Tây Nghiền",
+                            Price = 28000m,
+                            Description = "Khoai tây nghiền mịn, sốt gravy.",
+                            Category = "Món phụ",
+                            ImageUrl = "URL_CLOUDINARY_KHOAI_NGHIEN" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Súp Nấm",
+                            Price = 40000m,
+                            Description = "Súp kem nấm hương thơm ngon.",
+                            Category = "Súp",
+                            ImageUrl = "URL_CLOUDINARY_SUP_NAM" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Pizza Hải Sản",
+                            Price = 180000m,
+                            Description = "Pizza cỡ vừa, tôm, mực, phô mai Mozzarella.",
+                            Category = "Pizza",
+                            ImageUrl = "URL_CLOUDINARY_PIZZA_HAI_SAN" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Trà Sữa Matcha",
+                            Price = 50000m,
+                            Description = "Trà sữa vị Matcha truyền thống.",
+                            Category = "Đồ uống",
+                            ImageUrl = "URL_CLOUDINARY_TRA_SUA" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Burger Phô Mai 2 Tầng",
+                            Price = 115000m,
+                            Description = "2 miếng thịt bò, 2 lớp phô mai dày.",
+                            Category = "Burger",
+                            ImageUrl = "URL_CLOUDINARY_BURGER_2_TANG" // <== THÊM IMAGE URL
+                        },
+                        new Product {
+                            Name = "Phở Bò Tái",
+                            Price = 65000m,
+                            Description = "Phở truyền thống, thịt bò tái.",
+                            Category = "Khác",
+                            ImageUrl = "URL_CLOUDINARY_PHO_BO" // <== THÊM IMAGE URL
+                        }
                     };
                     context.Products.AddRange(products);
                 }
 
                 // 2. SEED DỮ LIỆU TÀI KHOẢN (USERS)
+                // (Giữ nguyên phần này)
                 if (!context.Users.Any())
                 {
                     var users = new User[]
@@ -53,6 +174,7 @@ namespace WebApplication1.Data
                         {
                             Username = "admin@example.com",
                             Email = "admin@example.com",
+                            // LƯU Ý: Trong ứng dụng thực tế, hãy HASH mật khẩu trước khi lưu.
                             PasswordHash = "LamDinh1702",
                             DisplayName = "Quản Trị Viên",
                             CreatedDate = DateTime.UtcNow
