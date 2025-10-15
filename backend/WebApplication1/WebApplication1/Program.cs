@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApplication1.Data; // Tham chiếu đến DbContext và DbInitializer
-using WebApplication1.Models; // Tham chiếu đến Models
+using WebApplication1.Data;
+using WebApplication1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +11,31 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)); // Sử dụng SQL Server provider
 
-// Add services to the container.
+// ====================================================================
+// START: Cấu hình CORS
+// ====================================================================
+// 1. Định nghĩa Policy CORS
+builder.Services.AddCors(options =>
+{
+    // Đặt tên Policy là "AllowFrontendOrigin"
+    options.AddPolicy("AllowFrontendOrigin",
+        builder =>
+        {
+            // Cho phép truy cập từ nguồn gốc (Origin) của Frontend: http://localhost:5000
+            // Đây là bước quan trọng nhất để sửa lỗi CORS.
+            builder.WithOrigins("http://localhost:5000")
+                   // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
+                   .AllowAnyMethod()
+                   // Cho phép tất cả các tiêu đề (headers), bao gồm cả Authorization
+                   .AllowAnyHeader();
+            // Nếu bạn cần gửi cookie hoặc chứng chỉ, hãy thêm: .AllowCredentials();
+        });
+});
+// ====================================================================
+// END: Cấu hình CORS
+// ====================================================================
 
+// Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -48,6 +71,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// ====================================================================
+// START: Kích hoạt CORS Policy
+// ====================================================================
+// 2. Kích hoạt Middleware CORS. 
+// Lệnh này PHẢI đặt sau app.UseRouting() và trước app.UseAuthorization()
+app.UseCors("AllowFrontendOrigin");
+// ====================================================================
+// END: Kích hoạt CORS Policy
+// ====================================================================
 
 app.UseAuthorization();
 
