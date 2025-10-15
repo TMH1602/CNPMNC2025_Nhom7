@@ -4,6 +4,24 @@ using FastFoodCompareAppEnhanced_v3_1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Đặt một tên cho chính sách CORS
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+// BƯỚC 1: Thêm dịch vụ CORS vào service container
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          // URL của trang web front-end của bạn
+                          // Dựa trên lỗi bạn gặp, nó có thể là http://localhost:5000 hoặc cổng khác
+                          policy.WithOrigins("http://localhost:5000") 
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
+
+
 // Add services
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -54,10 +72,17 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+
+// BƯỚC 2: Kích hoạt CORS middleware. Đặt ở đúng vị trí này là rất quan trọng.
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseSession();
+app.UseAuthorization(); // Thêm dòng này nếu bạn có xác thực
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Menu}/{action=Index}/{id?}");
+    
+app.MapControllers(); // Thêm dòng này để ánh xạ các API controllers
 
 app.Run();

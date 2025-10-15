@@ -9,25 +9,19 @@ namespace FastFoodCompareAppEnhanced_v3_1.Controllers
         private readonly AppDbContext _db;
         public MenuController(AppDbContext db) => _db = db;
 
-        // Shows all dishes and comparison summary
-        public async Task<IActionResult> Index()
+        // Action này bây giờ rất đơn giản
+        public IActionResult Index()
         {
-            var dishes = await _db.Dishes.ToListAsync();
-
-            // comparison metrics
-            ViewBag.AvgPrice = dishes.Any() ? dishes.Average(d => (double)d.Price) : 0;
-            ViewBag.AvgCalories = dishes.Any() ? dishes.Average(d => d.Calories) : 0;
-            ViewBag.BestValue = dishes.OrderBy(d => d.Price / (d.Calories == 0 ? 1 : d.Calories)).FirstOrDefault();
-            ViewBag.HighestRating = dishes.OrderByDescending(d => d.Rating).FirstOrDefault();
-
-            return View(dishes);
+            // Không tính toán ViewBag, không lấy dữ liệu từ database nữa.
+            // Chỉ trả về View để JavaScript tự xử lý.
+            return View();
         }
 
-        // Show details for selected dishes (ids comma-separated)
+        // Giữ nguyên action Compare
         public async Task<IActionResult> Compare(string ids)
         {
             if (string.IsNullOrWhiteSpace(ids)) return RedirectToAction("Index");
-            var idList = ids.Split(',').Select(s => long.TryParse(s.Trim(), out var x) ? x : 0).Where(x => x>0).ToList();
+            var idList = ids.Split(',').Select(s => long.TryParse(s.Trim(), out var x) ? x : 0).Where(x => x > 0).ToList();
             var dishes = await _db.Dishes.Where(d => idList.Contains(d.Id)).ToListAsync();
             return View(dishes);
         }

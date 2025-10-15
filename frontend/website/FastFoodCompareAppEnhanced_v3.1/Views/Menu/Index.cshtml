@@ -1,4 +1,6 @@
-@model IEnumerable<FastFoodCompareAppEnhanced_v3_1.Models.Dish>
+@{
+    ViewData["Title"] = "Thực đơn";
+}
 
 <h2 class="mb-3">Thực đơn - So sánh món ăn nhanh</h2>
 
@@ -7,52 +9,82 @@
 </div>
 
 <div class="mb-3 d-flex flex-wrap gap-3 align-items-center">
-    <span class="me-3"><strong>Giá trung bình:</strong> @ViewBag.AvgPrice.ToString("C")</span>
-    <span class="me-3"><strong>Calories trung bình:</strong> @((double)ViewBag.AvgCalories).ToString("N0") kcal</span>
-    @if(ViewBag.BestValue != null) {
-        <span class="me-3 badge bg-success">Best value: @ViewBag.BestValue.Name</span>
-    }
-    @if(ViewBag.HighestRating != null) {
-        <span class="me-3 badge bg-warning text-dark">Top rated: @ViewBag.HighestRating.Name (@ViewBag.HighestRating.Rating)</span>
-    }
+    <span class="me-3"><strong>Giá trung bình:</strong> <span id="avgPrice">Đang tính...</span></span>
+    <span class="me-3" hidden><strong>Calories trung bình:</strong> <span id="avgCalories">...</span> kcal</span>
+    <span class="me-3 badge bg-success" id="bestValue" hidden></span>
+    <span class="me-3 badge bg-warning text-dark" id="topRated" hidden></span>
 </div>
 
 <form id="compareForm" method="get" action="@Url.Action("Compare","Menu")">
-    <div class="row compare-row">
-        @foreach(var d in Model)
-        {
-            var ratio = d.Price / (d.Calories == 0 ? 1 : d.Calories);
-            <div class="col-md-4 col-lg-4 mb-4">
-                <div class="dish-card">
-                    <img src="@d.ImageUrl" alt="@d.Name" class="dish-image" onerror="this.src='/images/placeholder.png'"/>
-                    <div class="body">
-                        <h5>@d.Name <span class="badge bg-light text-dark badge-price">@d.Price.ToString("C")</span></h5>
-                        <p class="metric">Calories: <strong>@d.Calories</strong> kcal</p>
-                        <p class="metric">Rating: <strong>@d.Rating</strong>/5</p>
-                        <p class="metric">Value (price/cal): @ratio.ToString("N4")</p>
-
-                        <div class="controls mt-2">
-                            <input type="checkbox" name="ids" value="@d.Id" id="c@d.Id" />
-                            <label for="c@d.Id" class="mb-0"> Chọn để so sánh</label>
-
-                            <a href="@Url.Action("Compare","Menu", new { ids = d.Id })" class="btn btn-sm btn-outline-primary ms-auto">So sánh đơn</a>
-
-                            <form asp-controller="Cart" asp-action="Add" method="post" class="ms-2 d-inline">
-                                <input type="hidden" name="id" value="@d.Id" />
-                                <button type="submit" class="btn btn-sm btn-success">🛒 Thêm vào giỏ</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+    <div id="menu-container" class="row compare-row">
+        <p>Đang tải thực đơn từ nhà bếp, vui lòng chờ...</p>
     </div>
 
     <button type="submit" class="btn btn-gradient mt-3">So sánh các món đã chọn</button>
 </form>
 
+@section Scripts {
 <script>
-    // assemble ids into comma-separated list for Compare action
+    // 1. Chờ trang web tải xong
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuContainer = document.getElementById('menu-container');
+
+        // 2. Dùng fetch để gọi "nhà bếp" (API)
+        fetch('https://localhost:7132/api/Menu')
+            .then(response => {
+                if (!response.ok) { // Nếu gọi thất bại (lỗi 404, 500...)
+                    throw new Error('Không thể kết nối tới API.');
+                }
+                return response.json(); // Chuyển dữ liệu nhận được thành JSON
+            })
+            .then(data => { // 3. Nếu lấy dữ liệu thành công
+                menuContainer.innerHTML = ''; // Xóa chữ "Đang tải..."
+                let totalPrice = 0;
+
+                // 4. Lặp qua từng món ăn và tạo HTML
+                data.forEach(item => {
+                    totalPrice += item.price;
+                    
+                    // Tạo một khối HTML cho mỗi món ăn
+                    const dishCardHtml = `
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="dish-card">
+                                <img src="/images/placeholder.png" alt="${item.name}" class="dish-image"/>
+                                <div class="body">
+                                    <h5>${item.name} <span class="badge bg-light text-dark badge-price">${item.price.toLocaleString('vi-VN')} VNĐ</span></h5>
+                                    
+                                    <p>${item.description}</p>
+                                    <div class="controls mt-2">
+                                        <input type="checkbox" name="ids" value="${item.id}" id="c${item.id}" />
+                                        <label for="c${item.id}" class="mb-0"> Chọn để so sánh</label>
+                                        
+                                        <a href="/Menu/Compare?ids=${item.id}" class="btn btn-sm btn-outline-primary ms-auto">So sánh đơn</a>
+                                        
+                                        <form action="/Cart/Add" method="post" class="ms-2 d-inline">
+                                            <input type="hidden" name="id" value="${item.id}" />
+                                            <button type="submit" class="btn btn-sm btn-success">🛒 Thêm vào giỏ</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    // 5. Thêm khối HTML vừa tạo vào trang web
+                    menuContainer.innerHTML += dishCardHtml;
+                });
+
+                // Cập nhật giá trung bình
+                const avgPrice = data.length > 0 ? totalPrice / data.length : 0;
+                document.getElementById('avgPrice').innerText = avgPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
+            })
+            .catch(error => { // Nếu có bất kỳ lỗi nào xảy ra
+                console.error('Lỗi khi tải thực đơn:', error);
+                menuContainer.innerHTML = '<p class="text-danger">Đã xảy ra lỗi khi tải thực đơn. Vui lòng thử lại sau.</p>';
+            });
+    });
+
+    // Giữ nguyên script xử lý form so sánh
     document.getElementById('compareForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const checks = Array.from(document.querySelectorAll('input[name="ids"]:checked'));
@@ -61,6 +93,8 @@
             return;
         }
         const ids = checks.map(c => c.value).join(',');
-        window.location = '@Url.Action("Compare","Menu")' + '?ids=' + ids;
+        window.location.href = '@Url.Action("Compare", "Menu")' + '?ids=' + ids;
     });
+    
 </script>
+}
