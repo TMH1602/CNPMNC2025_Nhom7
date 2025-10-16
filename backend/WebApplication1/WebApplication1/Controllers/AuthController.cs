@@ -30,6 +30,19 @@ namespace MyWebApiWithSwagger.Controllers
             public string Password { get; set; } = string.Empty;
         }
 
+        public class RegisterRQ
+        {
+            [Required(ErrorMessage = "Tên người dùng là bắt buộc.")]
+            public string Username { get; set; } = string.Empty;
+
+            [Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
+            public string Password { get; set; } = string.Empty;
+
+            [Required(ErrorMessage = "Email là bắt buộc.")]
+            [EmailAddress(ErrorMessage = "Định dạng Email không hợp lệ (cần có ký tự @).")]
+            public string Email { get; set; } = string.Empty;
+        }
+
         public class LoginResponse
         {
             public bool IsSuccess { get; set; }
@@ -143,7 +156,7 @@ namespace MyWebApiWithSwagger.Controllers
         [HttpPost("register")] // Route: /api/Auth/register
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] LoginRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRQ request)
         {
             if (!ModelState.IsValid)
             {
@@ -162,14 +175,17 @@ namespace MyWebApiWithSwagger.Controllers
                     Message = "Tên người dùng đã tồn tại. Vui lòng chọn tên khác."
                 });
             }
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Trả về lỗi Validation 400 Bad Request
+            }
             // 2. Tạo User mới
             var newUser = new User
             {
                 Username = request.Username,
-                Email = $"{request.Username}@example.com", // Giả lập Email
-                PasswordHash = request.Password, // Giả lập lưu mật khẩu (thực tế phải hash)
-                DisplayName = request.Username,
+                Email =    request.Email, 
+                PasswordHash = request.Password,
+                DisplayName = "Khách Hàng",
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -184,7 +200,7 @@ namespace MyWebApiWithSwagger.Controllers
                 CreatedDate = newUser.CreatedDate
             };
 
-            return CreatedAtAction(nameof(GetUserAccount), new { email = newUser.Email }, response);
+            return CreatedAtAction(nameof(GetUserAccount), new { identifier = newUser.Email }, response);
         }
 
         // ------------------------------------------------------------------

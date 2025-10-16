@@ -167,7 +167,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BLoginRequest",
+        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BRegisterRQ",
         "IsRequired": true
       }
     ],
@@ -355,41 +355,6 @@
           "text/json"
         ],
         "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.RegisterController",
-    "Method": "Register",
-    "RelativePath": "api/Register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "WebApplication1.Controllers.RegisterController\u002BRegisterRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "WebApplication1.Controllers.RegisterController\u002BRegisterResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 201
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ValidationProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
       }
     ]
   }

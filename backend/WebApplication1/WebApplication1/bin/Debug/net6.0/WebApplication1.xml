@@ -26,55 +26,6 @@
             <param name="id">ID của món ăn cần xóa (ví dụ: 1).</param>
             <returns>HTTP 204 No Content nếu thành công hoặc HTTP 404 Not Found.</returns>
         </member>
-        <member name="T:WebApplication1.Controllers.RegisterController">
-            <summary>
-            Controller dùng để xử lý các yêu cầu đăng ký người dùng mới.
-            </summary>
-        </member>
-        <member name="T:WebApplication1.Controllers.RegisterController.RegisterRequest">
-            <summary>
-            Model dữ liệu được gửi lên trong yêu cầu đăng ký.
-            </summary>
-        </member>
-        <member name="P:WebApplication1.Controllers.RegisterController.RegisterRequest.Email">
-            <summary>
-            Tên người dùng hoặc Email (phải là duy nhất).
-            </summary>
-        </member>
-        <member name="P:WebApplication1.Controllers.RegisterController.RegisterRequest.Password">
-            <summary>
-            Mật khẩu (yêu cầu độ dài tối thiểu).
-            </summary>
-        </member>
-        <member name="P:WebApplication1.Controllers.RegisterController.RegisterRequest.ConfirmPassword">
-            <summary>
-            Xác nhận lại mật khẩu.
-            </summary>
-        </member>
-        <member name="T:WebApplication1.Controllers.RegisterController.RegisterResponse">
-            <summary>
-            Model dữ liệu trả về sau khi xử lý đăng ký.
-            </summary>
-        </member>
-        <member name="P:WebApplication1.Controllers.RegisterController.RegisterResponse.IsSuccess">
-            <summary>
-            Trạng thái thành công của yêu cầu.
-            </summary>
-        </member>
-        <member name="P:WebApplication1.Controllers.RegisterController.RegisterResponse.Message">
-            <summary>
-            Thông báo chi tiết về kết quả.
-            </summary>
-        </member>
-        <member name="P:WebApplication1.Controllers.RegisterController.RegisterResponse.UserId">
-            <summary>
-            ID người dùng mới được tạo.
-            </summary>
-        </member>
-        <member name="M:WebApplication1.Controllers.RegisterController.Register(WebApplication1.Controllers.RegisterController.RegisterRequest)">
-            <param name="request">Thông tin đăng ký (Email, Password, ConfirmPassword).</param>
-            <returns>HTTP 201 Created nếu thành công, hoặc HTTP 400 Bad Request nếu thất bại.</returns>
-        </member>
         <member name="T:WebApplication1.Data.ApplicationDbContext">
             <summary>
             Context cho Entity Framework Core, đại diện cho session kết nối với Database.
