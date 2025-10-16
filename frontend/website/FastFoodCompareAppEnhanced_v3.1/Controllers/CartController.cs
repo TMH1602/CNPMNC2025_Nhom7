@@ -29,9 +29,8 @@ namespace FastFoodCompareAppEnhanced_v3_1.Controllers
 
         public IActionResult Index()
         {
-            var cart = GetCart();
-            ViewBag.Total = cart.Sum(c => c.Total);
-            return View(cart);
+            
+            return View();
         }
 
         [HttpPost]

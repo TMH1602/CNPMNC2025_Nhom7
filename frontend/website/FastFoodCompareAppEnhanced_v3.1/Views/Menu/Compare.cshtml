@@ -1,0 +1,36 @@
+@model IEnumerable<FastFoodCompareAppEnhanced_v3_1.Models.Dish>
+
+@{
+    ViewData["Title"] = "So sánh món ăn";
+}
+
+<h2 class="mb-4">Kết quả so sánh</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning">Không tìm thấy món ăn nào để so sánh. Vui lòng thử lại.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var dish in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="dish-card highlight">
+                    <img src="@dish.ImageUrl" alt="@dish.Name" class="dish-image" onerror="this.src='/images/placeholder.png'"/>
+                    <div class="body">
+                        <h5>@dish.Name <span class="badge bg-light text-dark badge-price">@dish.Price.ToString("C")</span></h5>
+                        
+                        <p class="metric"><strong>Calories:</strong> @dish.Calories kcal</p>
+                        <p class="metric"><strong>Rating:</strong> @dish.Rating/5</p>
+                        <p class="metric"><strong>Category:</strong> @dish.Category</p>
+                        
+                        <div class="mt-3">
+                            <a href="@Url.Action("Index", "Menu")" class="btn btn-sm btn-outline-secondary">Quay lại Menu</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

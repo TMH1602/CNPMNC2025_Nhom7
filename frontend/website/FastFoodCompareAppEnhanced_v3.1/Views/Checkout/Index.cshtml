@@ -1,0 +1,104 @@
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<h2 class="mb-4">Thông tin thanh toán</h2>
+
+<div class="row g-5">
+    <div class="col-md-7">
+        <h4>Nhập thông tin giao hàng</h4>
+        <form id="checkout-form" novalidate>
+            <div class="mb-3">
+                <label for="fullName" class="form-label">Họ và tên</label>
+                <input type="text" class="form-control" id="fullName" required>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Địa chỉ</label>
+                <input type="text" class="form-control" id="address" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Số điện thoại</label>
+                <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="mb-3">
+                <label for="notes" class="form-label">Ghi chú (tùy chọn)</label>
+                <textarea class="form-control" id="notes" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 btn-lg">Hoàn tất đặt hàng</button>
+        </form>
+    </div>
+
+    <div class="col-md-5">
+        <h4>Đơn hàng của bạn</h4>
+        <div id="order-summary" class="border p-3 rounded bg-light">
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderSummaryContainer = document.getElementById('order-summary');
+        const checkoutForm = document.getElementById('checkout-form');
+
+        function getCart() {
+            const cartJson = localStorage.getItem('frontend_cart');
+            return cartJson ? JSON.parse(cartJson) : [];
+        }
+
+        // Hàm hiển thị tóm tắt đơn hàng
+        function renderOrderSummary() {
+            const cart = getCart();
+            if (cart.length === 0) {
+                orderSummaryContainer.innerHTML = '<p>Giỏ hàng của bạn đang trống.</p>';
+                checkoutForm.querySelector('button[type="submit"]').disabled = true;
+                return;
+            }
+
+            let summaryHtml = '<ul class="list-group list-group-flush">';
+            let totalAmount = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+                summaryHtml += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-light px-0">
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>${itemTotal.toLocaleString('vi-VN')} VNĐ</span>
+                    </li>
+                `;
+            });
+
+            summaryHtml += `
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold mt-2 px-0">
+                    Tổng cộng
+                    <span>${totalAmount.toLocaleString('vi-VN')} VNĐ</span>
+                </li>
+            </ul>`;
+
+            orderSummaryContainer.innerHTML = summaryHtml;
+        }
+
+        // Xử lý khi người dùng gửi form
+        checkoutForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Ngăn form gửi đi
+
+            if (!checkoutForm.checkValidity()) {
+                alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
+                return;
+            }
+
+            // Giả lập đặt hàng thành công
+            alert('Đặt hàng thành công! Cảm ơn bạn đã mua hàng.');
+
+            // Xóa giỏ hàng khỏi localStorage
+            localStorage.removeItem('frontend_cart');
+
+            // Chuyển hướng đến trang thành công
+            window.location.href = '@Url.Action("Success", "Checkout")';
+        });
+
+        renderOrderSummary();
+    });
+</script>
+}
