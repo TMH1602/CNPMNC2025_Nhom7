@@ -1,0 +1,8 @@
+wwwroot\css\auth.css
+wwwroot\css\site.css
+wwwroot\images\ads1.jpg
+wwwroot\images\banner.jpg
+wwwroot\images\burger.jpg
+wwwroot\images\fries.jpg
+wwwroot\images\pizza.jpg
+wwwroot\images\salad.jpg

@@ -277,6 +277,32 @@
     ]
   },
   {
+    "ContainingType": "CartController",
+    "Method": "RemoveFromCart",
+    "RelativePath": "api/Cart/remove",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "productId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MyFastFoodApi.Controllers.MenuController",
     "Method": "GetAllMenu",
     "RelativePath": "api/Menu",
@@ -305,9 +331,29 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "newProduct",
-        "Type": "WebApplication1.Models.Product",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Price",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ImageFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -321,7 +367,7 @@
         "StatusCode": 201
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ValidationProblemDetails",
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -380,8 +426,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedProduct",
-        "Type": "WebApplication1.Models.Product",
+        "Name": "updatedProductDto",
+        "Type": "WebApplication1.ViewModels.ProductCreationDto",
         "IsRequired": true
       }
     ],

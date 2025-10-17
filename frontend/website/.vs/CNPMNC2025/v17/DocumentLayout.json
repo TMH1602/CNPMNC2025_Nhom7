@@ -1,12 +1,105 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\ADMIN\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\controllers\\menuapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\controllers\\menuapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\controllers\\checkoutcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\controllers\\checkoutcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CheckoutController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\CheckoutController.cs",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CheckoutController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\CheckoutController.cs",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CheckoutController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T02:42:53.928Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T02:42:50.329Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MenuController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuController.cs",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuController.cs",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T02:42:37.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MenuApiController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuApiController.cs",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuApiController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuApiController.cs",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuApiController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T02:42:34.001Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CartController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\CartController.cs",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CartController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\CartController.cs",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CartController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAASwBYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T02:41:52.015Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

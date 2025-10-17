@@ -241,4 +241,58 @@ public class CartController : ControllerBase
 
         return Ok(historyViewModels);
     }
+    [HttpPost("remove")]
+    // Chấp nhận dữ liệu từ body (FromBody) hoặc từ query string (không có [FromBody] cho loại Request này)
+    public async Task<IActionResult> RemoveFromCart(string username, int productId, int quantity)
+    {
+        if (quantity <= 0)
+        {
+            return BadRequest("Quantity must be positive for removal.");
+        }
+
+        // 1. Tìm Cart
+        var cart = await _context.Carts
+            .Include(c => c.CartItems)
+            .FirstOrDefaultAsync(c => c.Username == username);
+
+        if (cart == null)
+        {
+            return NotFound($"Cart for user {username} not found.");
+        }
+
+        // 2. Tìm CartItem tương ứng
+        var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+        if (cartItem == null)
+        {
+            return NotFound($"Product ID {productId} not found in user's cart.");
+        }
+
+        // 3. Xử lý logic xóa/giảm số lượng
+        string message;
+
+        if (cartItem.Quantity <= quantity)
+        {
+            // Xóa hoàn toàn mục sản phẩm
+            _context.CartItems.Remove(cartItem);
+            message = $"Product ID {productId} has been completely removed from the cart.";
+        }
+        else
+        {
+            // Chỉ giảm số lượng
+            cartItem.Quantity -= quantity;
+            message = $"Removed {quantity} units of Product ID {productId}. New quantity: {cartItem.Quantity}.";
+        }
+
+        await _context.SaveChangesAsync();
+
+        // 4. Trả về Anonymous Object an toàn
+        return Ok(new
+        {
+            Username = username,
+            ProductId = productId,
+            CurrentQuantity = cartItem.Quantity, // Sẽ là 0 nếu mục đã bị xóa hoàn toàn
+            Message = message
+        });
+    }
 }

@@ -4,6 +4,9 @@ using WebApplication1.Data; // Thêm tham chiếu đến ApplicationDbContext
 using Microsoft.EntityFrameworkCore; // Cần thiết cho các phương thức Async (ToListAsync, FindAsync)
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplication1.ViewModels; // Thêm DTO/ViewModels
+using WebApplication1.Services; // Thêm Cloudinary Service
+using System.Linq; // Cần cho ToList()
 
 namespace MyFastFoodApi.Controllers
 {
@@ -14,13 +17,14 @@ namespace MyFastFoodApi.Controllers
     [Route("api/[controller]")] // Route: /api/Menu
     public class MenuController : ControllerBase
     {
-        // Loại bỏ danh sách giả lập tĩnh và thay bằng DbContext
         private readonly ApplicationDbContext _context;
+        private readonly ICloudinaryService _cloudinaryService; // Inject Service
 
-        // 1. Dependency Injection: Context được inject tự động nhờ cấu hình trong Program.cs
-        public MenuController(ApplicationDbContext context)
+        // 1. Dependency Injection: Nhận cả Context và Service
+        public MenuController(ApplicationDbContext context, ICloudinaryService cloudinaryService)
         {
             _context = context;
+            _cloudinaryService = cloudinaryService;
         }
 
         // ====================================================================
@@ -29,7 +33,7 @@ namespace MyFastFoodApi.Controllers
 
         [HttpGet] // Route: /api/Menu
         [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllMenu() // Sử dụng Task<IActionResult> và async/await
+        public async Task<IActionResult> GetAllMenu()
         {
             // Đọc toàn bộ dữ liệu từ bảng Products trong Database
             var products = await _context.Products.ToListAsync();
@@ -45,7 +49,7 @@ namespace MyFastFoodApi.Controllers
         [HttpGet("{id}")] // Route: /api/Menu/{id}
         [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetProductById(int id) // Sử dụng async/await
+        public async Task<IActionResult> GetProductById(int id)
         {
             // FindAsync chỉ tìm kiếm theo Khóa chính (Primary Key)
             var product = await _context.Products.FindAsync(id);
@@ -59,54 +63,76 @@ namespace MyFastFoodApi.Controllers
         }
 
         // ====================================================================
-        // ENDPOINT: THÊM MỚI (POST)
-        // Đã cập nhật để nhận ImageUrl qua JSON body
+        // ENDPOINT: THÊM MỚI (POST) - SỬ DỤNG ProductUploadDto & Cloudinary Service
         // ====================================================================
 
-        /// <param name="newProduct">Đối tượng Product mới cần thêm (bao gồm ImageUrl, không cần Id).</param>
+        /// <param name="productDto">DTO chứa dữ liệu Product và ImageFile (multipart/form-data).</param>
         /// <returns>Món ăn vừa được tạo cùng với ID mới và HTTP 201 Created.</returns>
         [HttpPost] // Route: /api/Menu
+        [Consumes("multipart/form-data")] // Chấp nhận dữ liệu form có tệp
         [ProducesResponseType(typeof(Product), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddProduct([FromBody] Product newProduct) // Sử dụng async/await
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddProduct([FromForm] ProductUploadDto productDto)
         {
-            // Kiểm tra tính hợp lệ của dữ liệu
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // HTTP 400 Bad Request
+                return BadRequest(ModelState);
             }
 
-            // 1. Thêm vào DbContext (Chưa lưu vào DB)
+            string? imageUrl = null;
+
+            // 1. Tải tệp lên Cloudinary (Sử dụng Service)
+            if (productDto.ImageFile != null)
+            {
+                imageUrl = await _cloudinaryService.UploadImageAsync(productDto.ImageFile);
+
+                if (imageUrl == null)
+                {
+                    // Service trả về null nếu có lỗi tải lên
+                    return BadRequest("Image upload failed. Please check the image file or server logs.");
+                }
+            }
+
+            // 2. Ánh xạ (Mapping) từ DTO sang Model Entity Framework
+            var newProduct = new Product
+            {
+                Name = productDto.Name,
+                Price = productDto.Price,
+                Description = productDto.Description,
+                Category = productDto.Category,
+                ImageUrl = imageUrl // <-- URL công khai được lưu vào DB
+            };
+
+            // 3. Thêm và lưu vào Database
             _context.Products.Add(newProduct);
-
-            // 2. Lưu thay đổi vào Database
             await _context.SaveChangesAsync();
-            // Sau khi lưu thành công, EF Core tự động gán Id được sinh ra từ DB vào newProduct
 
-            // Trả về HTTP 201 Created 
+            // Trả về HTTP 201 Created 
             return CreatedAtAction(nameof(GetProductById), new { id = newProduct.Id }, newProduct);
         }
 
         // ====================================================================
-        // ENDPOINT: CẬP NHẬT (PUT)
-        // Đã cập nhật để xử lý ImageUrl
+        // ENDPOINT: CẬP NHẬT (PUT) - SỬ DỤNG ProductCreationDto
+        // Lưu ý: Endpoint này không hỗ trợ upload file, chỉ cập nhật URL
+        // Nếu muốn update file, cần tạo 1 PUT/PATCH riêng với IFormFile
         // ====================================================================
 
         /// <param name="id">ID của món ăn cần sửa (ví dụ: 1).</param>
-        /// <param name="updatedProduct">Đối tượng Product với thông tin mới (bao gồm ImageUrl).</param>
+        /// <param name="updatedProductDto">DTO với thông tin mới (bao gồm ImageUrl, không IFormFile).</param>
         /// <returns>HTTP 204 No Content nếu thành công hoặc HTTP 404 Not Found.</returns>
         [HttpPut("{id}")] // Route: /api/Menu/{id}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product updatedProduct) // Sử dụng async/await
+        // 💡 SỬA: Nhận ProductCreationDto (DTO không có IFormFile)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductCreationDto updatedProductDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState); // HTTP 400 Bad Request
             }
 
-            // 1. Tìm Entity đang được theo dõi (hoặc trả về null)
+            // 1. Tìm Entity đang được theo dõi
             var existingProduct = await _context.Products.FindAsync(id);
 
             if (existingProduct == null)
@@ -114,13 +140,13 @@ namespace MyFastFoodApi.Controllers
                 return NotFound($"Không tìm thấy món ăn có ID: {id} để cập nhật. ❌"); // HTTP 404 Not Found
             }
 
-            // 2. Cập nhật thông tin lên Entity đang được theo dõi
-            existingProduct.Name = updatedProduct.Name;
-            existingProduct.Price = updatedProduct.Price;
-            existingProduct.Description = updatedProduct.Description;
-            existingProduct.Category = updatedProduct.Category;
-            // *** Cập nhật trường ImageUrl ***
-            existingProduct.ImageUrl = updatedProduct.ImageUrl;
+            // 2. Cập nhật thông tin từ DTO lên Entity đang được theo dõi
+            existingProduct.Name = updatedProductDto.Name;
+            existingProduct.Price = updatedProductDto.Price;
+            existingProduct.Description = updatedProductDto.Description;
+            existingProduct.Category = updatedProductDto.Category;
+            // *** Cập nhật ImageUrl (chỉ là string, không phải upload file) ***
+            existingProduct.ImageUrl = updatedProductDto.ImageUrl;
 
             // 3. Lưu thay đổi vào Database
             await _context.SaveChangesAsync();
@@ -138,7 +164,7 @@ namespace MyFastFoodApi.Controllers
         [HttpDelete("{id}")] // Route: /api/Menu/{id}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteProduct(int id) // Sử dụng async/await
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             // 1. Tìm món ăn cần xóa
             var productToDelete = await _context.Products.FindAsync(id);
@@ -147,6 +173,8 @@ namespace MyFastFoodApi.Controllers
             {
                 return NotFound($"Không tìm thấy món ăn có ID: {id} để xóa. ❌"); // HTTP 404 Not Found
             }
+
+            // (Tùy chọn: Thêm logic xóa ảnh trên Cloudinary nếu cần)
 
             // 2. Xóa khỏi DbContext
             _context.Products.Remove(productToDelete);

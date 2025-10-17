@@ -1,0 +1,22 @@
+[
+  {
+    "ContainingType": "FastFoodCompareAppEnhanced_v3_1.Controllers.MenuApiController",
+    "Method": "GetMenu",
+    "RelativePath": "api/Menu",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[FastFoodCompareAppEnhanced_v3_1.Models.MenuItem, FastFoodCompareAppEnhanced_v3.1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
