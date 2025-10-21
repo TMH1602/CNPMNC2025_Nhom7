@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
         {
             // Cho phép truy cập từ nguồn gốc (Origin) của Frontend: http://localhost:5000
             // Đây là bước quan trọng nhất để sửa lỗi CORS.
-            builder.WithOrigins("http://localhost:5000")
+            builder.WithOrigins("https://localhost:5000")
                    // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
                    .AllowAnyMethod()
                    // Cho phép tất cả các tiêu đề (headers), bao gồm cả Authorization
