@@ -236,6 +236,26 @@
   },
   {
     "ContainingType": "CartController",
+    "Method": "GetAllCarts",
+    "RelativePath": "api/Cart/AllCarts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[WebApplication1.ViewModels.AllCartsDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CartController",
     "Method": "Checkout",
     "RelativePath": "api/Cart/checkout",
     "HttpMethod": "POST",
