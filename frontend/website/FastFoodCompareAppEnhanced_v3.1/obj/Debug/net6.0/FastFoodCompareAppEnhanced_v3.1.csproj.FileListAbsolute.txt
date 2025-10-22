@@ -33,3 +33,4 @@ C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompar
 C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\obj\Debug\net6.0\FastFoodCompareAppEnhanced_v3.1.pdb
 C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\obj\Debug\net6.0\FastFoodCompareAppEnhanced_v3.1.genruntimeconfig.cache
 C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\obj\Debug\net6.0\ref\FastFoodCompareAppEnhanced_v3.1.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\BCrypt.Net-Next.dll

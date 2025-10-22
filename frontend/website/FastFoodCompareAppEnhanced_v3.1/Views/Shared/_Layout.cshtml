@@ -43,7 +43,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
                         <li><a class="dropdown-item" href="#">Lịch sử đơn hàng</a></li>
-                        <li><a class="dropdown-item" href="#">Cập nhật tài khoản</a></li>
+                        
+                        <li><a class="dropdown-item" href="@Url.Action("Profile", "Account")">Cập nhật tài khoản</a></li>
+                        
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" id="logout-button" href="#">Đăng xuất</a></li>
                     </ul>
@@ -79,25 +81,17 @@
 
             if (username) {
                 // *** ĐÃ ĐĂNG NHẬP ***
-                
                 if(displayNameSpan) displayNameSpan.textContent = username; 
                 if(avatarSpan && username.length > 0) avatarSpan.textContent = username.charAt(0).toUpperCase();
-
-                // Sửa: Dùng classList.remove để "HIỆN"
                 if(loggedInState) loggedInState.classList.remove("d-none");  
-                // Sửa: Dùng classList.add để "ẨN"
                 if(loggedOutState) loggedOutState.classList.add("d-none");  
-
             } else {
                 // *** CHƯA ĐĂNG NHẬP ***
-                
-                // Sửa: Dùng classList.add để "ẨN"
                 if(loggedInState) loggedInState.classList.add("d-none");   
-                // Sửa: Dùng classList.remove để "HIỆN"
                 if(loggedOutState) loggedOutState.classList.remove("d-none"); 
             }
 
-            // (Code giỏ hàng và nút đăng xuất...)
+            // (Code giỏ hàng)
             let cartCount = 0;
             const cartJson = localStorage.getItem("CART_ITEMS"); 
             if (cartJson) {
@@ -108,6 +102,7 @@
             }
             if(cartCountSpan) cartCountSpan.textContent = cartCount;
 
+            // (Code nút đăng xuất)
             const logoutButton = document.getElementById("logout-button");
             if(logoutButton) {
                 logoutButton.addEventListener("click", function (e) {
