@@ -22,6 +22,7 @@ namespace WebApplication1.Data
         // Bổ sung cho Lịch sử Đơn hàng (Order History)
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; } // Bảng trung gian Chi tiết Đơn hàng
+        public DbSet<ProductDeletedByAdmin> ProductDeletedByAdmin { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

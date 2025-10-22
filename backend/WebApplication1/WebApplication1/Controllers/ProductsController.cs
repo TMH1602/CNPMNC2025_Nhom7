@@ -167,23 +167,50 @@ namespace MyFastFoodApi.Controllers
         public async Task<IActionResult> DeleteProduct(int id)
         {
             // 1. Tìm món ăn cần xóa
-            var productToDelete = await _context.Products.FindAsync(id);
+            var productToDelete1 = await _context.Products.FindAsync(id);
 
-            if (productToDelete == null)
+            if (productToDelete1 == null)
             {
-                return NotFound($"Không tìm thấy món ăn có ID: {id} để xóa. ❌"); // HTTP 404 Not Found
+                return NotFound($"Không tìm thấy món ăn có ID: {id} để xóa"); // HTTP 404 Not Found
             }
 
-            // (Tùy chọn: Thêm logic xóa ảnh trên Cloudinary nếu cần)
+            bool hasBeenOrdered = await _context.OrderDetails.AnyAsync(od => od.ProductId == id);
+            var relatedCartItems = await _context.CartItems
+                .Where(ci => ci.ProductId == id)
+                .ToListAsync();
+            if (relatedCartItems.Any())
+            {
+                _context.CartItems.RemoveRange(relatedCartItems);
+            }
 
-            // 2. Xóa khỏi DbContext
-            _context.Products.Remove(productToDelete);
+            if (hasBeenOrdered)
+            {
+                var deletedRecord = new ProductDeletedByAdmin
+                {
+                    OriginalProductId = productToDelete1.Id,
+                    Name = productToDelete1.Name,
+                    Price = productToDelete1.Price,
+                    Description = productToDelete1.Description,
+                    Category = productToDelete1.Category,
+                    ImageUrl = productToDelete1.ImageUrl,
+                    DeletedDate = DateTime.UtcNow
+                };
+                _context.ProductDeletedByAdmin.Add(deletedRecord);
 
-            // 3. Lưu thay đổi vào Database
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            // 4. Trả về HTTP 204 No Content
-            return NoContent();
+                return Ok($"Món ăn ID {id} đã được đánh dấu không hoạt động để bảo toàn lịch sử.");
+            }
+            else
+            {
+                _context.Products.Remove(productToDelete1);
+
+                // Lưu thay đổi vào Database
+                await _context.SaveChangesAsync();
+
+                // 4. Trả về HTTP 204 No Content
+                return NoContent();
+            }
         }
     }
 }

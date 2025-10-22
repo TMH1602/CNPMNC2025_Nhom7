@@ -27,6 +27,7 @@ namespace WebApplication1.Models
 
         [MaxLength(300)] 
         public string? ImageUrl { get; set; }
+        public bool IsActive { get; set; } = true;
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
