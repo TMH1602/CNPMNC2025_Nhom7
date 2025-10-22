@@ -145,7 +145,6 @@ C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebAppl
 C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\WebApplication1.pdb
 C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\WebApplication1.genruntimeconfig.cache
 C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\ref\WebApplication1.dll
-C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\appsettings.json
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\WebApplication1.staticwebassets.endpoints.json
@@ -223,3 +222,6 @@ C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplicati
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\CloudinaryDotNet.dll
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\CloudinaryDotNet.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
