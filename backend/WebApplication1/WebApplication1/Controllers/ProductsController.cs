@@ -100,7 +100,8 @@ namespace MyFastFoodApi.Controllers
                 Price = productDto.Price,
                 Description = productDto.Description,
                 Category = productDto.Category,
-                ImageUrl = imageUrl // <-- URL công khai được lưu vào DB
+                ImageUrl = imageUrl, // <-- URL công khai được lưu vào DB
+                IsActive = true
             };
 
             // 3. Thêm và lưu vào Database
@@ -193,9 +194,12 @@ namespace MyFastFoodApi.Controllers
                     Description = productToDelete1.Description,
                     Category = productToDelete1.Category,
                     ImageUrl = productToDelete1.ImageUrl,
+                    IsActive = false,
                     DeletedDate = DateTime.UtcNow
                 };
                 _context.ProductDeletedByAdmin.Add(deletedRecord);
+                var existingProduct = await _context.Products.FindAsync(id);
+                existingProduct.IsActive = false;
 
                 await _context.SaveChangesAsync();
 
@@ -209,7 +213,7 @@ namespace MyFastFoodApi.Controllers
                 await _context.SaveChangesAsync();
 
                 // 4. Trả về HTTP 204 No Content
-                return NoContent();
+                return Ok($"Món ăn ID {id} đã được xóa thành công!");
             }
         }
     }
