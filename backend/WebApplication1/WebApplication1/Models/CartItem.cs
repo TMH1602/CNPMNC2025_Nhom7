@@ -23,5 +23,6 @@ namespace WebApplication1.Models
         // Thuộc tính Điều hướng (Navigation Properties)
         public Cart Cart { get; set; } = null!;
         public Product Product { get; set; } = null!;
+        public string ImageUrl { get; internal set; }
     }
 }

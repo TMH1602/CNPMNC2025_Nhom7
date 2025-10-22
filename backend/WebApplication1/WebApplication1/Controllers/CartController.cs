@@ -37,7 +37,7 @@ public class CartController : ControllerBase
             // Trả về Not Found nếu không có giỏ hàng hoạt động
             return NotFound($"Active cart for user {username} not found.");
         }
-
+        var existingProduct = await _context.Products.FindAsync(cart.Id);
         // Ánh xạ từ Model sang CartDto/ViewModel
         var cartViewModel = new CartDto
         {
@@ -48,7 +48,9 @@ public class CartController : ControllerBase
                 ProductId = ci.ProductId,
                 ProductName = ci.Product.Name,
                 Price = ci.Product.Price,
-                Quantity = ci.Quantity
+                Quantity = ci.Quantity,
+                ImageUrl = existingProduct.ImageUrl
+
             }).ToList()
         };
 

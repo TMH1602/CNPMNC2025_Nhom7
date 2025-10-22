@@ -1150,6 +1150,11 @@
           },
           "product": {
             "$ref": "#/components/schemas/Product"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
           }
         },
         "additionalProperties": false
@@ -1172,6 +1177,10 @@
           "quantity": {
             "type": "integer",
             "format": "int32"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
           },
           "totalItemPrice": {
             "type": "number",

@@ -27,6 +27,10 @@
             <label class="form-label" for="password">Mật khẩu</label>
             <input type="password" class="form-control" id="password" name="password" required />
         </div>
+         <div class="mb-3">
+            <label class="form-label" for="Address">Địa chỉ</label>
+            <input type="Address" class="form-control" id="Address" name="Address" required />
+        </div>
 
         <button type="submit" class="btn btn-gradient w-100">Đăng ký</button>
     </form>
@@ -46,6 +50,7 @@
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const Address = document.getElementById('Address').value;
             
             const errorMessageDiv = document.getElementById('error-message');
             const successMessageDiv = document.getElementById('success-message');
@@ -58,7 +63,8 @@
             const data = {
                 username: username,
                 password: password,
-                email: email
+                email: email,
+                Address: Address
             };
 
             try {
