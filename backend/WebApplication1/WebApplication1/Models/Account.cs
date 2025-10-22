@@ -22,9 +22,10 @@ namespace WebApplication1.Models
 
         [Required]
         [MinLength(6)]
-        // Trong thực tế, đây sẽ là Password HASH, nhưng tôi giữ là string
-        // để đơn giản hóa ví dụ này (giống như logic giả lập của bạn).
         public string PasswordHash { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(250)] // Giới hạn độ dài chuỗi địa chỉ
+        public string Address { get; set; }
 
         [MaxLength(150)]
         public string DisplayName { get; set; } = string.Empty;

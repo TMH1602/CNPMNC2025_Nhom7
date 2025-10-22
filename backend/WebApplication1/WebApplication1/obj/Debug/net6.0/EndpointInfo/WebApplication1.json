@@ -1429,6 +1429,7 @@
       },
       "RegisterRQ": {
         "required": [
+          "address",
           "email",
           "password",
           "username"
@@ -1443,6 +1444,10 @@
             "minLength": 1,
             "type": "string"
           },
+          "address": {
+            "minLength": 1,
+            "type": "string"
+          },
           "email": {
             "minLength": 1,
             "type": "string",
@@ -1453,6 +1458,7 @@
       },
       "User": {
         "required": [
+          "address",
           "email",
           "passwordHash",
           "username"
@@ -1476,6 +1482,11 @@
           },
           "passwordHash": {
             "minLength": 6,
+            "type": "string"
+          },
+          "address": {
+            "maxLength": 250,
+            "minLength": 1,
             "type": "string"
           },
           "displayName": {

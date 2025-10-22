@@ -176,6 +176,7 @@ namespace WebApplication1.Data
                             Email = "admin@example.com",
                             // LƯU Ý: Trong ứng dụng thực tế, hãy HASH mật khẩu trước khi lưu.
                             PasswordHash = "LamDinh1702",
+                            Address = "828 Sư Vạn Hạnh Quận 10 thành phố Hồ Chí Minh",
                             DisplayName = "Quản Trị Viên",
                             CreatedDate = DateTime.UtcNow
                         },
@@ -184,6 +185,7 @@ namespace WebApplication1.Data
                             Username = "user@example.com",
                             Email = "user@example.com",
                             PasswordHash = "LamDinh1702",
+                            Address = "828 Sư Vạn Hạnh Quận 10 thành phố Hồ Chí Minh",
                             DisplayName = "Khách Hàng Thử Nghiệm",
                             CreatedDate = DateTime.UtcNow
                         }
