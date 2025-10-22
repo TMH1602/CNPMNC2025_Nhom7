@@ -37,10 +37,13 @@ namespace MyWebApiWithSwagger.Controllers
 
             [Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
             public string Password { get; set; } = string.Empty;
+            [Required(ErrorMessage = "Vui lòng nhập địa chỉ")]
+            public string Address { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Email là bắt buộc.")]
             [EmailAddress(ErrorMessage = "Định dạng Email không hợp lệ (cần có ký tự @).")]
             public string Email { get; set; } = string.Empty;
+
         }
 
         public class LoginResponse
@@ -166,7 +169,17 @@ namespace MyWebApiWithSwagger.Controllers
             // 1. Kiểm tra username đã tồn tại chưa
             var existingUser = await _context.Users
                 .AnyAsync(u => u.Username.ToLower() == request.Username.ToLower());
+            var existingEmail = await _context.Users
+                .AnyAsync(u => u.Email.ToLower() == request.Email.ToLower());
 
+            if (existingEmail)
+            {
+                return BadRequest(new LoginResponse
+                {
+                    IsSuccess = false,
+                    Message = "Email đã tồn tại. Vui lòng chọn email khác."
+                });
+            }
             if (existingUser)
             {
                 return BadRequest(new LoginResponse
@@ -185,6 +198,7 @@ namespace MyWebApiWithSwagger.Controllers
                 Username = request.Username,
                 Email =    request.Email, 
                 PasswordHash = request.Password,
+                Address = request.Address,
                 DisplayName = "Khách Hàng",
                 CreatedDate = DateTime.UtcNow
             };

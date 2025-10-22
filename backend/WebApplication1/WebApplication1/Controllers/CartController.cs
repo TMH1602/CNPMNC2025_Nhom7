@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
-using WebApplication1.ViewModels; // <-- Rất quan trọng để tránh lỗi JSON Cycle
+using WebApplication1.ViewModels;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ public class CartController : ControllerBase
 
     // ************************************************************
     // 1. Endpoint: GET /api/Cart/{username}
-    // Trả về CartDto (ViewModel)
+    // Lấy giỏ hàng CHƯA XỬ LÝ (IsProcessed = false)
     // ************************************************************
     [HttpGet("{username}")]
     public async Task<ActionResult<CartDto>> GetCart(string username)
@@ -29,11 +29,13 @@ public class CartController : ControllerBase
         var cart = await _context.Carts
             .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
-            .FirstOrDefaultAsync(c => c.Username == username);
+            // 💡 CHỈ LẤY giỏ hàng KHÔNG được xử lý
+            .FirstOrDefaultAsync(c => c.Username == username && c.IsProcessed == false);
 
         if (cart == null)
         {
-            return NotFound($"Cart for user {username} not found.");
+            // Trả về Not Found nếu không có giỏ hàng hoạt động
+            return NotFound($"Active cart for user {username} not found.");
         }
 
         // Ánh xạ từ Model sang CartDto/ViewModel
@@ -55,36 +57,31 @@ public class CartController : ControllerBase
 
     // ************************************************************
     // 2. Endpoint: POST /api/Cart/add
-    // Thêm NHIỀU sản phẩm vào giỏ hàng (Chấp nhận AddItemsToCartDto)
+    // Thêm NHIỀU sản phẩm vào giỏ hàng
     // ************************************************************
     [HttpPost("add")]
     public async Task<IActionResult> AddToCart([FromBody] AddItemsToCartDto request)
     {
-        // 1. Kiểm tra tính hợp lệ cơ bản
         if (string.IsNullOrEmpty(request.Username) || !request.Items.Any() || request.Items.Any(i => i.Quantity <= 0))
         {
             return BadRequest("Invalid request: Username is required and at least one item with positive quantity must be provided.");
         }
 
-        // 2. Kiểm tra User
         var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == request.Username);
         if (user == null) return NotFound($"User '{request.Username}' not found.");
 
-        // 3. Tìm hoặc tạo Cart
+        // 💡 Tìm hoặc tạo Cart MỚI (chưa xử lý)
         var cart = await _context.Carts
             .Include(c => c.CartItems)
-            .FirstOrDefaultAsync(c => c.Username == request.Username);
+            .FirstOrDefaultAsync(c => c.Username == request.Username && c.IsProcessed == false);
 
         if (cart == null)
         {
-            cart = new Cart { Username = request.Username, User = user };
+            cart = new Cart { Username = request.Username, User = user, IsProcessed = false };
             _context.Carts.Add(cart);
-            // Không cần SaveChangesAsync ở đây, vì sẽ làm cùng lúc cuối cùng
         }
 
         var productIds = request.Items.Select(i => i.ProductId).ToList();
-
-        // Tải tất cả Product cần thiết một lần
         var products = await _context.Products
             .Where(p => productIds.Contains(p.Id))
             .ToDictionaryAsync(p => p.Id);
@@ -92,7 +89,6 @@ public class CartController : ControllerBase
         var addedItems = new List<CartAdditionItemDto>();
         var missingProducts = new List<int>();
 
-        // 4. Lặp qua từng sản phẩm trong Request và cập nhật Cart
         foreach (var item in request.Items)
         {
             if (!products.ContainsKey(item.ProductId))
@@ -115,10 +111,9 @@ public class CartController : ControllerBase
             }
             else
             {
-                cartItem.Quantity += item.Quantity; // Cộng thêm số lượng
+                cartItem.Quantity += item.Quantity;
             }
 
-            // Lưu thông tin item đã được thêm vào (hoặc cập nhật)
             addedItems.Add(new CartAdditionItemDto { ProductId = item.ProductId, Quantity = cartItem.Quantity });
         }
 
@@ -134,7 +129,6 @@ public class CartController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        // 5. Trả về Anonymous Object an toàn (Không gây JSON cycle)
         return Ok(new
         {
             Username = request.Username,
@@ -144,8 +138,63 @@ public class CartController : ControllerBase
     }
 
     // ************************************************************
-    // 3. Endpoint: POST /api/Cart/checkout
-    // Trả về Anonymous Object (Làm phẳng)
+    // 3. Endpoint: POST /api/Cart/remove
+    // Xóa/Giảm số lượng sản phẩm khỏi giỏ hàng
+    // ************************************************************
+    [HttpPost("remove")]
+    public async Task<IActionResult> RemoveFromCart(string username, int productId, int quantity)
+    {
+        if (quantity <= 0)
+        {
+            return BadRequest("Quantity must be positive for removal.");
+        }
+
+        // Tìm Cart CHƯA XỬ LÝ
+        var cart = await _context.Carts
+            .Include(c => c.CartItems)
+            .FirstOrDefaultAsync(c => c.Username == username && c.IsProcessed == false);
+
+        if (cart == null)
+        {
+            return NotFound($"Active cart for user {username} not found.");
+        }
+
+        var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+        if (cartItem == null)
+        {
+            return NotFound($"Product ID {productId} not found in user's cart.");
+        }
+
+        string message;
+
+        if (cartItem.Quantity <= quantity)
+        {
+            // Xóa hoàn toàn mục sản phẩm
+            _context.CartItems.Remove(cartItem);
+            message = $"Product ID {productId} has been completely removed from the cart.";
+        }
+        else
+        {
+            // Chỉ giảm số lượng
+            cartItem.Quantity -= quantity;
+            message = $"Removed {quantity} units of Product ID {productId}. New quantity: {cartItem.Quantity}.";
+        }
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            Username = username,
+            ProductId = productId,
+            CurrentQuantity = cartItem.Quantity,
+            Message = message
+        });
+    }
+
+    // ************************************************************
+    // 4. Endpoint: POST /api/Cart/checkout
+    // Chuyển giỏ hàng thành Đơn hàng (Lưu lịch sử)
     // ************************************************************
     [HttpPost("checkout")]
     public async Task<IActionResult> Checkout(string username)
@@ -153,11 +202,12 @@ public class CartController : ControllerBase
         var cart = await _context.Carts
             .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
-            .FirstOrDefaultAsync(c => c.Username == username);
+            // Tìm giỏ hàng CHƯA XỬ LÝ để thanh toán
+            .FirstOrDefaultAsync(c => c.Username == username && c.IsProcessed == false);
 
         if (cart == null || !cart.CartItems.Any())
         {
-            return BadRequest("Cart is empty or not found.");
+            return BadRequest("Active cart is empty or not found.");
         }
 
         // 1. Tạo Order mới
@@ -189,8 +239,11 @@ public class CartController : ControllerBase
 
         _context.Orders.Add(newOrder);
 
-        // 3. Xóa các mục trong giỏ hàng (CartItems)
-        _context.CartItems.RemoveRange(cart.CartItems);
+        // 3. 🔥 ĐÁNH DẤU GIỎ HÀNG ĐÃ XỬ LÝ
+        cart.IsProcessed = true;
+
+        // Không cần xóa CartItems vì chúng ta giữ lại Cart (với IsProcessed = true)
+        // và sẽ tạo một Cart mới khi user add product lần tiếp theo.
 
         await _context.SaveChangesAsync();
 
@@ -205,8 +258,8 @@ public class CartController : ControllerBase
     }
 
     // ************************************************************
-    // 4. Endpoint: GET /api/Cart/history/{username}
-    // Trả về List<OrderHistoryDto> (ViewModel)
+    // 5. Endpoint: GET /api/Cart/history/{username}
+    // Lấy lịch sử đơn hàng của người dùng
     // ************************************************************
     [HttpGet("history/{username}")]
     public async Task<ActionResult<IEnumerable<OrderHistoryDto>>> GetOrderHistory(string username)
@@ -223,7 +276,6 @@ public class CartController : ControllerBase
             return NotFound("No order history found.");
         }
 
-        // Ánh xạ sang OrderHistoryDto/ViewModel
         var historyViewModels = orders.Select(o => new OrderHistoryDto
         {
             OrderId = o.Id,
@@ -233,7 +285,7 @@ public class CartController : ControllerBase
             Items = o.OrderDetails.Select(od => new OrderItemDto
             {
                 ProductId = od.ProductId,
-                ProductName = od.Product?.Name ?? "N/A", // Xử lý trường hợp Product là null
+                ProductName = od.Product?.Name ?? "N/A",
                 Quantity = od.Quantity,
                 PriceAtTime = od.PriceAtTime
             }).ToList()
@@ -241,58 +293,44 @@ public class CartController : ControllerBase
 
         return Ok(historyViewModels);
     }
-    [HttpPost("remove")]
-    // Chấp nhận dữ liệu từ body (FromBody) hoặc từ query string (không có [FromBody] cho loại Request này)
-    public async Task<IActionResult> RemoveFromCart(string username, int productId, int quantity)
+    // ************************************************************
+    // 6. Endpoint: GET /api/Cart/AllCarts
+    // Lấy tất cả giỏ hàng (bao gồm cả đã xử lý)
+    // ************************************************************
+    [HttpGet("AllCarts")]
+    public async Task<ActionResult<IEnumerable<AllCartsDto>>> GetAllCarts()
     {
-        if (quantity <= 0)
-        {
-            return BadRequest("Quantity must be positive for removal.");
-        }
-
-        // 1. Tìm Cart
-        var cart = await _context.Carts
+        var allCarts = await _context.Carts
             .Include(c => c.CartItems)
-            .FirstOrDefaultAsync(c => c.Username == username);
+                .ThenInclude(ci => ci.Product)
+            .ToListAsync();
 
-        if (cart == null)
+        if (!allCarts.Any())
         {
-            return NotFound($"Cart for user {username} not found.");
+            return NotFound("No carts found in the system.");
         }
 
-        // 2. Tìm CartItem tương ứng
-        var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
-
-        if (cartItem == null)
+        // Trong phương thức GetAllCarts
+        var allCartsViewModel = allCarts.Select(cart => new AllCartsDto
         {
-            return NotFound($"Product ID {productId} not found in user's cart.");
-        }
+            CartId = cart.Id,
+            Username = cart.Username,
+            TotalItems = cart.CartItems.Count,
+            TotalQuantity = cart.CartItems.Sum(ci => ci.Quantity),
 
-        // 3. Xử lý logic xóa/giảm số lượng
-        string message;
+            // 🔥 SỬ DỤNG THUỘC TÍNH MỚI
+            IsProcessed = cart.IsProcessed,
 
-        if (cartItem.Quantity <= quantity)
-        {
-            // Xóa hoàn toàn mục sản phẩm
-            _context.CartItems.Remove(cartItem);
-            message = $"Product ID {productId} has been completely removed from the cart.";
-        }
-        else
-        {
-            // Chỉ giảm số lượng
-            cartItem.Quantity -= quantity;
-            message = $"Removed {quantity} units of Product ID {productId}. New quantity: {cartItem.Quantity}.";
-        }
+            // Ánh xạ danh sách Items
+            Items = cart.CartItems.Select(ci => new CartItemDto
+            {
+                ProductId = ci.ProductId,
+                ProductName = ci.Product?.Name ?? "N/A",
+                Price = ci.Product?.Price ?? 0,
+                Quantity = ci.Quantity
+            }).ToList()
+        }).ToList();
 
-        await _context.SaveChangesAsync();
-
-        // 4. Trả về Anonymous Object an toàn
-        return Ok(new
-        {
-            Username = username,
-            ProductId = productId,
-            CurrentQuantity = cartItem.Quantity, // Sẽ là 0 nếu mục đã bị xóa hoàn toàn
-            Message = message
-        });
+        return Ok(allCartsViewModel);
     }
 }

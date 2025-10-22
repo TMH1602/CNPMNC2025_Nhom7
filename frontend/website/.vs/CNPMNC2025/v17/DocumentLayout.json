@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\frontend\\website\\fastfoodcompareappenhanced_v3.1\\controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E2753F43-C101-68FF-83EB-ABC50297B9E6}|FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj|solutionrelative:fastfoodcompareappenhanced_v3.1\\controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -35,6 +47,45 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\appsettings.json",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\appsettings.json",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\appsettings.json",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-21T06:31:56.593Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Properties\\launchSettings.json",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-21T06:28:48.691Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Program.cs",
+              "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Program.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Program.cs",
+              "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Program.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T06:28:43.395Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "CheckoutController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\CheckoutController.cs",
               "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CheckoutController.cs",
@@ -42,12 +93,11 @@
               "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CheckoutController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T02:42:53.928Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-17T02:42:53.928Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\AccountController.cs",
@@ -55,12 +105,11 @@
               "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\AccountController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T02:42:50.329Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-17T02:42:50.329Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "MenuController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuController.cs",
               "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuController.cs",
@@ -73,7 +122,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "MenuApiController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuApiController.cs",
               "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuApiController.cs",
@@ -81,12 +130,11 @@
               "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\MenuApiController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T02:42:34.001Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-17T02:42:34.001Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "CartController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\Controllers\\CartController.cs",
               "RelativeDocumentMoniker": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CartController.cs",
@@ -94,8 +142,7 @@
               "RelativeToolTip": "FastFoodCompareAppEnhanced_v3.1\\Controllers\\CartController.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAASwBYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T02:41:52.015Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-17T02:41:52.015Z"
             }
           ]
         }
