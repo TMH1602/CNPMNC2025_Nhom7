@@ -7,7 +7,8 @@ using System;
 using System.Linq;
 using System.Net.Sockets; // Cần thiết cho AddressFamily
 using System.Net; // Cần thiết cho IPAddress
-using Microsoft.Extensions.Logging; // <-- THÊM DÒNG NÀY
+using Microsoft.Extensions.Logging;
+using System.Web; // <-- THÊM DÒNG NÀY
 namespace WebApplication1.Services
 {
     // Giả định IVnPayService đã được định nghĩa ở đâu đó
@@ -22,13 +23,12 @@ namespace WebApplication1.Services
             _config = config;
             _logger = logger; // <-- GÁN LOGGER
         }
-
-        // ====================================================================
-        // HÀM HỖ TRỢ: TÍNH HASH HMACSHA512
-        // ====================================================================
         private string HmacSha512(string key, string inputData)
         {
+            // Initialize StringBuilder to build the final hash string
             var hash = new StringBuilder();
+
+            // Convert the Secret Key to a byte array using UTF8 encoding
             byte[] keyBytes = Encoding.UTF8.GetBytes(key);
             byte[] inputBytes = Encoding.UTF8.GetBytes(inputData);
             using (var hmac = new HMACSHA512(keyBytes))
@@ -72,28 +72,34 @@ namespace WebApplication1.Services
             string baseUrl = _config["Vnpay:PaymentUrl"] ?? throw new ArgumentNullException("PaymentUrl is missing.");
             string returnUrl = _config["Vnpay:ReturnUrl"] ?? "";
 
+            // Đảm bảo không có dấu và xử lý lỗi encoding trước khi hash
+            string encodedOrderInfo = HttpUtility.UrlEncode(orderInfo, Encoding.GetEncoding("iso-8859-1"));
+
+            string expireDate = DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss");
+
             // 2. Chuẩn bị tham số (SortedList tự động sắp xếp A-Z cho Hash)
             var vnpParams = new SortedList<string, string>
             {
                 {"vnp_Amount", ((long)amount * 100).ToString()},
                 {"vnp_Command", "pay"},
-                {"vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss")},
+                {"vnp_CreateDate",DateTime.Now.ToString("yyyyMMddHHmmss")},
                 {"vnp_CurrCode", "VND"},
-                {"vnp_IpAddr", GetValidIpAddress(context)}, // 🔥 SỬ DỤNG HÀM XỬ LÝ IP
+                {"vnp_IpAddr", GetValidIpAddress(context)},
                 {"vnp_Locale", "vn"},
-                {"vnp_OrderInfo", orderInfo},
-                {"vnp_OrderType", "other"},
+                {"vnp_OrderInfo", encodedOrderInfo},
+                {"vnp_OrderType", "180000"},
                 {"vnp_ReturnUrl", returnUrl},
                 {"vnp_TmnCode", tmnCode},
                 {"vnp_TxnRef", orderId.ToString()},
-                {"vnp_Version", "2.1.0"}
+                {"vnp_Version", "2.0.0"},
+                {"vnp_ExpireDate", expireDate}, 
             };
 
             // 3. Tạo chuỗi Hash và URL
             var dataHash = string.Join("&", vnpParams.Select(p => p.Key + "=" + p.Value));
             string secureHash = HmacSha512(hashSecret, dataHash);
 
-            // Gán vnp_SecureHash (chữ S hoa) vào URL
+            // 4. Hoàn thiện URL (Sử dụng vnp_SecureHash - S và H hoa)
             return $"{baseUrl}?{dataHash}&vnp_SecureHash={secureHash}";
         }
         public bool ValidateVnPayHash(IQueryCollection collections)
@@ -108,7 +114,7 @@ namespace WebApplication1.Services
             foreach (var key in collections.Keys)
             {
                 // Chỉ lấy các tham số vnp_... và không lấy vnp_SecureHash
-                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_") && key != "vnp_SecureHash")
+                if (key.StartsWith("vnp_") && key != "vnp_SecureHash")
                 {
                     // Lấy giá trị chuỗi (cần thiết cho Hash)
                     vnpParams.Add(key, collections[key]!.ToString());

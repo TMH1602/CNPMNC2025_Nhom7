@@ -35,7 +35,7 @@ namespace WebApplication1.Controllers
             if (order == null || order.Status == "Paid") return BadRequest("Order không hợp lệ hoặc đã được thanh toán.");
 
             // Tạo thông tin OrderInfo
-            string orderInfo = $"Thanh toan don hang: {order.Id} thoi gian: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+            string orderInfo = $"Thanhtoandonhang{order.Id}";
 
             string paymentUrl = _vnPayService.CreatePaymentUrl(
                 order.Id,
