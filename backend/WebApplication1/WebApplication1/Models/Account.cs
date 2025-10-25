@@ -29,7 +29,7 @@ namespace WebApplication1.Models
 
         [MaxLength(150)]
         public string DisplayName { get; set; } = string.Empty;
-
+        public ICollection<VnPayCardToken> Tokens { get; set; } = new List<VnPayCardToken>();
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public ICollection<Cart> Carts { get; set; } = new List<Cart>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();

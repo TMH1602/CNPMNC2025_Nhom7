@@ -1007,6 +1007,92 @@
           }
         }
       }
+    },
+    "/api/VnPay/CreateTokenUrl": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/VnPay/PayWithToken": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/VnPay/RemoveToken": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/VnPay/TokenCreationReturn": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/VnPay/PaymentTokenReturn": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1605,6 +1691,13 @@
             "type": "string",
             "nullable": true
           },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VnPayCardToken"
+            },
+            "nullable": true
+          },
           "createdDate": {
             "type": "string",
             "format": "date-time"
@@ -1685,6 +1778,52 @@
           }
         },
         "additionalProperties": { }
+      },
+      "VnPayCardToken": {
+        "required": [
+          "token",
+          "userId",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "token": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "cardNumber": {
+            "maxLength": 20,
+            "type": "string",
+            "nullable": true
+          },
+          "bankCode": {
+            "maxLength": 10,
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

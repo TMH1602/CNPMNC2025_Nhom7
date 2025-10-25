@@ -227,7 +227,7 @@ public class CartController : ControllerBase
         {
             Username = username,
             OrderDate = DateTime.UtcNow,
-            Status = "Processed",
+            Status = "Pending",
         };
 
         decimal totalAmount = 0;
