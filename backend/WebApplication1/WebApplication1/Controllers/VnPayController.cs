@@ -30,8 +30,7 @@ namespace WebApplication1.Controllers
         // 💡 Giả định hàm lấy ID người dùng hiện tại
         private int GetCurrentUserId()
         {
-            // Trong thực tế, bạn sẽ lấy từ Claims/Token (ví dụ: return int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));)
-            return 1;
+            return 3;
         }
 
         // ====================================================================
@@ -110,7 +109,7 @@ namespace WebApplication1.Controllers
 
                 return Ok("Token created and saved successfully. ✅");
             }
-            return BadRequest($"Token creation failed. Response: {responseCode}.");
+            return BadRequest($"Token: {responseCode}.");
         }
 
         // ====================================================================
@@ -147,7 +146,31 @@ namespace WebApplication1.Controllers
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
             }
         }
+        [HttpGet("GetTokens")]
+        public async Task<IActionResult> GetTokens()
+        {
+            int currentUserId = GetCurrentUserId();
 
+            // Truy vấn các token của người dùng hiện tại từ database
+            // Sử dụng Select để chỉ lấy các trường cần thiết, không cần lấy toàn bộ đối tượng
+            var tokens = await _context.VnPayCardTokens
+                .Where(t => t.UserId == currentUserId)
+                .Select(t => new
+                {
+                    t.Token,
+                    t.CardNumber, // Số thẻ đã được che (ví dụ: 401234xxxxxx1234)
+                    t.BankCode,
+                    t.CreatedDate // Giả định có trường CreatedDate trong model VnPayCardToken
+                })
+                .ToListAsync();
+
+            if (tokens == null || !tokens.Any())
+            {
+                return NotFound("Không tìm thấy Token nào cho người dùng này.");
+            }
+
+            return Ok(tokens);
+        }
         // ************************************************************
         // TÙY CHỌN: Xử lý Callback Xóa Token (TokenRemoveReturn)
         // ************************************************************

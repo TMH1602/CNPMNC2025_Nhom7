@@ -576,6 +576,16 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.VnPayController",
+    "Method": "GetTokens",
+    "RelativePath": "api/VnPay/GetTokens",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.VnPayController",
     "Method": "PaymentTokenReturn",
     "RelativePath": "api/VnPay/PaymentTokenReturn",
     "HttpMethod": "GET",

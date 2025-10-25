@@ -1093,6 +1093,18 @@
           }
         }
       }
+    },
+    "/api/VnPay/GetTokens": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {
