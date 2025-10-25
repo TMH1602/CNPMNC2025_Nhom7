@@ -1008,19 +1008,7 @@
         }
       }
     },
-    "/api/VnPay/CreateTokenUrl": {
-      "get": {
-        "tags": [
-          "VnPay"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/VnPay/PayWithToken": {
+    "/api/VnPay/CreatePayment": {
       "get": {
         "tags": [
           "VnPay"
@@ -1033,13 +1021,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "token",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1049,52 +1030,7 @@
         }
       }
     },
-    "/api/VnPay/RemoveToken": {
-      "get": {
-        "tags": [
-          "VnPay"
-        ],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/VnPay/TokenCreationReturn": {
-      "get": {
-        "tags": [
-          "VnPay"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/VnPay/PaymentTokenReturn": {
-      "get": {
-        "tags": [
-          "VnPay"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/VnPay/GetTokens": {
+    "/api/VnPay/VnpayReturn": {
       "get": {
         "tags": [
           "VnPay"

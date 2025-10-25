@@ -28,110 +28,48 @@ namespace WebApplication1.Controllers
         }
 
         // 💡 Giả định hàm lấy ID người dùng hiện tại
-        private int GetCurrentUserId()
-        {
-            return 3;
-        }
-
-        // ====================================================================
-        // ENDPOINT 1: TẠO URL TẠO TOKEN
-        // ====================================================================
-        [HttpGet("CreateTokenUrl")]
-        public IActionResult CreateTokenUrl()
-        {
-            int currentUserId = GetCurrentUserId();
-            string tokenUrl = _vnPayService.CreateTokenizationUrl(currentUserId, HttpContext);
-            return Ok(new { TokenUrl = tokenUrl });
-        }
-
-        // ====================================================================
-        // ENDPOINT 2: TẠO URL THANH TOÁN BẰNG TOKEN
-        // ====================================================================
-        [HttpGet("PayWithToken")]
-        public async Task<IActionResult> PayWithToken([FromQuery] int orderId, [FromQuery] string token)
+        [HttpGet("CreatePayment")]
+        public async Task<IActionResult> CreatePayment([FromQuery] int orderId)
         {
             var order = await _context.Orders.FindAsync(orderId);
-            if (order == null) return BadRequest("Không tìm thấy Order!");
-            if (order.Status != "Processed") return BadRequest("Order Đã được trả tiền rồi");
+            if (order == null || order.Status == "Paid") return BadRequest("Order không hợp lệ hoặc đã được thanh toán.");
 
-            string paymentUrl = _vnPayService.CreatePaymentTokenUrl(
+            // Tạo thông tin OrderInfo
+            string orderInfo = $"Thanh toan don hang: {order.Id} thoi gian: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+
+            string paymentUrl = _vnPayService.CreatePaymentUrl(
                 order.Id,
                 order.TotalAmount,
-                token,
+                orderInfo,
                 HttpContext
             );
+
             return Ok(new { PaymentUrl = paymentUrl });
         }
-
-        // ====================================================================
-        // ENDPOINT 3: TẠO URL XÓA TOKEN
-        // ====================================================================
-        [HttpGet("RemoveToken")]
-        public IActionResult RemoveToken([FromQuery] string token)
-        {
-            int currentUserId = GetCurrentUserId();
-            string removeUrl = _vnPayService.CreateRemoveTokenUrl(token, currentUserId, HttpContext);
-
-            // Xóa khỏi DB cục bộ trước (có thể chuyển sang callback)
-            var localToken = _context.VnPayCardTokens.FirstOrDefault(t => t.Token == token && t.UserId == currentUserId);
-            if (localToken != null) _context.VnPayCardTokens.Remove(localToken);
-            _context.SaveChangesAsync();
-
-            return Ok(new { RemoveUrl = removeUrl });
-        }
-
-
-        // ====================================================================
-        // ENDPOINT CALLBACK: XỬ LÝ KẾT QUẢ TẠO TOKEN
-        // Route: /api/VnPay/TokenCreationReturn
-        // ====================================================================
-        [HttpGet("TokenCreationReturn")]
-        public async Task<IActionResult> TokenCreationReturn()
+        [HttpGet("VnpayReturn")]
+        public async Task<IActionResult> VnpayReturn()
         {
             var collections = Request.Query;
-            if (!_vnPayService.ValidateVnPayHash(collections)) return BadRequest("Invalid Hash Signature.");
 
-            string responseCode = collections["vnp_response_code"]!;
-            string transactionStatus = collections["vnp_transaction_status"]!;
-            string cardNumber = collections["vnp_card_number"]!.ToString();
-            if (responseCode == "00" && transactionStatus == "00")
+            // 1. Kiểm tra Hash
+            if (!_vnPayService.ValidateVnPayHash(collections))
             {
-                // Logic lưu Token (Giả định Model VnPayCardToken)
-                var newToken = new VnPayCardToken
-                {
-                    UserId = int.Parse(collections["vnp_app_user_id"]!),
-                    Token = collections["vnp_token"]!,
-                    CardNumber = cardNumber.Replace("x", ""),
-                    BankCode = collections["vnp_bank_code"]!,
-                };
-                _context.VnPayCardTokens.Add(newToken);
-                await _context.SaveChangesAsync();
-
-                return Ok("Token created and saved successfully. ✅");
+                return BadRequest("Invalid Hash Signature. 🚨");
             }
-            return BadRequest($"Token: {responseCode}.");
-        }
 
-        // ====================================================================
-        // ENDPOINT CALLBACK: XỬ LÝ KẾT QUẢ THANH TOÁN
-        // Route: /api/VnPay/PaymentTokenReturn
-        // ====================================================================
-        [HttpGet("PaymentTokenReturn")]
-        public async Task<IActionResult> PaymentTokenReturn()
-        {
-            var collections = Request.Query;
-            if (!_vnPayService.ValidateVnPayHash(collections)) return BadRequest("Invalid Hash Signature. 🚨");
-
-            int orderId = int.Parse(collections["vnp_txn_ref"]!);
-            string responseCode = collections["vnp_response_code"]!;
+            // 2. Lấy thông tin giao dịch
+            int orderId = int.Parse(collections["vnp_TxnRef"]!);
+            string responseCode = collections["vnp_ResponseCode"]!;
+            string transactionStatus = collections["vnp_TransactionStatus"]!;
 
             var order = await _context.Orders.FindAsync(orderId);
             if (order == null) return NotFound("Order not found.");
 
-            if (responseCode == "00" && collections["vnp_transaction_status"] == "00")
+            // 3. Xử lý trạng thái
+            if (responseCode == "00" && transactionStatus == "00")
             {
                 // Giao dịch thành công
-                if (order.Status != "Paid") // Ngăn chặn xử lý trùng lặp
+                if (order.Status != "Paid")
                 {
                     order.Status = "Paid";
                     await _context.SaveChangesAsync();
@@ -140,39 +78,11 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                // Thanh toán thất bại
+                // Thanh toán thất bại hoặc bị hủy
                 order.Status = "PaymentFailed";
                 await _context.SaveChangesAsync();
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
             }
         }
-        [HttpGet("GetTokens")]
-        public async Task<IActionResult> GetTokens()
-        {
-            int currentUserId = GetCurrentUserId();
-
-            // Truy vấn các token của người dùng hiện tại từ database
-            // Sử dụng Select để chỉ lấy các trường cần thiết, không cần lấy toàn bộ đối tượng
-            var tokens = await _context.VnPayCardTokens
-                .Where(t => t.UserId == currentUserId)
-                .Select(t => new
-                {
-                    t.Token,
-                    t.CardNumber, // Số thẻ đã được che (ví dụ: 401234xxxxxx1234)
-                    t.BankCode,
-                    t.CreatedDate // Giả định có trường CreatedDate trong model VnPayCardToken
-                })
-                .ToListAsync();
-
-            if (tokens == null || !tokens.Any())
-            {
-                return NotFound("Không tìm thấy Token nào cho người dùng này.");
-            }
-
-            return Ok(tokens);
-        }
-        // ************************************************************
-        // TÙY CHỌN: Xử lý Callback Xóa Token (TokenRemoveReturn)
-        // ************************************************************
     }
 }

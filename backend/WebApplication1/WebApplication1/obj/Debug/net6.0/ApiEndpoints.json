@@ -566,38 +566,8 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.VnPayController",
-    "Method": "CreateTokenUrl",
-    "RelativePath": "api/VnPay/CreateTokenUrl",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.VnPayController",
-    "Method": "GetTokens",
-    "RelativePath": "api/VnPay/GetTokens",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.VnPayController",
-    "Method": "PaymentTokenReturn",
-    "RelativePath": "api/VnPay/PaymentTokenReturn",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.VnPayController",
-    "Method": "PayWithToken",
-    "RelativePath": "api/VnPay/PayWithToken",
+    "Method": "CreatePayment",
+    "RelativePath": "api/VnPay/CreatePayment",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -606,35 +576,14 @@
         "Name": "orderId",
         "Type": "System.Int32",
         "IsRequired": false
-      },
-      {
-        "Name": "token",
-        "Type": "System.String",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
     "ContainingType": "WebApplication1.Controllers.VnPayController",
-    "Method": "RemoveToken",
-    "RelativePath": "api/VnPay/RemoveToken",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "token",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.VnPayController",
-    "Method": "TokenCreationReturn",
-    "RelativePath": "api/VnPay/TokenCreationReturn",
+    "Method": "VnpayReturn",
+    "RelativePath": "api/VnPay/VnpayReturn",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

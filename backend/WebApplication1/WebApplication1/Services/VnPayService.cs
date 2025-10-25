@@ -5,19 +5,27 @@ using System.Security.Cryptography;
 using System.Text;
 using System;
 using System.Linq;
-
+using System.Net.Sockets; // Cần thiết cho AddressFamily
+using System.Net; // Cần thiết cho IPAddress
+using Microsoft.Extensions.Logging; // <-- THÊM DÒNG NÀY
 namespace WebApplication1.Services
 {
+    // Giả định IVnPayService đã được định nghĩa ở đâu đó
+
+
     public class VnPayService : IVnPayService
     {
         private readonly IConfiguration _config;
-
-        public VnPayService(IConfiguration config)
+        private readonly ILogger<VnPayService> _logger; // <-- KHAI BÁO LOGGER
+        public VnPayService(IConfiguration config, ILogger<VnPayService> logger)
         {
             _config = config;
+            _logger = logger; // <-- GÁN LOGGER
         }
 
-        // --- Hàm hỗ trợ Hash ---
+        // ====================================================================
+        // HÀM HỖ TRỢ: TÍNH HASH HMACSHA512
+        // ====================================================================
         private string HmacSha512(string key, string inputData)
         {
             var hash = new StringBuilder();
@@ -33,110 +41,88 @@ namespace WebApplication1.Services
             }
             return hash.ToString();
         }
-
-        // --- Hàm hỗ trợ tạo tham số chung ---
-        private SortedList<string, string> GetBaseVnpayParams(HttpContext context)
+        private string GetValidIpAddress(HttpContext context)
         {
-            // Lấy cấu hình
-            string tmnCode = _config["Vnpay:TmnCode"] ?? throw new ArgumentNullException("Vnpay:TmnCode");
+            var remoteIp = context.Connection.RemoteIpAddress;
 
-            return new SortedList<string, string>
+            if (remoteIp == null) return "127.0.0.1";
+
+            if (remoteIp.IsIPv4MappedToIPv6)
             {
-                {"vnp_tmn_code", tmnCode},
-                {"vnp_version", "2.0.1"},
-                {"vnp_locale", "vi"},
-                {"vnp_ip_addr", context.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1"},
-                {"vnp_create_date", DateTime.Now.ToString("yyyyMMddHHmmss")},
+                return remoteIp.MapToIPv4().ToString();
+            }
+            // Trường hợp IPv6 Localhost (::1)
+            else if (remoteIp.AddressFamily == AddressFamily.InterNetworkV6 && remoteIp.ToString() == "::1")
+            {
+                return "127.0.0.1";
+            }
+            // Trường hợp IPv4 bình thường
+            else if (remoteIp.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return remoteIp.ToString();
+            }
+
+            return "127.0.0.1"; // Giá trị mặc định an toàn
+        }
+        public string CreatePaymentUrl(int orderId, decimal amount, string orderInfo, HttpContext context)
+        {
+            // 1. Lấy cấu hình
+            string tmnCode = _config["Vnpay:TmnCode"] ?? throw new ArgumentNullException("TmnCode is missing.");
+            string hashSecret = _config["Vnpay:HashSecret"] ?? throw new ArgumentNullException("HashSecret is missing.");
+            string baseUrl = _config["Vnpay:PaymentUrl"] ?? throw new ArgumentNullException("PaymentUrl is missing.");
+            string returnUrl = _config["Vnpay:ReturnUrl"] ?? "";
+
+            // 2. Chuẩn bị tham số (SortedList tự động sắp xếp A-Z cho Hash)
+            var vnpParams = new SortedList<string, string>
+            {
+                {"vnp_Amount", ((long)amount * 100).ToString()},
+                {"vnp_Command", "pay"},
+                {"vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss")},
+                {"vnp_CurrCode", "VND"},
+                {"vnp_IpAddr", GetValidIpAddress(context)}, // 🔥 SỬ DỤNG HÀM XỬ LÝ IP
+                {"vnp_Locale", "vn"},
+                {"vnp_OrderInfo", orderInfo},
+                {"vnp_OrderType", "other"},
+                {"vnp_ReturnUrl", returnUrl},
+                {"vnp_TmnCode", tmnCode},
+                {"vnp_TxnRef", orderId.ToString()},
+                {"vnp_Version", "2.1.0"}
             };
-        }
 
-        // --- 1. TẠO URL TẠO TOKEN ---
-        public string CreateTokenizationUrl(int userId, HttpContext context)
-        {
-            var vnpParams = GetBaseVnpayParams(context);
-            string baseUrl = _config["Vnpay:TokenBaseUrl"] + "create-token.html";
-            string hashSecret = _config["Vnpay:HashSecret"] ?? "";
-
-            // Tham số Tokenization cụ thể
-            vnpParams.Add("vnp_command", "token_create");
-            vnpParams.Add("vnp_app_user_id", userId.ToString());
-            vnpParams.Add("vnp_card_type", "01");
-            vnpParams.Add("vnp_txn_desc", "Tao moi token");
-            vnpParams.Add("vnp_txn_ref", DateTime.Now.Ticks.ToString()); // Transaction ID duy nhất
-            vnpParams.Add("vnp_return_url", _config["Vnpay:ReturnTokenCreateUrl"] ?? "");
-            vnpParams.Add("vnp_cancel_url", _config["Vnpay:CancelUrl"] ?? "");
-
-            // Tạo chuỗi Hash và URL
+            // 3. Tạo chuỗi Hash và URL
             var dataHash = string.Join("&", vnpParams.Select(p => p.Key + "=" + p.Value));
             string secureHash = HmacSha512(hashSecret, dataHash);
-            return $"{baseUrl}?{dataHash}&vnp_secure_hash={secureHash}";
+
+            // Gán vnp_SecureHash (chữ S hoa) vào URL
+            return $"{baseUrl}?{dataHash}&vnp_SecureHash={secureHash}";
         }
-
-        // --- 2. TẠO URL THANH TOÁN BẰNG TOKEN ---
-        public string CreatePaymentTokenUrl(int orderId, decimal amount, string token, HttpContext context)
-        {
-            var vnpParams = GetBaseVnpayParams(context);
-            string baseUrl = _config["Vnpay:TokenBaseUrl"] + "payment-token.html";
-            string hashSecret = _config["Vnpay:HashSecret"] ?? "";
-
-            // Tham số Payment Token cụ thể
-            vnpParams.Add("vnp_command", "token_pay");
-            vnpParams.Add("vnp_amount", ((long)amount * 100).ToString());
-            vnpParams.Add("vnp_curr_code", "VND");
-            vnpParams.Add("vnp_token", token);
-            vnpParams.Add("vnp_app_user_id", "4"); // Lấy User ID thực tế
-            vnpParams.Add("vnp_txn_ref", orderId.ToString());
-            vnpParams.Add("vnp_txn_desc", $"thanh toan don hang {orderId}");
-            vnpParams.Add("vnp_return_url", _config["Vnpay:ReturnPaymentUrl"] ?? "");
-            vnpParams.Add("vnp_cancel_url", _config["Vnpay:CancelUrl"] ?? "");
-
-            // Tạo chuỗi Hash và URL
-            var dataHash = string.Join("&", vnpParams.Select(p => p.Key + "=" + p.Value));
-            string secureHash = HmacSha512(hashSecret, dataHash);
-            return $"{baseUrl}?{dataHash}&vnp_secure_hash={secureHash}";
-        }
-
-        // --- 3. TẠO URL XÓA TOKEN ---
-        public string CreateRemoveTokenUrl(string token, int userId, HttpContext context)
-        {
-            var vnpParams = GetBaseVnpayParams(context);
-            string baseUrl = _config["Vnpay:TokenBaseUrl"] + "remove-token.html";
-            string hashSecret = _config["Vnpay:HashSecret"] ?? "";
-
-            // Tham số Remove Token cụ thể
-            vnpParams.Add("vnp_command", "token_remove");
-            vnpParams.Add("vnp_token", token);
-            vnpParams.Add("vnp_app_user_id", userId.ToString());
-            vnpParams.Add("vnp_txn_ref", DateTime.Now.Ticks.ToString()); // ID giao dịch duy nhất
-            vnpParams.Add("vnp_txn_desc", "Xoa token da luu");
-            vnpParams.Add("vnp_return_url", _config["Vnpay:ReturnTokenRemoveUrl"] ?? "");
-
-            // Tạo chuỗi Hash và URL
-            var dataHash = string.Join("&", vnpParams.Select(p => p.Key + "=" + p.Value));
-            string secureHash = HmacSha512(hashSecret, dataHash);
-            return $"{baseUrl}?{dataHash}&vnp_secure_hash={secureHash}";
-        }
-
-        // --- 4. XÁC MINH HASH (Callback) ---
         public bool ValidateVnPayHash(IQueryCollection collections)
         {
             string hashSecret = _config["Vnpay:HashSecret"] ?? "";
-            string receivedHash = collections["vnp_secure_hash"]!;
 
-            // Lấy tất cả tham số trừ vnp_secure_hash
+            // LƯU Ý: VNPay V2.1.0 sử dụng vnp_SecureHash (S hoa)
+            string receivedHash = collections["vnp_SecureHash"]!.ToString();
+
+            // 1. Lọc và sắp xếp các tham số (trừ Hash)
             var vnpParams = new SortedList<string, string>();
             foreach (var key in collections.Keys)
             {
-                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_") && key != "vnp_secure_hash")
+                // Chỉ lấy các tham số vnp_... và không lấy vnp_SecureHash
+                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_") && key != "vnp_SecureHash")
                 {
-                    vnpParams.Add(key, collections[key]!);
+                    // Lấy giá trị chuỗi (cần thiết cho Hash)
+                    vnpParams.Add(key, collections[key]!.ToString());
                 }
             }
 
-            // Tạo chuỗi Hash để so sánh
+            // 2. Tạo chuỗi Hash Data
+
             var dataHash = string.Join("&", vnpParams.Select(p => p.Key + "=" + p.Value));
+            _logger.LogError("Debug DataHash: {Data}", dataHash);
+            // 3. Tính toán lại Hash
             string computedHash = HmacSha512(hashSecret, dataHash);
 
+            // 4. So sánh (Không phân biệt hoa thường)
             return computedHash.Equals(receivedHash, StringComparison.OrdinalIgnoreCase);
         }
     }
