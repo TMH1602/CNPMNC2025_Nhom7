@@ -91,15 +91,53 @@
         opacity: 1;
         text-decoration: underline;
     }
+    
+    /* CSS cho các nút Category mới */
+    .category-btn {
+        margin-right: 8px;
+        margin-bottom: 8px;
+        border-radius: 50px;
+        border: 1px solid #ff6a00;
+        color: #ff6a00;
+        background-color: #fff;
+        padding: 6px 15px;
+        font-weight: 500;
+        transition: all 0.2s;
+        white-space: nowrap; 
+    }
+    .category-btn:hover:not(.active) {
+        background-color: #fff0e0;
+    }
+    .category-btn.active {
+        background-color: #ff6a00;
+        color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* KHỐI CHỨA CÁC NÚT CATEGORY */
+    #full-width-category-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 15px 30px 10px 30px; 
+        /* Loại bỏ border-bottom để banner nằm sát */
+    }
+    #full-width-category-container h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
 </style>
 
 
 <div class="container-fluid page-content-wrapper">
+    
+    <div id="full-width-category-container" class="mb-4">
+         <h2>Thực đơn - Món ăn nhanh</h2>
+        <div id="category-filter-container" class="d-flex flex-wrap">
+            </div>
+    </div>
     <div class="row g-0 justify-content-between">
         
         <div class="col-left-panel col-left-panel-wrapper">
-            <h2 class="mb-3">Thực đơn - Món ăn nhanh</h2>
-            
             <div class="mb-3">
                 <img src="/images/banner.jpg" onerror="this.src='/images/placeholder-ad.jpg'" class="w-100 ad-banner" alt="Ad banner" />
             </div>
@@ -128,11 +166,11 @@
 
             <div class="mt-3">
                 <button id="clear-local-cart-btn" class="btn btn-outline-danger w-100 mb-2">
-                     Xóa Giỏ hàng Tạm thời
+                    🗑️ Xóa Giỏ hàng Tạm thời
                 </button>
                 
                 <button id="commit-cart-btn" class="btn btn-success w-100 mb-2" disabled>
-                     Thêm vào Giỏ hàng
+                    ✅ Thêm vào Giỏ hàng (Gửi API)
                 </button>
                 <a href="@Url.Action("Index", "Cart")" class="btn btn-primary w-100">Xem Giỏ hàng Đã lưu</a>
             </div>
@@ -148,12 +186,17 @@
     const LOCAL_CART_KEY = 'frontend_cart'; // Key cho giỏ hàng local
     const MENU_LOGIN_URL = 'Account/login'; 
     const CART_ADD_API_URL = 'https://localhost:7132/api/Cart/add';
+    
+    // Biến lưu trữ toàn bộ dữ liệu menu đã lọc (isActive: true)
+    let activeMenuItems = []; 
+    // Biến lưu Category đang được chọn
+    let selectedCategory = 'Tất cả';
 
     // =================================================================
     // HÀM QUẢN LÝ DỮ LIỆU CHUNG (NAVBAR)
     // =================================================================
 
-    window.loadCartCount = async function (user) {
+    window.loadCartCount = async function (user) { /* ... (Giữ nguyên) ... */
         const cartCountSpan = document.getElementById("cartCount");
         if (!user || !cartCountSpan) return;
 
@@ -194,17 +237,17 @@
     const localCartItemCountSpan = document.getElementById('local-cart-item-count');
     const clearLocalCartBtn = document.getElementById('clear-local-cart-btn');
 
-    function getLocalCart() {
+    function getLocalCart() { /* ... (Giữ nguyên) ... */
         const cartJson = localStorage.getItem(LOCAL_CART_KEY);
         return cartJson ? JSON.parse(cartJson) : [];
     }
 
-    function saveLocalCart(cart) {
+    function saveLocalCart(cart) { /* ... (Giữ nguyên) ... */
         localStorage.setItem(LOCAL_CART_KEY, JSON.stringify(cart));
         renderLocalCartPanel(); // Luôn render lại sau khi thay đổi
     }
     
-    function clearLocalCart() {
+    function clearLocalCart() { /* ... (Giữ nguyên) ... */
         if (confirm("Bạn có chắc chắn muốn xóa tất cả món ăn trong giỏ hàng tạm thời này không?")) {
             localStorage.removeItem(LOCAL_CART_KEY);
             renderLocalCartPanel();
@@ -212,20 +255,15 @@
         }
     }
     
-    // HÀM MỚI: Xóa một món ăn cụ thể khỏi giỏ hàng
-    function removeItemFromLocalCart(itemId) {
+    function removeItemFromLocalCart(itemId) { /* ... (Giữ nguyên) ... */
         const cart = getLocalCart();
-        
-        // Tìm vị trí của sản phẩm trong giỏ
         const index = cart.findIndex(item => item.id === itemId);
         
         if (index > -1) {
             if (cart[index].quantity > 1) {
-                // Nếu số lượng > 1, giảm số lượng
                 cart[index].quantity--;
                 alert(`Đã giảm số lượng của món "${cart[index].name}".`);
             } else {
-                // Nếu số lượng = 1, xóa sản phẩm khỏi mảng
                 const removedItemName = cart[index].name;
                 cart.splice(index, 1);
                 alert(`Đã xóa món "${removedItemName}" khỏi giỏ hàng tạm thời.`);
@@ -236,7 +274,7 @@
     }
 
 
-    function renderLocalCartPanel() {
+    function renderLocalCartPanel() { /* ... (Giữ nguyên) ... */
         const items = getLocalCart();
         let totalAmount = 0;
         let totalQuantity = 0;
@@ -272,6 +310,94 @@
         localCartTotalAmount.textContent = totalAmount.toLocaleString('vi-VN') + ' VNĐ';
         localCartItemCountSpan.textContent = totalQuantity; // Cập nhật số lượng trên tiêu đề
     }
+
+    // =================================================================
+    // HÀM QUẢN LÝ HIỂN THỊ MENU VÀ LỌC (MỚI)
+    // =================================================================
+    
+    const menuContainer = document.getElementById('menu-container');
+    const categoryContainer = document.getElementById('category-filter-container');
+
+    /**
+     * Lọc và render danh sách món ăn dựa trên Category đang chọn.
+     */
+    function renderMenuItems(items) {
+        let itemsToRender = items;
+        if (selectedCategory && selectedCategory !== 'Tất cả') {
+            itemsToRender = items.filter(item => item.category === selectedCategory);
+        }
+
+        menuContainer.innerHTML = '';
+        let totalPrice = 0;
+        
+        if (itemsToRender.length === 0) {
+            menuContainer.innerHTML = `<p class="text-muted p-3">Không tìm thấy món ăn nào trong danh mục "${selectedCategory}".</p>`;
+        }
+        
+        itemsToRender.forEach(item => {
+            totalPrice += item.price;
+            
+            const dishCardHtml = `
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="dish-card">
+                        <img src="${item.imageUrl}" alt="${item.name}" class="dish-image"/>
+                        <div class="body">
+                            <h5>${item.name} <span class="badge bg-light text-dark badge-price">${item.price.toLocaleString('vi-VN')} VNĐ</span></h5>
+                            <p>${item.description}</p>
+                            <div class="controls mt-2">
+                                <button type="button" class="btn btn-sm btn-success add-to-cart-btn" 
+                                    data-id="${item.id}" 
+                                    data-name="${item.name}" 
+                                    data-price="${item.price}">
+                                    🛒 Thêm vào giỏ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            menuContainer.innerHTML += dishCardHtml;
+        });
+
+        // Tính giá trung bình
+        const avgPrice = itemsToRender.length > 0 ? totalPrice / itemsToRender.length : 0;
+        document.getElementById('avgPrice').innerText = avgPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    }
+
+    /**
+     * Render các nút Category và gắn sự kiện lọc.
+     */
+    function renderCategoryFilters(items) {
+        // Lấy danh sách Category duy nhất từ các item đang hoạt động
+        const categories = [...new Set(items.map(item => item.category))].filter(c => c);
+        
+        // Thêm nút "Tất cả" lên đầu
+        categories.unshift('Tất cả');
+        
+        let categoryHtml = '';
+        categories.forEach(category => {
+            const isActive = category === selectedCategory ? 'active' : '';
+            categoryHtml += `<button type="button" class="category-btn ${isActive}" data-category="${category}">${category}</button>`;
+        });
+        
+        categoryContainer.innerHTML = categoryHtml;
+    }
+    
+    /**
+     * Xử lý click vào nút Category
+     */
+    function handleCategoryClick(event) {
+        const target = event.target;
+        if (target.classList.contains('category-btn')) {
+            // Cập nhật Category đang chọn
+            selectedCategory = target.dataset.category;
+            
+            // Render lại cả bộ lọc và menu
+            renderCategoryFilters(activeMenuItems);
+            renderMenuItems(activeMenuItems);
+        }
+    }
+
 
     // =================================================================
     // HÀM XỬ LÝ CLICK VÀO MÓN ĂN (Thêm vào LocalStorage)
@@ -398,6 +524,9 @@
             clearLocalCartBtn.addEventListener('click', clearLocalCart);
         }
         
+        // --- Gắn sự kiện cho nút Category (MỚI) ---
+        categoryContainer.addEventListener('click', handleCategoryClick);
+        
         // --- Lắng nghe sự kiện click chung (Cho các nút Thêm và Xóa Item) ---
         document.addEventListener('click', function(event) {
             const target = event.target;
@@ -427,40 +556,19 @@
                 return response.json();
             })
             .then(data => {
-                const activeItems = data.filter(item => item.isActive === true);
-                menuContainer.innerHTML = '';
-                let totalPrice = 0;
+                // 1. Lọc và lưu trữ dữ liệu chính
+                activeMenuItems = data.filter(item => item.isActive === true);
                 
-                activeItems.forEach(item => {
-                    totalPrice += item.price;
-                    
-                    const dishCardHtml = `
-                        <div class="col-12 col-md-6 col-lg-4 mb-4">
-                            <div class="dish-card">
-                                <img src="${item.imageUrl}" alt="${item.name}" class="dish-image"/>
-                                <div class="body">
-                                    <h5>${item.name} <span class="badge bg-light text-dark badge-price">${item.price.toLocaleString('vi-VN')} VNĐ</span></h5>
-                                    <p>${item.description}</p>
-                                    <div class="controls mt-2">
-                                        <button type="button" class="btn btn-sm btn-success add-to-cart-btn" 
-                                            data-id="${item.id}" 
-                                            data-name="${item.name}" 
-                                            data-price="${item.price}">
-                                            🛒 Thêm vào giỏ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    menuContainer.innerHTML += dishCardHtml;
-                });
-                const avgPrice = activeItems.length > 0 ? totalPrice / activeItems.length : 0;
-                document.getElementById('avgPrice').innerText = avgPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                // 2. Render các nút Category
+                renderCategoryFilters(activeMenuItems);
+                
+                // 3. Render toàn bộ menu mặc định
+                renderMenuItems(activeMenuItems);
             })
             .catch(error => {
                 console.error('Lỗi khi tải thực đơn:', error);
                 menuContainer.innerHTML = '<p class="text-danger">Không thể tải thực đơn. Vui lòng kiểm tra lại API.</p>';
+                document.getElementById('avgPrice').innerText = '0 VNĐ';
             });
             
         // --- Khởi tạo hiển thị Local Cart ---
