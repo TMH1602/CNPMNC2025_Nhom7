@@ -23,6 +23,7 @@ builder.Services.AddCors(options =>
 
 
 // Add services
+builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("FastFoodDb"));

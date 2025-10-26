@@ -120,6 +120,16 @@
         margin-right: 8px; 
         vertical-align: middle; 
     }
+    .footer-wrapper-white { 
+        background-color: white; /* Nền trắng */
+        border-radius: 12px; /* Bo góc */
+        padding: 15px; /* Padding bên trong */
+        margin-top: 20px; /* Cách nội dung chính */
+        bottom: 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bóng đổ nhẹ */
+        text-align: left;
+    }
+    
     </style>
 </head>
 <body>
@@ -168,7 +178,9 @@
         @RenderBody()
     </div>
 
-    <footer class="text-center mt-5 mb-4 text-muted text-white">© 2025 FastFood Compare</footer>
+    <div class="footer-wrapper-white">
+        @await Component.InvokeAsync("FastFoodFooter") 
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
