@@ -30,13 +30,29 @@
         /* CSS CHO BACKGROUND VÀ CẤU TRÚC CHÍNH */
         body {
             background-image: url('/images/BackGround.jpg'); 
-            background-size: cover;       
+            background-size: cover;      
             background-repeat: no-repeat; 
             background-attachment: fixed; 
             background-position: center center;
         }
         .navbar {
             background-color: #ffffff !important; 
+        }
+        
+        /* HIỆU ỨNG HOVER MÀU VÀNG CHO CÁC NÚT NAV BAR */
+        .navbar .btn-outline-primary:hover,
+        .navbar .btn-outline-secondary:hover {
+            color: #000 !important; /* Chữ đen */
+            background-color: #ffc107; /* Màu vàng (Bootstrap Warning) */
+            border-color: #ffc107; /* Viền cùng màu */
+            opacity: 0.9;
+        }
+        /* Đảm bảo nút Đăng xuất vẫn có hover màu đỏ */
+        .navbar .btn-danger:hover {
+            background-color: #c82333 !important; 
+            border-color: #bd2130 !important;
+            color: #fff !important;
+            opacity: 1;
         }
         
         /* KHUNG NỘI DUNG CHÍNH Ở GIỮA MÀN HÌNH */
@@ -63,9 +79,9 @@
             padding: 20px;
             position: fixed; 
             top: 80px; 
-            right: 20px
-            width: 350px; 
-            max-height: calc(100vh - 100px);
+            right: 20px; /* Đã sửa lỗi thiếu dấu chấm phẩy */
+            width: 400px; 
+            max-height: calc(250vh - 250px);
             box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto; 
             z-index: 1000; 
@@ -78,7 +94,6 @@
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px; 
             padding: 30px;
-            max-height: calc(1000vh - 1000px);
             left: 0;
             right: 10px; 
             position: flex; 
@@ -91,7 +106,7 @@
             <a class="navbar-brand" href="/">FastFood Compare</a>
             <div class="ms-auto d-flex align-items-center">
                 
-                <a href="@Url.Action("Index","Cart")" class="btn btn-outline-primary btn-sm me-3">
+                <a href="@Url.Action("Index","Cart")" class="btn btn-outline-primary btn-sm me-3 rounded-pill">
                     🛒 Giỏ 
                 </a>
 
@@ -102,22 +117,22 @@
                         <strong id="user-display-name"></strong>
                     </span>
                     
-                    <a class="btn btn-outline-secondary btn-sm me-2 d-none d-lg-block" href="@Url.Action("Profile", "Account")">
+                    <a class="btn btn-outline-secondary btn-sm me-2 d-none d-lg-block rounded-pill" href="@Url.Action("Profile", "Account")">
                         Lịch sử Đơn hàng
                     </a>
                     
-                    <a class="btn btn-outline-secondary btn-sm me-3 d-none d-lg-block" href="@Url.Action("Profile", "Account")">
+                    <a class="btn btn-outline-secondary btn-sm me-3 d-none d-lg-block rounded-pill" href="@Url.Action("Profile", "Account")">
                         Cập nhật Tài khoản
                     </a>
                     
-                    <button class="btn btn-sm btn-danger" id="logout-button">
+                    <button class="btn btn-sm btn-danger rounded-pill" id="logout-button">
                         Đăng xuất
                     </button>
                 </div>
 
                 <div id="user-logged-out-state" class="d-flex align-items-center">
-                    <a href="@Url.Action("Login","Account")" class="btn btn-outline-primary btn-sm me-2">Đăng nhập</a>
-                    <a href="@Url.Action("Register","Account")" class="btn btn-gradient btn-sm">Đăng ký</a>
+                    <a href="@Url.Action("Login","Account")" class="btn btn-outline-primary btn-sm me-2 rounded-pill">Đăng nhập</a>
+                    <a href="@Url.Action("Register","Account")" class="btn btn-gradient btn-sm rounded-pill">Đăng ký</a>
                 </div>
 
             </div>
@@ -166,8 +181,8 @@
                 const cartData = await response.json();
                 
                 const totalItems = cartData.items ? 
-                                     cartData.items.reduce((total, item) => total + (item.quantity || 0), 0) : 
-                                     0;
+                                             cartData.items.reduce((total, item) => total + (item.quantity || 0), 0) : 
+                                             0;
 
                 if (cartCountSpan) {
                     cartCountSpan.textContent = totalItems;
@@ -200,7 +215,7 @@
                 if(displayNameSpan) displayNameSpan.textContent = username; 
                 if(avatarSpan && username.length > 0) avatarSpan.textContent = username.charAt(0).toUpperCase();
                 
-                if(loggedInState) loggedInState.classList.remove("d-none");  // HIỆN KHỐI LOGGED IN
+                if(loggedInState) loggedInState.classList.remove("d-none");  // HIỆN KHỐI LOGGED IN
                 if(loggedOutState) loggedOutState.classList.add("d-none"); // ẨN KHỐI LOGGED OUT
                 
                 if(cartLink) {
@@ -209,8 +224,8 @@
                 }
             } else {
                 // Chưa đăng nhập: Ẩn khối user, hiện nút Đăng nhập/Đăng ký
-                if(loggedInState) loggedInState.classList.add("d-none");   // ẨN KHỐI LOGGED IN
-                if(loggedOutState) loggedOutState.classList.remove("d-none"); // HIỆN KHỐI LOGGED OUT
+                if(loggedInState) loggedInState.classList.add("d-none");   // ẨN KHỐI LOGGED IN
+                if(loggedOutState) loggedOutOutState.classList.remove("d-none"); // HIỆN KHỐI LOGGED OUT
                 
                 if(cartLink) {
                     // Cập nhật link giỏ hàng không số đếm

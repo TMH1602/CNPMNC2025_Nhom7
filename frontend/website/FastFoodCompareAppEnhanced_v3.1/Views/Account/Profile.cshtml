@@ -15,6 +15,7 @@
         font-size: 3rem; display: flex; align-items: center; justify-content: center;
         margin-bottom: 1rem;
     }
+    /* Đã di chuyển selector profile-sidebar xuống đây để áp dụng padding/margin cho card-body */
     .profile-sidebar .nav-link {
         color: #555; padding-top: 12px; padding-bottom: 12px;
     }
@@ -65,20 +66,22 @@
 
 <div class="row">
     <div class="col-md-3">
-        <div class="profile-sidebar">
-            <div class="d-flex align-items-center mb-3">
-                <div class="sidebar-avatar me-3" id="sidebar-avatar-initial">...</div>
-                <div>
-                    <strong id="sidebar-username" class="d-block">Đang tải...</strong>
+        <div class="card">
+            <div class="card-body p-4 profile-sidebar">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="sidebar-avatar me-3" id="sidebar-avatar-initial">...</div>
+                    <div>
+                        <strong id="sidebar-username" class="d-block">Đang tải...</strong>
+                    </div>
                 </div>
+                <hr>
+                <nav class="nav nav-pills flex-column">
+                    <a class="nav-link active" href="#" data-panel="profile" id="link-profile">Cập nhật tài khoản</a>
+                    <a class="nav-link" href="#" data-panel="history" id="link-history">Lịch sử đơn hàng</a>
+                </nav>
             </div>
-            <hr>
-            <nav class="nav nav-pills flex-column">
-                <a class="nav-link active" href="#" data-panel="profile" id="link-profile">Cập nhật tài khoản</a>
-                <a class="nav-link" href="#" data-panel="history" id="link-history">Lịch sử đơn hàng</a>
-            </nav>
         </div>
-    </div>
+        </div>
 
     <div class="col-md-9">
         <div class="card">
