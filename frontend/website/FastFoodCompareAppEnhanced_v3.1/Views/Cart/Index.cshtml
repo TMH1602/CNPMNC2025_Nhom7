@@ -21,54 +21,54 @@
 
         const username = localStorage.getItem('username');
         const token = localStorage.getItem('jwtToken');
+        const LOGIN_URL = '@Url.Action("Login", "Account")';
+        const API_BASE_URL = 'https://localhost:7132/api/Cart';
+        
+        const authHeader = {
+            "accept": "application/json", 
+            "Content-Type": "application/json"
+        };
+        
+        const apiUrl = `${API_BASE_URL}/${username}`; 
 
-        if (!username || !token) {
-            cartContainer.innerHTML = '<div class="alert alert-danger">Bạn cần <a href="@Url.Action("Login", "Account")">đăng nhập</a> để xem giỏ hàng.</div>';
+        if (!username) {
+            cartContainer.innerHTML = `<div class="alert alert-danger">Bạn cần <a href="${LOGIN_URL}">đăng nhập</a> để xem giỏ hàng.</div>`;
             return;
         }
 
-        const authHeader = {
-            "accept": "text/plain" // Sửa: Giỏ hàng nên là JSON
-        };
-        
-        const apiUrl = `https://localhost:7132/api/Cart/${username}`; // Lấy username từ localStorage
-
         // === HÀM QUẢN LÝ CACHE LOCALSTORAGE ===
         function getCartFromCache() {
-            const cartJson = localStorage.getItem('frontend_cart_items'); // Sửa key
-            // Luôn trả về một mảng
+            const cartJson = localStorage.getItem('frontend_cart_items'); 
             try {
                 const items = cartJson ? JSON.parse(cartJson) : [];
                 return Array.isArray(items) ? items : []; 
             } catch (e) {
-                return []; // Nếu JSON hỏng, trả về mảng rỗng
+                return []; 
             }
         }
 
         function saveCartToCache(items) {
-             // Đảm bảo chỉ lưu mảng items
             if (Array.isArray(items)) {
                 localStorage.setItem('frontend_cart_items', JSON.stringify(items));
             } else {
-                 localStorage.setItem('frontend_cart_items', JSON.stringify([])); // Lưu mảng rỗng nếu đầu vào sai
-            }
-        }
-
-        function updateCartIcon() {
-            const items = getCartFromCache(); // Lấy từ cache
-            const totalItems = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
-            if (cartCountSpan) {
-                cartCountSpan.innerText = totalItems;
+                localStorage.setItem('frontend_cart_items', JSON.stringify([])); 
             }
         }
         
-        // === HÀM RENDER (ĐÃ SỬA) ===
+        // Hàm cập nhật icon giỏ hàng trên Navbar (gọi hàm loadCartCount từ _Layout)
+        function refreshGlobalCartCount() {
+            if (typeof window.loadCartCount === 'function') {
+                window.loadCartCount(username); 
+            }
+        }
+        
+        // === HÀM RENDER GIỎ HÀNG ===
         function renderCart() {
             const items = getCartFromCache(); // Lấy mảng items từ cache
 
             if (!Array.isArray(items) || items.length === 0) {
                 cartContainer.innerHTML = '<div class="alert alert-info">Giỏ hàng trống.</div>';
-                updateCartIcon(); // Cập nhật icon về 0
+                refreshGlobalCartCount();
                 return;
             }
 
@@ -88,20 +88,27 @@
                     <tbody>
             `;
 
-            // Dùng forEach trên mảng items
             items.forEach(item => {
                 const itemTotal = (item.price || 0) * (item.quantity || 0);
                 totalAmount += itemTotal;
                 cartHtml += `
                     <tr>
-                        <td><img src="${item.imageUrl}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;" /></td>                        
+                        <td><img src="${item.imageUrl}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;" /></td> 
                         <td>${item.productName}</td> 
                         
                         <td>${(item.price || 0).toLocaleString('vi-VN')} VNĐ</td>
-                        <td>${item.quantity || 0}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                ${item.quantity || 0}
+                            </div>
+                        </td>
                         <td>${itemTotal.toLocaleString('vi-VN')} VNĐ</td>
                         <td>
-                            <button class="btn btn-sm btn-danger remove-item-btn" data-product-id="${item.productId}">🗑️ Xóa</button> 
+                            <button class="btn btn-sm btn-danger remove-item-btn" 
+                                    data-product-id="${item.productId}" 
+                                    data-quantity="${item.quantity}">
+                                🗑️ Xóa
+                            </button> 
                         </td>
                     </tr>
                 `;
@@ -116,64 +123,83 @@
                         </tr>
                     </tfoot>
                 </table>
-                 <div class="text-end mt-3">
+                <div class="text-end mt-3">
                     <button class="btn btn-danger" id="clear-cart-btn">Xóa hết giỏ hàng</button>
                     <a href="@Url.Action("Index", "Checkout")" class="btn btn-primary">Tiến hành thanh toán</a>
-                 </div>
+                </div>
             `;
             cartContainer.innerHTML = cartHtml;
-            updateCartIcon(); // Cập nhật icon sau khi render
+            refreshGlobalCartCount(); 
         }
 
-        // === HÀM GỌI API (ĐÃ SỬA) ===
-        
+        // === HÀM GỌI API TẢI GIỎ HÀNG (GIỮ NGUYÊN) ===
         async function loadCartFromServer() {
-            console.log("Đang tải giỏ hàng từ:", apiUrl);
+             cartContainer.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Đang tải giỏ hàng...</span></div><p class="mt-2">Đang tải giỏ hàng của bạn...</p></div>';
+
             try {
                 const response = await fetch(apiUrl, {
                     method: 'GET',
-                    headers: authHeader // Đã sửa accept thành application/json
+                    headers: authHeader
                 });
 
                 if (!response.ok) {
                     throw new Error(`Lỗi ${response.status}: Không thể tải giỏ hàng.`);
                 }
                 
-                // API trả về object { id, username, items: [] }
                 const cartData = await response.json(); 
                 
-                console.log("API trả về:", cartData);
-
-                // Sửa: Chỉ lưu mảng 'items' vào cache
-                saveCartToCache(cartData.items || []); // Lấy mảng items, nếu không có thì dùng mảng rỗng
+                saveCartToCache(cartData.items || []); 
                 
-                renderCart(); // Render từ cache đã cập nhật
+                renderCart(); 
 
             } catch (error) {
                 console.error("Lỗi fetch giỏ hàng:", error);
                 cartContainer.innerHTML = `<div class="alert alert-danger">Lỗi khi tải giỏ hàng: ${error.message}</div>`;
-                saveCartToCache([]); // Xóa cache nếu lỗi
-                renderCart(); // Render lại (sẽ thấy giỏ trống)
+                saveCartToCache([]); 
+                renderCart(); 
             }
         }
 
-        // Hàm xóa 1 món (Cần productId)
-        async function removeItemFromServer(productId) {
-            console.log("Đang xóa productId:", productId);
+        // 🎯 === HÀM XÓA 1 MÓN CÓ POP-UP NHẬP SỐ LƯỢNG ===
+        async function removeItemWithPrompt(productId, maxQuantity) {
+            
+            // 1. Hiển thị pop-up cho người dùng nhập số lượng
+            const inputQuantity = prompt(`Bạn muốn xóa bao nhiêu sản phẩm (tối đa ${maxQuantity})?`, maxQuantity.toString());
+            
+            if (inputQuantity === null) {
+                return; // Người dùng nhấn Cancel
+            }
+
+            // 2. Kiểm tra và chuyển đổi giá trị nhập vào
+            let quantityToRemove = parseInt(inputQuantity);
+
+            if (isNaN(quantityToRemove) || quantityToRemove <= 0) {
+                alert("Số lượng không hợp lệ. Vui lòng nhập số dương.");
+                return;
+            }
+
+            if (quantityToRemove > maxQuantity) {
+                alert(`Bạn chỉ có thể xóa tối đa ${maxQuantity} sản phẩm.`);
+                quantityToRemove = maxQuantity; // Đặt lại thành tối đa
+            }
+            
+            // 3. Gọi API với số lượng đã nhập/xác nhận
+            // Xây dựng URL theo format: /api/Cart/remove?username=string&productId=1&quantity=N
+            const removeUrl = `${API_BASE_URL}/remove?username=${username}&productId=${productId}&quantity=${quantityToRemove}`;
+
             try {
-                // API này là suy luận, bạn cần kiểm tra lại backend
-                const deleteUrl = `${apiUrl}/items/${productId}`; // Ví dụ URL: /api/Cart/user2/items/17
-                
-                const response = await fetch(deleteUrl, {
-                    method: 'DELETE',
-                    headers: authHeader
+                const response = await fetch(removeUrl, {
+                    method: 'POST', 
+                    headers: { "accept": "*/*" }, 
+                    body: '' 
                 });
 
                 if (!response.ok) { 
                     const errorText = await response.text();
                     throw new Error(`Xóa thất bại: ${errorText}`); 
                 }
-
+                
+                alert(`Đã xóa ${quantityToRemove} sản phẩm khỏi giỏ hàng.`);
                 // Tải lại toàn bộ giỏ hàng sau khi xóa thành công
                 await loadCartFromServer(); 
                 
@@ -183,46 +209,46 @@
             }
         }
 
-        // Hàm xóa toàn bộ giỏ hàng
+        // === HÀM XÓA TOÀN BỘ GIỎ HÀNG (GIỮ NGUYÊN LOGIC DELETE) ===
         async function clearCartFromServer() {
-            console.log("Đang xóa toàn bộ giỏ hàng cho:", username);
-            try {
-                const response = await fetch(apiUrl, { // Ví dụ URL: DELETE /api/Cart/user2
-                    method: 'DELETE',
-                    headers: authHeader
-                });
-                
-                if (!response.ok) { 
-                     const errorText = await response.text();
-                    throw new Error(`Xóa thất bại: ${errorText}`); 
+            if(confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')) {
+                try {
+                    const response = await fetch(apiUrl, { // DELETE /api/Cart/{username}
+                        method: 'DELETE',
+                        headers: authHeader
+                    });
+                    
+                    if (!response.ok) { 
+                         const errorText = await response.text();
+                        throw new Error(`Xóa thất bại: ${errorText}`); 
+                    }
+
+                    await loadCartFromServer();
+
+                } catch (error) {
+                    console.error("Lỗi xóa giỏ hàng:", error);
+                    alert(`Lỗi khi xóa giỏ hàng: ${error.message}`);
                 }
-
-                // Tải lại giỏ hàng (sẽ là rỗng)
-                await loadCartFromServer();
-
-            } catch (error) {
-                 console.error("Lỗi xóa giỏ hàng:", error);
-                alert(`Lỗi khi xóa giỏ hàng: ${error.message}`);
             }
         }
 
-        // === GẮN SỰ KIỆN (ĐÃ SỬA) ===
+        // === GẮN SỰ KIỆN ===
         cartContainer.addEventListener('click', async function(event) {
             
             // Xóa 1 món
             if (event.target && event.target.classList.contains('remove-item-btn')) {
-                // Sửa: Lấy productId từ data attribute
-                const productId = parseInt(event.target.dataset.productId); 
-                if (!isNaN(productId) && confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-                    await removeItemFromServer(productId); 
+                const button = event.target;
+                const productId = parseInt(button.dataset.productId); 
+                const maxQuantity = parseInt(button.dataset.quantity); // Lấy số lượng hiện tại
+                
+                if (!isNaN(productId) && !isNaN(maxQuantity)) {
+                    await removeItemWithPrompt(productId, maxQuantity); 
                 }
             }
             
             // Xóa hết
             if(event.target && event.target.id === 'clear-cart-btn') {
-                if(confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')) {
-                    await clearCartFromServer(); 
-                }
+                await clearCartFromServer(); 
             }
         });
 

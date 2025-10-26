@@ -16,11 +16,28 @@
     <p>Đang tải thực đơn, vui lòng chờ...</p>
 </div>
 
+<div class="text-end mt-4">
+    <button id="checkout-btn" class="btn btn-lg btn-success">🛒 Tiến hành Thanh toán</button>
+</div>
+
 @section Scripts {
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const menuContainer = document.getElementById('menu-container');
         const cartCountSpan = document.getElementById('cartCount');
+        
+        // =================================================================
+        // HÀM KIỂM TRA USERNAME & CHUYỂN HƯỚNG
+        // =================================================================
+        function getUsername() {
+            const username = localStorage.getItem('username'); // Giả định key là 'username'
+            if (!username) {
+                alert("Bạn phải đăng nhập để sử dụng chức năng này.");
+                window.location.href = 'Account/login'; 
+                return null;
+            }
+            return username;
+        }
 
         // =================================================================
         // CÁC HÀM QUẢN LÝ GIỎ HÀNG BẰNG LOCALSTORAGE
@@ -41,20 +58,120 @@
                 cartCountSpan.innerText = totalItems;
             }
         }
-
-        function addToCart(itemData) {
-            const cart = getCart();
-            const existingItem = cart.find(item => item.id === itemData.id);
-
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({ ...itemData, quantity: 1 });
+        
+        // =================================================================
+        // HÀM GỌI API THANH TOÁN (MỚI)
+        // =================================================================
+        async function handleCheckout() {
+            const username = getUsername();
+            
+            if (username === null) {
+                return;
             }
-            saveCart(cart);
-            updateCartIcon();
-            alert(`Đã thêm "${itemData.name}" vào giỏ hàng!`);
+            
+            const checkoutUrl = `https://localhost:7132/api/Cart/checkout?username=${username}`;
+
+            try {
+                // Hiển thị thông báo đang xử lý
+                alert("Đang tiến hành thanh toán, vui lòng chờ...");
+
+                const response = await fetch(checkoutUrl, {
+                    method: 'POST',
+                    headers: {
+                        'accept': '*/*'
+                    },
+                    body: '' // Không gửi body theo cURL yêu cầu
+                });
+
+                if (response.ok) {
+                    // API trả về JSON khi thành công
+                    const result = await response.json(); 
+                    
+                    // Xây dựng thông báo thành công
+                    const message = `
+                        Thanh toán thành công! 🎉
+                        Mã đơn hàng: ${result.orderId}
+                        Tổng tiền: ${result.totalAmount.toLocaleString('vi-VN')} VNĐ
+                        Thời gian: ${new Date(result.orderDate).toLocaleString('vi-VN')}
+                        Thông báo: ${result.message}
+                    `;
+                    alert(message);
+                    
+                    // Tùy chọn: Xóa giỏ hàng client-side sau khi thanh toán thành công
+                    // localStorage.removeItem('frontend_cart');
+                    // updateCartIcon();
+
+                    // TO DO: Chuyển hướng người dùng đến trang xác nhận/lịch sử đơn hàng
+                    // Sau alert, bạn có thể thêm window.location.href = '...'
+                    
+
+                } else {
+                    // Xử lý lỗi từ server (ví dụ: giỏ hàng trống, lỗi xác thực)
+                    const errorText = await response.text();
+                    alert(`❌ Lỗi Thanh Toán: ${response.status} - ${errorText}`);
+                }
+
+            } catch (error) {
+                console.error('Lỗi kết nối khi thanh toán:', error);
+                alert(`❌ Lỗi kết nối: Không thể kết nối đến máy chủ thanh toán. ${error.message}`);
+            }
         }
+
+        // =================================================================
+        // HÀM THÊM VÀO GIỎ HÀNG (GỌI API - Giữ nguyên)
+        // =================================================================
+        async function addToCart(itemData) {
+            const username = getUsername();
+            
+            if (username === null) {
+                return;
+            }
+            
+            const apiUrl = 'https://localhost:7132/api/Cart/add';
+            
+            const postData = {
+                username: username,
+                items: [{
+                    productId: itemData.id,
+                    quantity: 1
+                }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Lỗi từ Server: ${response.status} - ${errorText}`);
+                }
+
+                const cart = getCart();
+                const existingItem = cart.find(item => item.id === itemData.id);
+
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ ...itemData, quantity: 1 });
+                }
+                
+                saveCart(cart);
+                updateCartIcon();
+                
+                alert(`🛒 Đã thêm "${itemData.name}" vào giỏ hàng thành công!`);
+
+            } catch (error) {
+                console.error('Lỗi khi thêm vào giỏ hàng:', error);
+                alert(`❌ Lỗi: Không thể thêm "${itemData.name}" vào giỏ hàng. ${error.message}`);
+            }
+        }
+
 
         // =================================================================
         // LOGIC CHÍNH CỦA TRANG
@@ -73,7 +190,13 @@
             }
         });
 
-        // Tải danh sách sản phẩm từ API
+        // Lắng nghe sự kiện click cho nút Thanh toán (MỚI)
+        const checkoutButton = document.getElementById('checkout-btn');
+        if(checkoutButton) {
+            checkoutButton.addEventListener('click', handleCheckout);
+        }
+
+        // Tải danh sách sản phẩm từ API (Giữ nguyên)
         fetch('https://localhost:7132/api/Menu')
             .then(response => {
                 if (!response.ok) throw new Error('Lỗi kết nối API.');
@@ -85,7 +208,6 @@
                 data.forEach(item => {
                     totalPrice += item.price;
                     
-                    // Tạo HTML cho mỗi món ăn (đã bỏ phần so sánh)
                     const dishCardHtml = `
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
                             <div class="dish-card">
@@ -95,9 +217,9 @@
                                     <p>${item.description}</p>
                                     <div class="controls mt-2">
                                         <button type="button" class="btn btn-sm btn-success add-to-cart-btn" 
-                                                data-id="${item.id}" 
-                                                data-name="${item.name}" 
-                                                data-price="${item.price}">
+                                            data-id="${item.id}" 
+                                            data-name="${item.name}" 
+                                            data-price="${item.price}">
                                             🛒 Thêm vào giỏ
                                         </button>
                                     </div>
@@ -115,7 +237,6 @@
                 menuContainer.innerHTML = '<p class="text-danger">Không thể tải thực đơn. Vui lòng kiểm tra lại API.</p>';
             });
 
-        // Cập nhật icon giỏ hàng khi tải trang
         updateCartIcon();
     });
 </script>
