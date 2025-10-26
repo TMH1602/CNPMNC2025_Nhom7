@@ -1007,6 +1007,40 @@
           }
         }
       }
+    },
+    "/api/VnPay/CreatePayment": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/VnPay/VnpayReturn": {
+      "get": {
+        "tags": [
+          "VnPay"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1150,6 +1184,11 @@
           },
           "product": {
             "$ref": "#/components/schemas/Product"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
           }
         },
         "additionalProperties": false
@@ -1172,6 +1211,10 @@
           "quantity": {
             "type": "integer",
             "format": "int32"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
           },
           "totalItemPrice": {
             "type": "number",
@@ -1596,6 +1639,13 @@
             "type": "string",
             "nullable": true
           },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VnPayCardToken"
+            },
+            "nullable": true
+          },
           "createdDate": {
             "type": "string",
             "format": "date-time"
@@ -1676,6 +1726,52 @@
           }
         },
         "additionalProperties": { }
+      },
+      "VnPayCardToken": {
+        "required": [
+          "token",
+          "userId",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "token": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "cardNumber": {
+            "maxLength": 20,
+            "type": "string",
+            "nullable": true
+          },
+          "bankCode": {
+            "maxLength": 10,
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

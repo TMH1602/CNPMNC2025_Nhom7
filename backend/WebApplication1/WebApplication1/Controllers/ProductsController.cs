@@ -197,7 +197,7 @@ namespace MyFastFoodApi.Controllers
                     IsActive = false,
                     DeletedDate = DateTime.UtcNow
                 };
-                _context.ProductDeletedByAdmin.Add(deletedRecord);
+                _context.ProductDeletedByAdmins.Add(deletedRecord);
                 var existingProduct = await _context.Products.FindAsync(id);
                 existingProduct.IsActive = false;
 
