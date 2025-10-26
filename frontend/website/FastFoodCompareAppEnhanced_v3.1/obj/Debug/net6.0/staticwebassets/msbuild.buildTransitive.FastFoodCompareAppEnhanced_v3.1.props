@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\FastFoodCompareAppEnhanced_v3.1.props" />
+</Project>

@@ -74,7 +74,7 @@ namespace WebApplication1.Controllers
                     order.Status = "Paid";
                     await _context.SaveChangesAsync();
                 }
-                return Ok($"Order {orderId} paid successfully. Status: Paid. ✅");
+                return Redirect("https://localhost:5000/Checkout/Success");
             }
             else
             {
