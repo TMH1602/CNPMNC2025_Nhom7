@@ -3,34 +3,85 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="#FFFFFF">
 
     <ImageView
         android:id="@+id/ivCartImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="Ảnh món ăn"
+        android:layout_marginEnd="10dp"/>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingStart="8dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvCartName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tên món"
+            android:text="Tên Món Ăn"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/tvCartPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="55,000 VNĐ"
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_red_dark"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Giá"
-            android:textColor="#E91E63" />
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDecrease"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="-"
+                android:textSize="18sp"
+                android:padding="0dp"/>
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:minWidth="20dp"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/btnIncrease"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="+"
+                android:textSize="18sp"
+                android:padding="0dp"/>
+        </LinearLayout>
+
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnRemoveItem"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/ic_delete"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Xóa món"/>
+
 </LinearLayout>

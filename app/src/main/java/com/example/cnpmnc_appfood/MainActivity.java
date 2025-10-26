@@ -1,34 +1,56 @@
 package com.example.cnpmnc_appfood;
 
+// ... các import khác ...
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // Đảm bảo activity_main có BottomNavigationView và fragment_container
 
-        // Đoạn này chỉ để xử lý padding cho status bar/navigation bar
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // 👉 Hiển thị Fragment sau khi setContentView
-        if (savedInstanceState == null) { // chỉ thêm lần đầu
-            FoodDetailsFragment fragment = FoodDetailsFragment.newInstance(1); // ví dụ mở món có id=1
+        if (savedInstanceState == null) {
+            loadFragment(new HomeFragment());
+        }
+    }
+
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = item -> {
+        Fragment fragment = null;
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.navigation_home) {
+            fragment = new HomeFragment();
+        } else if (itemId == R.id.navigation_cart) {
+            fragment = new CartFragment();
+        } else if (itemId == R.id.navigation_compare) {
+            fragment = new ComparisonFragment();
+        }
+        // CẬP NHẬT: Thay thế SettingsFragment bằng DishManagementFragment
+        else if (itemId == R.id.navigation_settings) {
+            fragment = new DishManagementFragment(); // Mở trang thêm món ăn
+        }
+
+        if (fragment != null) {
+            return loadFragment(fragment);
+        }
+        return false;
+    };
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .commit();
+            return true;
         }
+        return false;
     }
 }

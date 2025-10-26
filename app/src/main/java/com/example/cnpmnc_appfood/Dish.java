@@ -5,7 +5,7 @@ public class Dish {
     private String name;
     private String description;
     private double price;
-    private String imageUrl;
+    private String imageUrl; // Sửa lại thành String để lưu URL hoặc URI cục bộ
 
     public Dish(int id, String name, String description, double price, String imageUrl) {
         this.id = id;
@@ -19,5 +19,5 @@ public class Dish {
     public String getName() { return name; }
     public String getDescription() { return description; }
     public double getPrice() { return price; }
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() { return imageUrl; } // Getter mới
 }

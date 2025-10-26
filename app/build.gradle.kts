@@ -32,6 +32,14 @@ android {
 }
 
 dependencies {
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+// Gson Converter (cho JSON request)
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+// Scalars Converter (cho text/plain response)
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+// OkHttp (cần thiết để xử lý SSL)
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.appcompat)

@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+// Loại bỏ import Glide
+
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -59,8 +61,6 @@ public class ComparisonFragment extends Fragment {
         tvDish2Price = view.findViewById(R.id.tvDish2Price);
         tvDish2Description = view.findViewById(R.id.tvDish2Description);
 
-        // KHÔNG gọi loadComparisonData() ở đây nữa
-
         btnClearComparison.setOnClickListener(v -> {
             ComparisonManager.clearComparison();
             Toast.makeText(getContext(), "Đã xóa danh sách so sánh.", Toast.LENGTH_SHORT).show();
@@ -71,9 +71,6 @@ public class ComparisonFragment extends Fragment {
         return view;
     }
 
-    // THAY ĐỔI 1: Di chuyển logic vào onViewCreated
-    // Phương thức này được gọi ngay sau khi onCreateView hoàn tất.
-    // Đây là nơi an toàn để thao tác với các view.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -83,10 +80,8 @@ public class ComparisonFragment extends Fragment {
 
     private void loadComparisonData() {
         List<Dish> comparisonList = ComparisonManager.getComparisonList();
-
-        // THAY ĐỔI 2: Sử dụng getView() để tham chiếu đến view gốc của Fragment
         View fragmentView = getView();
-        if (fragmentView == null) return; // Luôn kiểm tra null để đảm bảo an toàn
+        if (fragmentView == null) return;
 
         if (comparisonList.size() < 2) {
             tvNotEnoughItems.setVisibility(View.VISIBLE);
@@ -94,14 +89,12 @@ public class ComparisonFragment extends Fragment {
             if (comparisonList.size() == 1) {
                 tvNotEnoughItems.setText("Vui lòng chọn thêm 1 món nữa để so sánh.");
                 comparisonContent.setVisibility(View.VISIBLE);
-                // Sửa ở đây: dùng fragmentView thay cho 'view'
                 fragmentView.findViewById(R.id.dish2Layout).setVisibility(View.INVISIBLE);
                 populateDishData(comparisonList.get(0), ivDish1Image, tvDish1Name, tvDish1Price, tvDish1Description);
             }
         } else {
             tvNotEnoughItems.setVisibility(View.GONE);
             comparisonContent.setVisibility(View.VISIBLE);
-            // Sửa ở đây: dùng fragmentView thay cho 'view'
             fragmentView.findViewById(R.id.dish2Layout).setVisibility(View.VISIBLE);
 
             Dish dish1 = comparisonList.get(0);
@@ -110,10 +103,16 @@ public class ComparisonFragment extends Fragment {
             populateDishData(dish1, ivDish1Image, tvDish1Name, tvDish1Price, tvDish1Description);
             populateDishData(dish2, ivDish2Image, tvDish2Name, tvDish2Price, tvDish2Description);
 
+            // Xử lý tô màu giá thấp hơn
             if (dish1.getPrice() < dish2.getPrice()) {
                 tvDish1Price.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                tvDish2Price.setBackgroundColor(getResources().getColor(android.R.color.transparent));
             } else if (dish2.getPrice() < dish1.getPrice()) {
                 tvDish2Price.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                tvDish1Price.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            } else {
+                tvDish1Price.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                tvDish2Price.setBackgroundColor(getResources().getColor(android.R.color.transparent));
             }
         }
     }
@@ -123,9 +122,11 @@ public class ComparisonFragment extends Fragment {
         price.setText(String.format("%,.0f VNĐ", dish.getPrice()));
         description.setText(dish.getDescription());
 
+        // THAY THẾ GLIDE: Dùng Resource ID
         Glide.with(this)
-                .load(dish.getImageUrl())
+                .load(dish.getImageUrl()) // ĐÃ SỬA CHƯA?
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(image);
+        price.setBackgroundColor(getResources().getColor(android.R.color.transparent)); // Reset màu nền
     }
 }
