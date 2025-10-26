@@ -37,7 +37,16 @@ public class CartController : ControllerBase
             // Trả về Not Found nếu không có giỏ hàng hoạt động
             return NotFound($"Active cart for user {username} not found.");
         }
-        var existingProduct = await _context.Products.FindAsync(cart.Id);
+        var productId = cart.CartItems.FirstOrDefault()?.ProductId;
+
+        if (productId.HasValue)
+        {
+            var existingProduct = await _context.Products.FindAsync(productId.Value);
+        }
+        else
+        {
+            return BadRequest("Không thể tìm được giỏ hàng của người dùng ");
+        }
         // Ánh xạ từ Model sang CartDto/ViewModel
         var cartViewModel = new CartDto
         {
@@ -46,11 +55,12 @@ public class CartController : ControllerBase
             Items = cart.CartItems.Select(ci => new CartItemDto
             {
                 ProductId = ci.ProductId,
+                // Truy cập trực tiếp thông tin sản phẩm từ navigation property
                 ProductName = ci.Product.Name,
                 Price = ci.Product.Price,
-                Quantity = ci.Quantity,
-                ImageUrl = existingProduct.ImageUrl
-
+                // Lấy ImageUrl trực tiếp từ đối tượng Product đã được Include
+                ImageUrl = ci.Product.ImageUrl,
+                Quantity = ci.Quantity
             }).ToList()
         };
 
@@ -72,7 +82,6 @@ public class CartController : ControllerBase
         var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == request.Username);
         if (user == null) return NotFound($"User '{request.Username}' not found.");
 
-        // 💡 Tìm hoặc tạo Cart MỚI (chưa xử lý)
         var cart = await _context.Carts
             .Include(c => c.CartItems)
             .FirstOrDefaultAsync(c => c.Username == request.Username && c.IsProcessed == false);
@@ -93,21 +102,22 @@ public class CartController : ControllerBase
 
         foreach (var item in request.Items)
         {
-            if (!products.ContainsKey(item.ProductId))
+            if (!products.TryGetValue(item.ProductId, out var product))
             {
                 missingProducts.Add(item.ProductId);
                 continue;
             }
 
             var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == item.ProductId);
-
+            
             if (cartItem == null)
-            {
+            {   
                 cartItem = new CartItem
                 {
                     CartId = cart.Id,
                     ProductId = item.ProductId,
-                    Quantity = item.Quantity
+                    Quantity = item.Quantity,
+                    ImageUrl = product.ImageUrl
                 };
                 cart.CartItems.Add(cartItem);
             }
@@ -217,7 +227,7 @@ public class CartController : ControllerBase
         {
             Username = username,
             OrderDate = DateTime.UtcNow,
-            Status = "Processed",
+            Status = "Pending",
         };
 
         decimal totalAmount = 0;

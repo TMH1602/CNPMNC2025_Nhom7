@@ -46,5 +46,10 @@
             Model đại diện cho một món ăn/sản phẩm trong cơ sở dữ liệu.
             </summary>
         </member>
+        <member name="T:WebApplication1.Models.VnPayCardToken">
+            <summary>
+            Model lưu trữ Token thẻ đã được VNPay cấp phép (Tokenization).
+            </summary>
+        </member>
     </members>
 </doc>
