@@ -13,7 +13,9 @@
     <link href="~/css/auth.css" rel="stylesheet" />
 
     <style>
+    
         /* CSS CỦA BẠN (Giữ nguyên) */
+        
         .user-avatar {
             display: inline-flex;
             align-items: center;
@@ -57,7 +59,7 @@
         .navbar .btn-outline-secondary:hover {
             color: #000 !important; /* Chữ đen */
             background-color: #ffc107; /* Màu vàng (Bootstrap Warning) */
-            border-color: #ffc107; /* Viền cùng màu */
+            border-color: #020202; /* Viền cùng màu */
             opacity: 0.9;
         }
         /* Đảm bảo nút Đăng xuất vẫn có hover màu đỏ */
@@ -112,12 +114,21 @@
             right: 10px; 
             position: flex; 
         }
+        .navbar-logo {
+        height: 45px; /* Chiều cao cố định 10px */
+        width: 45px;  /* Chiều rộng cố định 10px */
+        margin-right: 8px; 
+        vertical-align: middle; 
+    }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
         <div class="container-fluid"> 
-            <a class="navbar-brand" href="/">FastFood Compare</a>
+            <a class="navbar-brand" href="/">
+                <img src="/images/Logo.jpg" alt="" class="navbar-logo ">
+                FastFoobCompany
+            </a>
             <div class="ms-auto d-flex align-items-center">
                 
                 <a href="@Url.Action("Index","Cart")" class="btn btn-outline-primary btn-sm me-3 rounded-pill">
