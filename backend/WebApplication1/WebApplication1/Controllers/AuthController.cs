@@ -216,6 +216,66 @@ namespace MyWebApiWithSwagger.Controllers
 
             return CreatedAtAction(nameof(GetUserAccount), new { identifier = newUser.Email }, response);
         }
+        [HttpPost("registerRes")] // Route: /api/Auth/register
+        [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RegisterRes([FromBody] RegisterRQ request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // 1. Kiểm tra username đã tồn tại chưa
+            var existingUser = await _context.Users
+                .AnyAsync(u => u.Username.ToLower() == request.Username.ToLower());
+            var existingEmail = await _context.Users
+                .AnyAsync(u => u.Email.ToLower() == request.Email.ToLower());
+
+            if (existingEmail)
+            {
+                return BadRequest(new LoginResponse
+                {
+                    IsSuccess = false,
+                    Message = "Email đã tồn tại. Vui lòng chọn email khác."
+                });
+            }
+            if (existingUser)
+            {
+                return BadRequest(new LoginResponse
+                {
+                    IsSuccess = false,
+                    Message = "Tên người dùng đã tồn tại. Vui lòng chọn tên khác."
+                });
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Trả về lỗi Validation 400 Bad Request
+            }
+            // 2. Tạo User mới
+            var newUser = new User
+            {
+                Username = request.Username,
+                Email = request.Email,
+                PasswordHash = request.Password,
+                Address = request.Address,
+                DisplayName = "Nhà hàng",
+                CreatedDate = DateTime.UtcNow
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            var response = new UserAccountResponse
+            {
+                UserId = newUser.Id,
+                Email = newUser.Email,
+                DisplayName = newUser.DisplayName,
+                CreatedDate = newUser.CreatedDate
+            };
+
+            return CreatedAtAction(nameof(GetUserAccount), new { identifier = newUser.Email }, response);
+        }
 
         // ------------------------------------------------------------------
         // ENDPOINT: ĐỔI MẬT KHẨU
