@@ -1,10 +1,44 @@
 @{
     ViewData["Title"] = "Đặt hàng thành công";
 }
+<style>
+    /* CSS cho Wrapper thông báo thành công */
+    .success-wrapper {
+        background-color: white; /* Nền trắng */
+        padding: 50px; /* Thêm padding bên trong */
+        border-radius: 12px; /* Bo góc */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+        
+        /* Căn giữa và giới hạn kích thước */
+        max-width: 1000px; /* Chiều rộng tối đa 1000px */
+        /* Giới hạn chiều cao nếu cần, nhưng thường để auto (tự động) */
+        /* height: 1000px; /* Bạn có thể bỏ dòng này nếu nội dung ít */
+        margin: 50px auto; /* Căn giữa theo chiều ngang (auto) và có margin trên/dưới */
+        
+        /* Đảm bảo nội dung căn giữa bên trong */
+        text-align: center; 
+    }
+    .btn-warning-custom {
+        color: #000 !important; /* Chữ đen */
+        background-color: #ffc107 !important; /* Màu vàng */
+        border-color: #020202 !important; /* Viền màu đen */
+        opacity: 0.9;
+        font-weight: bold;
+        transition: opacity 0.2s, background-color 0.2s;
+    }
+    .btn-warning-custom:hover {
+        opacity: 1;
+        background-color: #ffcd39 !important; /* Vàng nhạt hơn khi hover */
+        transform: translateY(-2px); /* Nâng lên 2px */
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Bóng đổ mạnh hơn khi hover */
+    }
+</style>
 
-<div class="text-center py-5">
-    <h1 class="display-4 text-success">✅ Đặt hàng thành công!</h1>
-    <p class="lead">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đang được xử lý.</p>
-    <hr class="my-4">
-    <a href="@Url.Action("Index", "Menu")" class="btn btn-primary">Tiếp tục mua sắm</a>
+<div class="success-wrapper">
+    <div class="text-center py-5">
+        <h1 class="display-4 text-success">✅ Đặt hàng thành công!</h1>
+        <p class="lead">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đang được xử lý.</p>
+        <hr class="my-4">
+        <a href="@Url.Action("Index", "Menu")" class="btn btn-warning-custom">Tiếp tục mua sắm</a>
+    </div>
 </div>
