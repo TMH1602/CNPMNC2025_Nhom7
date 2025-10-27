@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ONGAP3tRlmS+3XNLNX4qXjnfPAcUoBf0zB1kowSTmNM=",
+  "Hash": "qjhMkfJT31eYnol04gCzYLk3zoBrx6On6K0wc7BOQJE=",
   "Source": "FastFoodCompareAppEnhanced_v3.1",
   "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
   "Mode": "Default",
@@ -162,6 +162,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\fries.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
+      "SourceId": "FastFoodCompareAppEnhanced_v3.1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
+      "RelativePath": "images/Logo#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "3roumigk33",
+      "Integrity": "zzZ2qsboOdNVGusxO312B3mLAoEa2DXUUlIt7isQeTI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Logo.jpg"
     },
     {
       "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
@@ -476,7 +497,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 26 Oct 2025 12:31:52 GMT"
+          "Value": "Sun, 26 Oct 2025 17:44:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -521,7 +542,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 26 Oct 2025 12:31:52 GMT"
+          "Value": "Sun, 26 Oct 2025 17:44:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -778,6 +799,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-S7/aiquDT/EQps/0+OGbodTrV0fjZX5idJvHCBULQPw="
+        }
+      ]
+    },
+    {
+      "Route": "images/Logo.3roumigk33.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "65912"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zzZ2qsboOdNVGusxO312B3mLAoEa2DXUUlIt7isQeTI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 26 Oct 2025 17:13:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3roumigk33"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Logo.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-zzZ2qsboOdNVGusxO312B3mLAoEa2DXUUlIt7isQeTI="
+        }
+      ]
+    },
+    {
+      "Route": "images/Logo.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "65912"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zzZ2qsboOdNVGusxO312B3mLAoEa2DXUUlIt7isQeTI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 26 Oct 2025 17:13:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-zzZ2qsboOdNVGusxO312B3mLAoEa2DXUUlIt7isQeTI="
         }
       ]
     },

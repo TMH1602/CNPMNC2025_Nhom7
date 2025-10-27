@@ -186,8 +186,7 @@
               "RelativeToolTip": "WebApplication1\\Models\\VnPayCardToken.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAxwAcAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T14:20:48.187Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-25T14:20:48.187Z"
             },
             {
               "$type": "Document",
@@ -195,8 +194,8 @@
               "Title": "VnPayController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\VnPayController.cs",
-              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs*",
-              "RelativeToolTip": "WebApplication1\\Controllers\\VnPayController.cs*",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\VnPayController.cs",
               "ViewState": "AgIAADwAAAAAAAAAAAAAAEwAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-25T14:17:54.156Z",
@@ -212,8 +211,7 @@
               "RelativeToolTip": "WebApplication1\\Services\\VnPayService.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAQwHoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T14:17:26.718Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-25T14:17:26.718Z"
             },
             {
               "$type": "Document",
@@ -261,8 +259,7 @@
               "RelativeToolTip": "WebApplication1\\Program.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAABUAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T13:05:46.584Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T13:05:46.584Z"
             },
             {
               "$type": "Document",
@@ -334,8 +331,7 @@
               "RelativeToolTip": "WebApplication1\\appsettings.json",
               "ViewState": "AgIAABIAAAAAAAAAAAAAABgAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-14T13:20:56.305Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T13:20:56.305Z"
             },
             {
               "$type": "Document",
