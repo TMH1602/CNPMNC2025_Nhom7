@@ -10,7 +10,8 @@
         font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
     }
     .profile-avatar {
-        width: 100px; height: 100px; border-radius: 50%;
+        
+        width: 100px;height :100px; border-radius: 50%;
         background-color: #ff6a00; color: #ffffff; font-weight: 600;
         font-size: 3rem; display: flex; align-items: center; justify-content: center;
         margin-bottom: 1rem;
@@ -60,6 +61,26 @@
     .card-footer {
         padding: 15px;
     }
+    .footer-wrapper-white { 
+        background-color: #dbcb9c; /* Nền trắng */
+        border-radius: 12px; /* Bo góc */
+        padding: 15px; /* Padding bên trong */
+        bottom: 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bóng đổ nhẹ */
+        text-align: left;
+        width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+        position: fixed; /* Hoặc 'absolute' */
+        z-index: 0;
+    }
+    #history-content {
+    /* Kích thước cố định */
+    width: 1200px;  /* Chiều rộng 100px */
+    height: 1000px; /* Chiều cao 100px */
+    
+    /* Cho phép cuộn */
+    overflow: auto; /* Kích hoạt thanh cuộn (cả ngang và dọc) khi nội dung tràn */
+    margin-bottom: 100px;
+}
 </style>
 
 <div id="message-panel" class="mb-3"></div>
@@ -79,6 +100,10 @@
                     <a class="nav-link active" href="#" data-panel="profile" id="link-profile">Cập nhật tài khoản</a>
                     <a class="nav-link" href="#" data-panel="history" id="link-history">Lịch sử đơn hàng</a>
                 </nav>
+                <hr class="mt-3">
+                    <div id="total-spent-summary" class="p-2 border rounded bg-light small">
+                        <strong>Tổng chi tiêu:</strong> <span id="total-spent-amount">...</span>
+                    </div>
             </div>
         </div>
         </div>
@@ -228,6 +253,8 @@
                 </div>
             `;
             
+            updateSidebarTotalSpent(null); // Hiển thị 'Đang tải...' ở sidebar
+
             try {
                 const response = await fetch(HISTORY_API_URL, {
                     method: 'GET',
@@ -242,11 +269,17 @@
                 const orders = await response.json(); 
                 
                 let historyHtml = '';
+                let totalSpent = 0; // BIẾN TÍNH TỔNG TIỀN
 
                 if (!orders || orders.length === 0) {
                     historyHtml = '<div class="alert alert-info">Bạn chưa có đơn hàng nào.</div>';
                 } else {
                     orders.forEach(order => {
+                        // Chỉ cộng tổng tiền của đơn hàng có trạng thái là 'Paid' (hoặc status bạn muốn tính)
+                        if (order.status && order.status.toLowerCase() === 'paid') {
+                            totalSpent += order.totalAmount;
+                        }
+                        
                         const orderDate = new Date(order.orderDate).toLocaleString('vi-VN');
                         const totalAmount = order.totalAmount.toLocaleString('vi-VN');
                         const statusClass = order.status && order.status.toLowerCase() === 'paid' ? 'order-status-paid' : 'bg-secondary text-white p-1 rounded';
@@ -282,13 +315,30 @@
                 }
                 
                 document.getElementById('history-content').innerHTML = historyHtml;
+                // CẬP NHẬT TỔNG CHI TIÊU SAU KHI TẢI DỮ LIỆU
+                updateSidebarTotalSpent(totalSpent); 
 
             } catch (error) {
                 console.error("Lỗi fetch lịch sử đơn hàng:", error);
                 document.getElementById('history-content').innerHTML = `<div class="alert alert-danger">Lỗi khi tải lịch sử đơn hàng: ${error.message}</div>`;
+                updateSidebarTotalSpent(0); // Đặt lại 0 hoặc 'Lỗi' nếu cần
             }
         }
+        function updateSidebarTotalSpent(totalAmount) {
+            const totalSpentEl = document.getElementById("total-spent-summary");
+            const totalSpentAmountEl = document.getElementById("total-spent-amount");
 
+            if (totalSpentEl && totalSpentAmountEl) {
+                if (totalAmount !== null) {
+                    totalSpentAmountEl.textContent = totalAmount.toLocaleString('vi-VN') + ' VNĐ';
+                    totalSpentEl.style.display = 'block'; // Hiển thị nếu có dữ liệu
+                } else {
+                    // Ẩn hoặc reset khi chuyển tab nếu cần, hoặc để giữ nguyên giá trị cuối cùng.
+                    totalSpentAmountEl.textContent = 'Đang tải...';
+                    totalSpentEl.style.display = 'block'; 
+                }
+            }
+        }
         // ============================================
         // === HÀM GẮN LẮNG NGHE SỰ KIỆN ĐỔI MẬT KHẨU ===
         // ============================================
