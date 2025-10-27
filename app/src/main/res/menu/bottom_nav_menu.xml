@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_menu_home"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_cart"
+        android:icon="@drawable/ic_menu_cart"
+        android:title="@string/title_cart" />
+
+    <item
+        android:id="@+id/navigation_compare"
+        android:icon="@drawable/ic_compare"
+        android:title="So sánh" /> <item
+    android:id="@+id/navigation_settings"
+    android:icon="@drawable/ic_menu_settings"
+    android:title="@string/title_settings" />
+
+</menu>

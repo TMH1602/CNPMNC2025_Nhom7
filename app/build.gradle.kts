@@ -32,14 +32,20 @@ android {
 }
 
 dependencies {
-    // Retrofit
+    implementation("com.cloudinary:cloudinary-android:2.4.0")
+// Hoặc kiểm tra phiên bản mới nhất
+    // OkHttp & Logging Interceptor (Dùng CÙNG phiên bản)
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // Giữ 4.11.0
+
+    // Retrofit (Chỉ cần 1 lần)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-// Gson Converter (cho JSON request)
+
+    // Converters (Chỉ cần 1 lần mỗi loại)
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-// Scalars Converter (cho text/plain response)
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
-// OkHttp (cần thiết để xử lý SSL)
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0") // Giữ lại nếu bạn cần gọi API trả về text
+
+    // Các thư viện khác của bạn (Giữ nguyên)
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.appcompat)
