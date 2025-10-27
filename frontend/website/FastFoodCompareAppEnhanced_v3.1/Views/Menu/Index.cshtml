@@ -3,6 +3,7 @@
 }
 
 <style>
+    
     /* CSS CỦA BẠN (Giữ nguyên) */
     .btn-border-dark {
         border-color: #000 !important;
@@ -43,23 +44,23 @@
         background-position: center center;
     }
     .navbar {
-    background-color: #ffffff !important; 
-    
-    /* === Cố định trên cùng và luôn thu gọn === */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1040; /* Cao hơn thanh danh mục (1030) */
+        background-color: #ffffff !important; 
+        
+        /* === Cố định trên cùng và luôn thu gọn === */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1040; /* Cao hơn thanh danh mục (1030) */
 
-    /* Kiểu dáng thu gọn (Ví dụ: Chiều cao 60px) */
-    height: 60px; 
-    padding: 10px 0; /* Giảm padding */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Thêm bóng đổ nhẹ */
-    
-    /* Thêm transition để đảm bảo các thay đổi nếu có sau này sẽ mượt mà */
-    transition: all 0.5s ease-in-out; 
-}
+        /* Kiểu dáng thu gọn (Ví dụ: Chiều cao 60px) */
+        height: 60px; 
+        padding: 10px 0; /* Giảm padding */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Thêm bóng đổ nhẹ */
+        
+        /* Thêm transition để đảm bảo các thay đổi nếu có sau này sẽ mượt mà */
+        transition: all 0.5s ease-in-out; 
+    }
     
     /* Cấu trúc 2 cột */
     .container-fluid {
@@ -151,32 +152,37 @@
         box-shadow: 0 20px 20px rgba(0,0,0,0.1);
     }
     .footer-wrapper-white { 
-    background-color: #dbcb9c; 
-    border-radius: 12px; 
-    padding: 15px; 
-    /* ĐÃ LOẠI BỎ bottom: 0; */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
-    text-align: left;
-    width: 100%; 
-    
-    /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
-       Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
-    /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
-    position: static; 
-    z-index: 0; 
+        background-color: #dbcb9c; 
+        border-radius: 12px; 
+        padding: 15px; 
+        /* ĐÃ LOẠI BỎ bottom: 0; */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+        text-align: left;
+        width: 100%; 
+        
+        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
+        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
+        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
+        position: static; 
+        z-index: 0; 
 
-    /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
-    margin-top: 30px; 
-}
+        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
+        margin-top: 30px; 
+    }
     /* KHỐI CHỨA CÁC NÚT CATEGORY */
     #full-width-category-container {
         background-color: rgba(255, 255, 255, 0.95);
         margin-top:50px;
-        padding: 15px 30px 10px 30px; 
+        padding: 30px 30px 10px 30px; 
         border-radius: 12px;
         margin-left: 10px;
         margin-right: 10px;
         text-align: center;
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center;     /* Căn giữa theo chiều dọc (nếu cần) */
+        flex-wrap: wrap;
+        overflow-x: auto;
         transition: all 0.6s ease;
     }
     #full-width-category-container h2 {
@@ -189,7 +195,11 @@
         top: 30px; /* Cố định sát mép trên */
         right: 30px; /* Cố định sát mép trái */
         z-index: 1030; /* Đảm bảo nó nằm trên các nội dung khác */
-        
+        max-width: 350px; /* Đảm bảo chiều rộng này nhỏ hơn khoảng trống bù trừ */
+        width: 350px;
+        max-height: 350px; /* Chiều cao tối đa là 90% chiều cao viewport */
+        overflow-y: auto; /* Tự động hiển thị thanh cuộn dọc nếu nội dung tràn */
+        overflow-x: hidden;
         /* Thay đổi kích thước và kiểu dáng để nhỏ gọn hơn */
         width: auto; /* Chiều rộng tự động (hoặc đặt giá trị nhỏ hơn nếu muốn) */
         max-width: 300px; /* Ví dụ: Giới hạn chiều rộng nhỏ hơn */
@@ -203,6 +213,12 @@
         /* Bo góc chỉ ở bên phải để trông như thanh sidebar nhỏ */
         border-radius: 12px 0 0 12px;
         text-align: right; /* Căn lề trái khi cố định */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    .is-fixed::-webkit-scrollbar {
+        display: none; /* Hoặc width: 0px; */
+        width: 0px; 
+        background: transparent; /* Giúp đảm bảo trong suốt */
     }
 
 </style>
@@ -211,7 +227,7 @@
 <div class="container-fluid page-content-wrapper">
     
     <div id="full-width-category-container" class="mb-4">
-         <h1>Thực đơn</h1>
+         <h1>Thực đơn dành cho: </h1>
         <div id="category-filter-container" class="d-flex flex-wrap">
             </div>
     </div>

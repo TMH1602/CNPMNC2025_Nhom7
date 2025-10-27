@@ -15,7 +15,27 @@
     <style>
     
         /* CSS CỦA BẠN (Giữ nguyên) */
-        
+        body::-webkit-scrollbar {
+    width: 8px; /* Chiều rộng của thanh cuộn dọc */
+    height: 8px; /* Chiều cao của thanh cuộn ngang */
+}
+
+/* Background của khu vực thanh cuộn */
+body::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Màu nền của rãnh cuộn (track) */
+    border-radius: 10px; /* Bo góc cho rãnh */
+}
+
+/* Thanh trượt (thumb) */
+body::-webkit-scrollbar-thumb {
+    background: #ff6a00; /* Màu của thanh trượt (Màu cam của bạn) */
+    border-radius: 10px; /* Bo góc cho thanh trượt */
+}
+
+/* Khi hover lên thanh trượt */
+body::-webkit-scrollbar-thumb:hover {
+    background: #e55c00; /* Màu đậm hơn khi hover */
+}
         .user-avatar {
             display: inline-flex;
             align-items: center;
