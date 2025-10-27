@@ -28,8 +28,23 @@
         background-position: center center;
     }
     .navbar {
-        background-color: #ffffff !important; 
-    }
+    background-color: #ffffff !important; 
+    
+    /* === Cố định trên cùng và luôn thu gọn === */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1040; /* Cao hơn thanh danh mục (1030) */
+
+    /* Kiểu dáng thu gọn (Ví dụ: Chiều cao 60px) */
+    height: 60px; 
+    padding: 10px 0; /* Giảm padding */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Thêm bóng đổ nhẹ */
+    
+    /* Thêm transition để đảm bảo các thay đổi nếu có sau này sẽ mượt mà */
+    transition: all 0.5s ease-in-out; 
+}
     
     /* Cấu trúc 2 cột */
     .container-fluid {
@@ -121,28 +136,58 @@
         box-shadow: 0 20px 20px rgba(0,0,0,0.1);
     }
     .footer-wrapper-white { 
-        background-color: #dbcb9c; /* Nền trắng */
-        border-radius: 12px; /* Bo góc */
-        padding: 15px; /* Padding bên trong */
-        bottom: 0;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bóng đổ nhẹ */
-        text-align: left;
-        width: 100%; /* Đảm bảo chiều rộng đầy đủ */
-        position: fixed; /* Hoặc 'absolute' */
-        z-index: 0;
-    }
+    background-color: #dbcb9c; 
+    border-radius: 12px; 
+    padding: 15px; 
+    /* ĐÃ LOẠI BỎ bottom: 0; */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+    text-align: left;
+    width: 100%; 
+    
+    /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
+       Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
+    /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
+    position: static; 
+    z-index: 0; 
+
+    /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
+    margin-top: 30px; 
+}
     /* KHỐI CHỨA CÁC NÚT CATEGORY */
     #full-width-category-container {
         background-color: rgba(255, 255, 255, 0.95);
+        margin-top:50px;
         padding: 15px 30px 10px 30px; 
         border-radius: 12px;
         margin-left: 10px;
         margin-right: 10px;
         text-align: center;
+        transition: all 0.6s ease;
     }
     #full-width-category-container h2 {
         margin-top: 0;
         margin-bottom: 10px;
+    }
+    .is-fixed {
+    /* Cố định vị trí */
+        position: fixed;
+        top: 30px; /* Cố định sát mép trên */
+        right: 30px; /* Cố định sát mép trái */
+        z-index: 1030; /* Đảm bảo nó nằm trên các nội dung khác */
+        
+        /* Thay đổi kích thước và kiểu dáng để nhỏ gọn hơn */
+        width: auto; /* Chiều rộng tự động (hoặc đặt giá trị nhỏ hơn nếu muốn) */
+        max-width: 300px; /* Ví dụ: Giới hạn chiều rộng nhỏ hơn */
+        
+        /* Giảm padding để nhỏ gọn hơn */
+        padding: 10px 15px; 
+        
+        /* Xóa margin đã đặt ban đầu */
+        margin: 0; 
+        
+        /* Bo góc chỉ ở bên phải để trông như thanh sidebar nhỏ */
+        border-radius: 12px 0 0 12px;
+        text-align: right; /* Căn lề trái khi cố định */
     }
 
 </style>
@@ -214,7 +259,36 @@
     // =================================================================
     // HÀM QUẢN LÝ DỮ LIỆU CHUNG (NAVBAR)
     // =================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryContainer = document.getElementById('full-width-category-container');
+        
+        if (!categoryContainer) return; // Thoát nếu không tìm thấy phần tử
 
+        // Lấy vị trí ban đầu của phần tử so với đỉnh trang
+        // Offset Top là vị trí mà container bắt đầu bị cuộn qua
+        const stickyOffset = categoryContainer.offsetTop; 
+
+        function handleScroll() {
+            // Kiểm tra xem vị trí cuộn hiện tại có lớn hơn vị trí ban đầu của container không
+            if (window.scrollY > stickyOffset) {
+                // Thêm lớp is-fixed khi cuộn qua
+                if (!categoryContainer.classList.contains('is-fixed')) {
+                    categoryContainer.classList.add('is-fixed');
+                }
+            } else {
+                // Xóa lớp is-fixed khi cuộn ngược lại lên trên
+                if (categoryContainer.classList.contains('is-fixed')) {
+                    categoryContainer.classList.remove('is-fixed');
+                }
+            }
+        }
+
+        // Lắng nghe sự kiện cuộn
+        window.addEventListener('scroll', handleScroll);
+        
+        // Gọi hàm một lần để xử lý trạng thái nếu trang được tải ở vị trí đã cuộn
+        handleScroll();
+    });
     window.loadCartCount = async function (user) { /* ... (Giữ nguyên) ... */
         const cartCountSpan = document.getElementById("cartCount");
         if (!user || !cartCountSpan) return;
