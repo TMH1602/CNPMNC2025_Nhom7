@@ -1,50 +1,90 @@
 package com.example.cnpmnc_appfood;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import android.util.Log; // Cần thiết cho Log.w
 
 public class CartManager {
-    // Sử dụng Map để lưu trữ Dish và số lượng (Integer)
-    private static Map<Dish, Integer> cart = new HashMap<>();
 
-    // Thêm món vào giỏ (Tự động tăng số lượng nếu món đã có)
-    public static void addToCart(Dish dish) {
-        int currentQuantity = cart.getOrDefault(dish, 0);
-        cart.put(dish, currentQuantity + 1);
+    private final List<CartItem> cartItems = new ArrayList<>();
+    private static CartManager instance;
+
+    public static CartManager getInstance() {
+        if (instance == null) {
+            instance = new CartManager();
+        }
+        return instance;
     }
 
-    // Cập nhật số lượng
-    public static void updateQuantity(Dish dish, int quantity) {
-        if (quantity <= 0) {
-            cart.remove(dish); // Xóa khỏi giỏ nếu số lượng <= 0
-        } else {
-            cart.put(dish, quantity);
+    private CartManager() {
+        // Private constructor
+    }
+
+    // --- LOGIC ĐỒNG BỘ HÓA TỪ SERVER ---
+
+    /**
+     * Đồng bộ hóa giỏ hàng cục bộ bằng dữ liệu từ API.
+     * Phương thức này cần DishRepository để tìm chi tiết Dish (khắc phục lỗi hiển thị).
+     */
+    public void syncCartFromServer(List<CartApiItemDetail> serverItemDetails) {
+        DishRepository dishRepository = DishRepository.getInstance();
+        cartItems.clear();
+
+        for (CartApiItemDetail apiItem : serverItemDetails) {
+            Dish dish = dishRepository.getDishById(apiItem.getProductId());
+
+            if (dish == null) {
+                // 🎯 KHẮC PHỤC LỖI: TẠO DISH TẠM THỜI TỪ DỮ LIỆU API GIỎ HÀNG 🎯
+
+                // Nếu DishRepository chưa tải hoặc món ăn bị xóa, ta tự tạo Dish object
+                dish = new Dish();
+                dish.setId(apiItem.getProductId());
+                // Cần getters/setters trong CartApiItemDetail để lấy các trường này
+                // Giả sử đã có getters trong CartApiItemDetail:
+                dish.setName(apiItem.getProductName());
+                dish.setPrice(apiItem.getPrice());
+                dish.setImageUrl(apiItem.getImageUrl());
+                dish.setActive(true); // Giả định là Active
+
+                Log.w("CartManager", "Dish ID " + apiItem.getProductId() + " được tạo tạm thời.");
+            }
+
+            // Nếu dish đã được tìm thấy (hoặc vừa được tạo tạm thời)
+            CartItem localItem = new CartItem(dish, apiItem.getQuantity());
+            cartItems.add(localItem);
         }
     }
 
-    // Xóa 1 món khỏi giỏ hàng (bất kể số lượng)
-    public static void removeFromCart(Dish dish) {
-        cart.remove(dish);
-    }
+    // --- LOGIC GIỎ HÀNG CƠ BẢN ---
 
-    // Lấy danh sách Map Entry để Adapter có thể hiển thị (gồm Dish và Quantity)
-    public static List<Map.Entry<Dish, Integer>> getCartList() {
-        return new ArrayList<>(cart.entrySet());
-    }
-
-    // Tính tổng tiền
-    public static double getTotalPrice() {
-        double total = 0;
-        for (Map.Entry<Dish, Integer> entry : cart.entrySet()) {
-            total += entry.getKey().getPrice() * entry.getValue();
+    public void addItemToCart(Dish dish) {
+        for (CartItem item : cartItems) {
+            if (item.getDish().getId() == dish.getId()) {
+                item.setQuantity(item.getQuantity() + 1);
+                return;
+            }
         }
-        return total;
+        cartItems.add(new CartItem(dish, 1));
     }
 
-    // Xóa toàn bộ giỏ hàng
-    public static void clearCart() {
-        cart.clear();
+    public void updateQuantity(Dish dish, int newQuantity) {
+        for (CartItem item : cartItems) {
+            if (item.getDish().getId() == dish.getId()) {
+                if (newQuantity > 0) {
+                    item.setQuantity(newQuantity);
+                } else {
+                    cartItems.remove(item);
+                }
+                return;
+            }
+        }
+    }
+
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void clearCart() {
+        cartItems.clear();
     }
 }

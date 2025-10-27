@@ -1,87 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:gravity="center_vertical"
-    android:background="#FFFFFF">
-
-    <ImageView
-        android:id="@+id/ivCartImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="Ảnh món ăn"
-        android:layout_marginEnd="10dp"/>
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvCartName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tên Món Ăn"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+        <ImageView
+            android:id="@+id/ivCartDishImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_launcher_background"
+            android:contentDescription="Hình ảnh món ăn trong giỏ" />
 
-        <TextView
-            android:id="@+id/tvCartPrice"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="55,000 VNĐ"
-            android:textSize="14sp"
-            android:textColor="@android:color/holo_red_dark"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCartDishName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên Món Ăn"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvCartDishPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="150.000 VNĐ"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_red_dark" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical">
 
-            <Button
-                android:id="@+id/btnDecrease"
+            <ImageButton
+                android:id="@+id/btnCartDecrease"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:text="-"
-                android:textSize="18sp"
-                android:padding="0dp"/>
+                android:src="@drawable/baseline_remove_24"
+                android:background="@drawable/circle_button"
+                android:contentDescription="Giảm số lượng"
+                android:tint="@android:color/white"
+                android:padding="4dp" />
 
             <TextView
-                android:id="@+id/tvQuantity"
+                android:id="@+id/tvCartQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="16sp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:minWidth="20dp"
-                android:gravity="center"/>
+                android:text="1"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnIncrease"
+            <ImageButton
+                android:id="@+id/btnCartIncrease"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:text="+"
-                android:textSize="18sp"
-                android:padding="0dp"/>
+                android:src="@drawable/ic_baseline_add_24"
+                android:background="@drawable/circle_button"
+                android:contentDescription="Tăng số lượng"
+                android:tint="@android:color/white"
+                android:padding="4dp" />
+
         </LinearLayout>
-
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/btnRemoveItem"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@android:drawable/ic_delete"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Xóa món"/>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

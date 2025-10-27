@@ -1,6 +1,8 @@
 package com.example.cnpmnc_appfood;
 
+import android.content.Context; // 🎯 IMPORT MỚI 🎯
 import android.content.Intent;
+import android.content.SharedPreferences; // 🎯 IMPORT MỚI 🎯
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +21,6 @@ import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
 
-    // SỬA ĐỔI 1: Đổi tên biến từ etEmail sang etUsername
     private EditText etUsername, etPassword;
     private Button btnLogin;
     private TextView tvToRegister;
@@ -32,31 +33,26 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        // SỬA ĐỔI 2: Ánh xạ ID mới từ file XML (etLoginUsername)
+        // Ánh xạ View
         etUsername = view.findViewById(R.id.etLoginUsername);
         etPassword = view.findViewById(R.id.etLoginPassword);
         btnLogin = view.findViewById(R.id.btnLogin);
         tvToRegister = view.findViewById(R.id.tvToRegister);
         tvSkipLogin = view.findViewById(R.id.tvSkipLogin);
 
-        // Khởi tạo ApiService (Giả sử bạn đã sửa RetrofitClientInstance thành RetrofitClient)
         apiService = RetrofitClient.getApiService();
 
         // Xử lý sự kiện Đăng nhập
         btnLogin.setOnClickListener(v -> {
-            // SỬA ĐỔI 3: Lấy text từ etUsername
             String username = etUsername.getText().toString().trim();
             String password = etPassword.getText().toString();
 
-            // SỬA ĐỔI 4: Kiểm tra username.isEmpty()
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             btnLogin.setEnabled(false);
-
-            // SỬA ĐỔI 5: Truyền 'username' vào hàm
             loginUser(username, password);
         });
 
@@ -69,22 +65,25 @@ public class LoginFragment extends Fragment {
 
         // Xử lý sự kiện BỎ QUA ĐĂNG NHẬP
         tvSkipLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-            if (getActivity() != null) {
-                getActivity().finish();
+            if (getActivity() instanceof AuthActivity) {
+                // Tùy chọn: Lưu tên người dùng giả/Khách (nếu cần)
+                // saveUserData("GuestUser", null);
+                ((AuthActivity) getActivity()).onLoginSuccess();
+            } else {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             }
         });
 
         return view;
     }
 
-    // SỬA ĐỔI 6: Đổi tên tham số từ 'email' sang 'username'
     private void loginUser(String username, String password) {
 
-        // SỬA ĐỔI 7: Khởi tạo LoginRequest với username (giờ đã đúng)
         LoginRequest loginRequest = new LoginRequest(username, password);
-
         Call<String> call = apiService.login(loginRequest);
 
         call.enqueue(new Callback<String>() {
@@ -93,20 +92,27 @@ public class LoginFragment extends Fragment {
                 btnLogin.setEnabled(true);
 
                 if (response.isSuccessful()) {
-                    String responseString = response.body();
+                    String authToken = response.body(); // Giả sử body là chuỗi token
+
+                    // 🎯 LƯU USERNAME VÀ TOKEN VÀO SHAREDPREFERENCES 🎯
+                    if (getActivity() != null) {
+                        saveUserData(username, authToken);
+                    }
+
                     Toast.makeText(getContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-                    // TODO: Lưu token (responseString) vào SharedPreferences
-                    // Ví dụ: saveToken(responseString);
-
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                    if (getActivity() != null) {
-                        getActivity().finish();
+                    // Chuyển đổi Fragment
+                    if (getActivity() instanceof AuthActivity) {
+                        ((AuthActivity) getActivity()).onLoginSuccess();
+                    } else {
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                        if (getActivity() != null) {
+                            getActivity().finish();
+                        }
                     }
 
                 } else {
-                    // SỬA ĐỔI 8: Sửa thông báo lỗi cho rõ ràng
                     Toast.makeText(getContext(), "Tên tài khoản hoặc mật khẩu không đúng.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -118,5 +124,22 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getContext(), "Lỗi kết nối. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * Phương thức lưu trữ tên người dùng và token vào SharedPreferences.
+     */
+    private void saveUserData(String username, String token) {
+        // Lấy SharedPreferences object (tên file là "UserPrefs")
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // Lưu dữ liệu
+        editor.putString("USERNAME", username);
+        editor.putString("AUTH_TOKEN", token);
+
+        // Áp dụng thay đổi
+        editor.apply();
     }
 }

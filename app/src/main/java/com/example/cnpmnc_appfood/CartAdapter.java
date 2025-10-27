@@ -5,84 +5,107 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-// Loại bỏ import Glide
 import com.bumptech.glide.Glide;
-
 import java.util.List;
-import java.util.Map;
 
-public class CartAdapter extends ArrayAdapter<Map.Entry<Dish, Integer>> {
-    private Context context;
-    private List<Map.Entry<Dish, Integer>> cartItems;
-    private CartItemChangeListener listener;
+// 🎯 KHẮC PHỤC LỖI: Thêm import CartManager 🎯
+import com.example.cnpmnc_appfood.CartManager;
 
-    // Interface để thông báo cho Fragment khi có thay đổi (số lượng/xóa)
+
+public class CartAdapter extends ArrayAdapter<CartItem> {
+
+    private final Context context;
+    private final int resource;
+    private final List<CartItem> cartItems;
+    private final CartItemChangeListener listener; // Biến để lưu Listener
+
+    // 🎯 INTERFACE BỊ THIẾU 🎯
     public interface CartItemChangeListener {
-        void onQuantityChange();
+        void onCartItemQuantityChanged();
+        // void onCartItemRemoved();
     }
 
-    public CartAdapter(@NonNull Context context, List<Map.Entry<Dish, Integer>> cartItems, CartItemChangeListener listener) {
-        super(context, 0, cartItems);
+    /**
+     * Constructor đã sửa: Thêm tham số CartItemChangeListener.
+     */
+    public CartAdapter(@NonNull Context context, int resource, List<CartItem> cartItems, CartItemChangeListener listener) {
+        super(context, resource, cartItems);
         this.context = context;
+        this.resource = resource;
         this.cartItems = cartItems;
-        this.listener = listener;
+        this.listener = listener; // Gán Listener
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Map.Entry<Dish, Integer> entry = cartItems.get(position);
-        Dish dish = entry.getKey();
-        int quantity = entry.getValue();
 
         if (convertView == null) {
-            // Sử dụng item_cart.xml
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_cart, parent, false);
+            convertView = LayoutInflater.from(context).inflate(this.resource, parent, false);
         }
 
-        // Ánh xạ Views
-        ImageView ivCartImage = convertView.findViewById(R.id.ivCartImage);
-        TextView tvCartName = convertView.findViewById(R.id.tvCartName);
-        TextView tvCartPrice = convertView.findViewById(R.id.tvCartPrice);
-        TextView tvQuantity = convertView.findViewById(R.id.tvQuantity);
-        Button btnIncrease = convertView.findViewById(R.id.btnIncrease);
-        Button btnDecrease = convertView.findViewById(R.id.btnDecrease);
-        ImageButton btnRemove = convertView.findViewById(R.id.btnRemoveItem);
+        CartItem item = getItem(position);
+        if (item == null) {
+            return convertView;
+        }
 
-        // Đổ dữ liệu
-        tvCartName.setText(dish.getName());
-        tvCartPrice.setText(String.format("%,.0f VNĐ", dish.getPrice()));
-        tvQuantity.setText(String.valueOf(quantity));
+        Dish dish = item.getDish();
 
-        // THAY THẾ GLIDE: Dùng Resource ID
-        ivCartImage = convertView.findViewById(R.id.ivCartImage);
+        // 1. Ánh xạ các View
+        ImageView ivDishImage = convertView.findViewById(R.id.ivCartDishImage);
+        TextView tvDishName = convertView.findViewById(R.id.tvCartDishName);
+        TextView tvDishPrice = convertView.findViewById(R.id.tvCartDishPrice);
+        TextView tvQuantity = convertView.findViewById(R.id.tvCartQuantity);
+        ImageButton btnIncrease = convertView.findViewById(R.id.btnCartIncrease);
+        ImageButton btnDecrease = convertView.findViewById(R.id.btnCartDecrease);
+
+        // 2. Gán dữ liệu
+        tvDishName.setText(dish.getName());
+        double totalPrice = dish.getPrice() * item.getQuantity();
+        tvDishPrice.setText(String.format("%,.0f VNĐ", totalPrice));
+        tvQuantity.setText(String.valueOf(item.getQuantity()));
+
         Glide.with(context)
                 .load(dish.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
-                .into(ivCartImage);
+                .into(ivDishImage);
 
-        // Xử lý sự kiện Tăng/Giảm/Xóa
+        // 3. Xử lý sự kiện TĂNG số lượng
         btnIncrease.setOnClickListener(v -> {
-            CartManager.updateQuantity(dish, quantity + 1);
-            listener.onQuantityChange();
+            int newQuantity = item.getQuantity() + 1;
+
+            // FIX LỖI: Gọi qua CartManager.getInstance()
+            CartManager.getInstance().updateQuantity(dish, newQuantity);
+            notifyDataSetChanged();
+
+            // GỌI LISTENER: Thông báo cho CartFragment cập nhật tổng tiền
+            listener.onCartItemQuantityChanged();
         });
 
+        // 4. Xử lý sự kiện GIẢM số lượng
         btnDecrease.setOnClickListener(v -> {
-            CartManager.updateQuantity(dish, quantity - 1);
-            listener.onQuantityChange();
-        });
+            int newQuantity = item.getQuantity() - 1;
 
-        btnRemove.setOnClickListener(v -> {
-            CartManager.removeFromCart(dish);
-            listener.onQuantityChange();
+            // FIX LỖI: Gọi qua CartManager.getInstance()
+            CartManager.getInstance().updateQuantity(dish, newQuantity);
+            notifyDataSetChanged();
+
+            // GỌI LISTENER: Thông báo cho CartFragment cập nhật tổng tiền
+            listener.onCartItemQuantityChanged();
         });
 
         return convertView;
+    }
+
+    @Nullable
+    @Override
+    public CartItem getItem(int position) {
+        // Trả về item từ danh sách nội bộ
+        return cartItems.get(position);
     }
 }

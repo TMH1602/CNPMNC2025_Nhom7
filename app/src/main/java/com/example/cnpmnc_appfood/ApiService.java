@@ -7,7 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-
+import retrofit2.http.Path; // ✅ ĐÃ THÊM
 public interface ApiService {
 
     // Phương thức login từ trước
@@ -43,4 +43,15 @@ public interface ApiService {
      */
     @POST("api/Menu")
     Call<Dish> createDish(@Body Dish newDish);
+    @Headers({
+            "accept: */*",
+            "Content-Type: application/json"
+    })
+    @POST("api/Cart/add")
+    Call<AddToCartResponse> addToCart(@Body AddToCartRequest request);
+    @Headers({
+            "accept: text/plain"
+    })
+    @GET("api/Cart/{username}")
+    Call<CartApiResponse> getCartDetails(@Path("username") String username);
 }

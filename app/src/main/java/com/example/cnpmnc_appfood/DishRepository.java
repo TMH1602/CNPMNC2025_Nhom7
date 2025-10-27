@@ -1,68 +1,38 @@
 package com.example.cnpmnc_appfood;
 
 import android.util.Log;
-import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DishRepository {
 
-    // SỬA 1: ĐIỀU CHỈNH ĐƯỜNG DẪN URL
-    // *** CẢNH BÁO QUAN TRỌNG ***
-    // Nếu bạn chạy API (backend) trên máy tính (localhost) và chạy ứng dụng
-    // trên MÁY ẢO Android, bạn phải dùng IP "10.0.2.2" thay vì "localhost".
-    // Nếu bạn dùng MÁY THẬT, hãy dùng IP của máy tính (ví dụ: 192.168.1.10)
-    //
-    // THAY THẾ IP NÀY CHO ĐÚNG:
-    private static final String BASE_URL = "https://10.0.2.2:7132/"; // Dùng 10.0.2.2 cho máy ảo
-
+    private static final String TAG = "DishRepository";
     private static DishRepository instance;
-    private final ApiService apiService;
-
-    // Danh sách này sẽ là "nguồn sự thật" (source of truth)
     private final List<Dish> allDishes = new ArrayList<>();
-
-    // Danh sách các listener (chính là HomeFragment)
     private final List<OnDishDataChangeListener> listeners = new ArrayList<>();
 
-    // Interface để HomeFragment lắng nghe
+    private final ApiService apiService;
+
     public interface OnDishDataChangeListener {
         void onDishDataChanged();
     }
 
-    // Phương thức Private Constructor cho Singleton
-    private DishRepository() {
-
-        // SỬA 1: Lấy OkHttpClient không an toàn từ lớp bạn vừa tạo
-        OkHttpClient okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
-
-        // Khởi tạo Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                // SỬA 2: Thêm dòng .client() này vào
-                .client(okHttpClient)
-                .build();
-
-        apiService = retrofit.create(ApiService.class);
-    }
-
-    // Singleton pattern (Giống code của bạn)
-    public static synchronized DishRepository getInstance() {
+    public static DishRepository getInstance() {
         if (instance == null) {
             instance = new DishRepository();
         }
         return instance;
     }
 
-    // Các phương thức quản lý listener (Giống code của bạn)
+    private DishRepository() {
+        apiService = RetrofitClient.getApiService();
+    }
+
+    // --- QUẢN LÝ LISTENER (DATA CHANGE NOTIFICATION) ---
+
     public void addListener(OnDishDataChangeListener listener) {
         listeners.add(listener);
     }
@@ -71,129 +41,113 @@ public class DishRepository {
         listeners.remove(listener);
     }
 
-    // Thông báo cho tất cả listener (HomeFragment) rằng dữ liệu đã thay đổi
     private void notifyListeners() {
         for (OnDishDataChangeListener listener : listeners) {
-            listener.onDishDataChanged();
+            listener.onDishDataChanged(); // 👈 Kích hoạt cập nhật UI trong HomeFragment
         }
     }
 
-    // Lấy danh sách món ăn hiện tại (Giống code của bạn)
-    public List<Dish> getAllDishes() {
-        return allDishes;
-    }
+    // --- LOGIC API GET VÀ LƯU TRỮ ---
 
-
-    // ********************************************
-    // *** THÊM PHƯƠNG THỨC NÀY VÀO ***
-    // (FoodDetailsFragment cần phương thức này)
-    // ********************************************
     /**
-     * Tìm một món ăn trong danh sách đã tải về dựa theo ID.
-     * @param foodId ID của món ăn cần tìm.
-     * @return Đối tượng Dish nếu tìm thấy, ngược lại trả về null.
+     * Kích hoạt cuộc gọi API để tải danh sách món ăn.
      */
-    public Dish getDishById(int foodId) {
-        // Duyệt qua danh sách allDishes (đã được tải về từ API)
-        for (Dish dish : allDishes) {
-            if (dish.getId() == foodId) {
-                return dish; // Trả về món ăn nếu ID khớp
-            }
-        }
-        return null; // Trả về null nếu không tìm thấy món ăn
-    }
-    public void addDish(String name, String description, double price, String imageUrl) {
-
-        // 1. Tạo đối tượng Dish từ thông tin đầu vào
-        Dish newDish = new Dish();
-        newDish.setName(name);
-        newDish.setDescription(description);
-        newDish.setPrice(price);
-        newDish.setImageUrl(imageUrl); // <-- Đọc cảnh báo bên dưới
-        newDish.setCategory("Món mới"); // Tạm gán (vì form của bạn thiếu category)
-
-        // 2. Gọi API để tạo món ăn
-        Call<Dish> call = apiService.createDish(newDish);
-
-        // 3. Thực thi bất đồng bộ
-        call.enqueue(new Callback<Dish>() {
+    public void loadDishesFromServer() {
+        apiService.getMenu().enqueue(new Callback<List<Dish>>() {
             @Override
-            public void onResponse(@NonNull Call<Dish> call, @NonNull Response<Dish> response) {
+            public void onResponse(Call<List<Dish>> call, Response<List<Dish>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // 4. Thêm món ăn mới (server trả về) vào danh sách
-                    Dish createdDish = response.body();
-                    allDishes.add(createdDish);
+                    List<Dish> fetchedList = response.body();
 
-                    // 5. Thông báo cho HomeFragment cập nhật UI
+                    // 1. Cập nhật danh sách nội bộ và lưu
+                    setDishes(fetchedList);
+
+                    // 2. Thông báo cho các Fragment đang lắng nghe
                     notifyListeners();
-
-                    Log.d("DishRepository", "Thêm món ăn thành công: " + createdDish.getName());
+                    Log.d(TAG, "Tải API thành công. Thông báo cập nhật.");
                 } else {
-                    Log.e("DishRepository", "Lỗi khi thêm món ăn: " + response.code());
+                    Log.e(TAG, "Lỗi Server khi tải menu: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Dish> call, @NonNull Throwable t) {
-                Log.e("DishRepository", "Lỗi API (addDish): " + t.getMessage(), t);
+            public void onFailure(Call<List<Dish>> call, Throwable t) {
+                Log.e(TAG, "Lỗi kết nối API Menu: " + t.getMessage());
+                // Vẫn gọi notifyListeners() để Fragment biết đã có lỗi và có thể hiển thị thông báo lỗi
+                notifyListeners();
             }
         });
     }
-    // ********************************************
-    // *** THÊM PHƯƠNG THỨC NÀY VÀO ***
-    // (Đây là phiên bản Java của code C#)
-    // ********************************************
-    /**
-     * Đếm số lượng món ăn đang "Active" (IsActive = true)
-     * mà repository đang giữ.
-     * @return Số lượng món ăn đang hoạt động.
-     */
-    public int getActiveDishCount() {
-        int count = 0;
 
-        // Duyệt qua toàn bộ danh sách allDishes
-        for (Dish dish : allDishes) {
-            // Kiểm tra trường isActive (giống hệt C#)
-            if (dish.isActive()) {
-                count++;
-            }
-        }
-        return count; // Trả về tổng số lượng
+    // Lưu trữ dữ liệu mới nhận được
+    public void setDishes(List<Dish> fetchedList) {
+        allDishes.clear();
+        allDishes.addAll(fetchedList);
     }
 
+    // ------------------------------------------
+    // --- LOGIC TRUY XUẤT DỮ LIỆU CỤC BỘ ---
+    // ------------------------------------------
 
-    // SỬA 2: TRIỂN KHAI LOGIC GỌI API
-    public void loadDishesFromServer() {
-        // Gọi API
-        Call<List<Dish>> call = apiService.getMenu();
+    /**
+     * Trả về danh sách các món ăn có IsActive = true.
+     */
+    public List<Dish> getActiveDishes() {
+        List<Dish> activeList = new ArrayList<>();
+        if (allDishes != null) {
+            for (Dish dish : allDishes) {
+                if (dish.isActive()) {
+                    activeList.add(dish);
+                }
+            }
+        }
+        return activeList;
+    }
 
-        // Thực thi cuộc gọi BẤT ĐỒNG BỘ (trên một luồng khác)
-        call.enqueue(new Callback<List<Dish>>() {
+    /**
+     * Tìm và trả về một món ăn cụ thể dựa trên ID.
+     */
+    public Dish getDishById(int id) {
+        for (Dish dish : allDishes) {
+            if (dish.getId() == id) {
+                return dish;
+            }
+        }
+        return null;
+    }
+
+    public List<Dish> getAllDishes() {
+        return new ArrayList<>(allDishes);
+    }
+
+    public int getActiveDishCount() {
+        return getActiveDishes().size();
+    }
+
+    // --- LOGIC API POST KHÁC ---
+    public void addDish(String name, String desc, double price, String imageUrl) {
+
+        Dish newDish = new Dish();
+        newDish.setName(name);
+        newDish.setDescription(desc);
+        newDish.setPrice(price);
+        newDish.setImageUrl(imageUrl);
+        newDish.setActive(true);
+
+        apiService.createDish(newDish).enqueue(new retrofit2.Callback<Dish>() {
             @Override
-            public void onResponse(@NonNull Call<List<Dish>> call, @NonNull Response<List<Dish>> response) {
-                // 1. GỌI API THÀNH CÔNG
+            public void onResponse(Call<Dish> call, Response<Dish> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Xóa dữ liệu cũ
-                    allDishes.clear();
-                    // Thêm dữ liệu mới từ API
-                    allDishes.addAll(response.body());
-
-                    // 2. THÔNG BÁO CHO HOMEFRAGMENT
-                    // Báo cho HomeFragment (và các listener khác)
-                    // "Này, dữ liệu mới về rồi, cập nhật UI đi!"
+                    allDishes.add(response.body());
                     notifyListeners();
-
-                    Log.d("DishRepository", "Tải dữ liệu thành công: " + allDishes.size() + " món.");
                 } else {
-                    Log.e("DishRepository", "Lỗi Response: " + response.code());
+                    Log.e(TAG, "Lỗi Server khi thêm món: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Dish>> call, @NonNull Throwable t) {
-                // 3. GỌI API THẤT BẠI
-                // Thường là do mất mạng, sai URL, hoặc lỗi SSL
-                Log.e("DishRepository", "Lỗi gọi API: " + t.getMessage(), t);
+            public void onFailure(Call<Dish> call, Throwable t) {
+                Log.e(TAG, "Lỗi kết nối khi thêm món: " + t.getMessage());
             }
         });
     }

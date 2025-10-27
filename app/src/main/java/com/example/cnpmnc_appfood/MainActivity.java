@@ -1,6 +1,5 @@
 package com.example.cnpmnc_appfood;
 
-// ... các import khác ...
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Đảm bảo activity_main có BottomNavigationView và fragment_container
+        setContentView(R.layout.activity_main);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -33,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (itemId == R.id.navigation_compare) {
             fragment = new ComparisonFragment();
         }
-        // CẬP NHẬT: Thay thế SettingsFragment bằng DishManagementFragment
         else if (itemId == R.id.navigation_settings) {
-            fragment = new DishManagementFragment(); // Mở trang thêm món ăn
+            fragment = new DishManagementFragment();
         }
 
         if (fragment != null) {
