@@ -3,8 +3,24 @@
 }
 
 <style>
-    /* CSS CỦA BẠN (Giữ nguyên) */
     
+    /* CSS CỦA BẠN (Giữ nguyên) */
+    .btn-border-dark {
+        border-color: #000 !important;
+        border-width: 1px;
+        border-style: solid;
+        radius: 20%;
+        /* === TRẠNG THÁI BÌNH THƯỜNG === */
+        transition: all 0.2s ease-in-out; /* Thêm transition cho độ mượt */
+        transform: translateY(0);          /* Vị trí ban đầu: không dịch chuyển */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Bóng đổ nhẹ ban đầu */
+    }
+
+    .btn-border-dark:hover {
+        /* === TRẠNG THÁI HOVER: Áp dụng hiệu ứng nâng lên và bóng đổ mạnh hơn === */
+        transform: translateY(-2px); /* Nâng lên 2px */
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Bóng đổ mạnh hơn khi hover */
+    }
     .user-avatar {
         display: inline-flex;
         align-items: center;
@@ -21,14 +37,29 @@
     /* CSS CHO BACKGROUND VÀ CẤU TRÚC CỘT */
     body {
         font-family: 'QuickSand', cursive, sans-serif;
-        background-image: url('/images/BackGround.jpg'); 
+        background-image: url('/images/BackGround1.jpg'); 
         background-size: cover;      
         background-repeat: no-repeat; 
         background-attachment: fixed; 
         background-position: center center;
     }
     .navbar {
-        background-color: #fff !important; 
+        background-color: #ffffff !important; 
+        
+        /* === Cố định trên cùng và luôn thu gọn === */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1040; /* Cao hơn thanh danh mục (1030) */
+
+        /* Kiểu dáng thu gọn (Ví dụ: Chiều cao 60px) */
+        height: 60px; 
+        padding: 10px 0; /* Giảm padding */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Thêm bóng đổ nhẹ */
+        
+        /* Thêm transition để đảm bảo các thay đổi nếu có sau này sẽ mượt mà */
+        transition: all 0.5s ease-in-out; 
     }
     
     /* Cấu trúc 2 cột */
@@ -49,6 +80,7 @@
         width: 1200px;
         margin-left: 30px;
         padding: 30px;
+        margin-bottom:100px;
     }
     
     /* Cột Phải (Local Cart) - FIXED BOTTOM */
@@ -109,25 +141,84 @@
     }
     .category-btn:hover:not(.active) {
         background-color: #fff0e0;
+        transform: translateY(-2px); /* Nâng lên 2px */
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Bóng đổ mạnh hơn khi hover */
     }
     .category-btn.active {
+        border-color: black;
         background-color: #ff6a00;
         color: #ffffff;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 20px rgba(0,0,0,0.1);
     }
-    
+    .footer-wrapper-white { 
+        background-color: #dbcb9c; 
+        border-radius: 12px; 
+        padding: 15px; 
+        /* ĐÃ LOẠI BỎ bottom: 0; */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+        text-align: left;
+        width: 100%; 
+        
+        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
+        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
+        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
+        position: static; 
+        z-index: 0; 
+
+        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
+        margin-top: 30px; 
+    }
     /* KHỐI CHỨA CÁC NÚT CATEGORY */
     #full-width-category-container {
         background-color: rgba(255, 255, 255, 0.95);
-        padding: 15px 30px 10px 30px; 
+        margin-top:50px;
+        padding: 30px 30px 10px 30px; 
         border-radius: 12px;
         margin-left: 10px;
         margin-right: 10px;
         text-align: center;
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center;     /* Căn giữa theo chiều dọc (nếu cần) */
+        flex-wrap: wrap;
+        overflow-x: auto;
+        transition: all 0.6s ease;
     }
     #full-width-category-container h2 {
         margin-top: 0;
         margin-bottom: 10px;
+    }
+    .is-fixed {
+    /* Cố định vị trí */
+        position: fixed;
+        top: 30px; /* Cố định sát mép trên */
+        right: 30px; /* Cố định sát mép trái */
+        z-index: 1030; /* Đảm bảo nó nằm trên các nội dung khác */
+        max-width: 350px; /* Đảm bảo chiều rộng này nhỏ hơn khoảng trống bù trừ */
+        width: 350px;
+        max-height: 350px; /* Chiều cao tối đa là 90% chiều cao viewport */
+        overflow-y: auto; /* Tự động hiển thị thanh cuộn dọc nếu nội dung tràn */
+        overflow-x: hidden;
+        /* Thay đổi kích thước và kiểu dáng để nhỏ gọn hơn */
+        width: auto; /* Chiều rộng tự động (hoặc đặt giá trị nhỏ hơn nếu muốn) */
+        max-width: 300px; /* Ví dụ: Giới hạn chiều rộng nhỏ hơn */
+        
+        /* Giảm padding để nhỏ gọn hơn */
+        padding: 10px 15px; 
+        
+        /* Xóa margin đã đặt ban đầu */
+        margin: 0; 
+        
+        /* Bo góc chỉ ở bên phải để trông như thanh sidebar nhỏ */
+        border-radius: 12px 0 0 12px;
+        text-align: right; /* Căn lề trái khi cố định */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    .is-fixed::-webkit-scrollbar {
+        display: none; /* Hoặc width: 0px; */
+        width: 0px; 
+        background: transparent; /* Giúp đảm bảo trong suốt */
     }
 
 </style>
@@ -136,7 +227,7 @@
 <div class="container-fluid page-content-wrapper">
     
     <div id="full-width-category-container" class="mb-4">
-         <h1>Thực đơn</h1>
+         <h1>Thực đơn dành cho: </h1>
         <div id="category-filter-container" class="d-flex flex-wrap">
             </div>
     </div>
@@ -170,14 +261,17 @@
             </div>
 
             <div class="mt-3">
-                <button id="clear-local-cart-btn" class="btn btn-outline-danger w-100 mb-2">
-                    Xóa Giỏ hàng Tạm thời
+                <button id="clear-local-cart-btn" class="btn btn-outline-danger w-100 mb-2 btn-border-dark">
+                    Xóa tất cả món ăn đã chọn
                 </button>
                 
-                <button id="commit-cart-btn" class="btn btn-success w-100 mb-2" disabled>
-                    Thêm vào Giỏ hàng (Gửi API)
+                <button id="commit-cart-btn" class="btn btn-success w-100 mb-2 btn-border-dark" disabled>
+                    Thêm Vào giỏ hàng
                 </button>
-                <a href="@Url.Action("Index", "Cart")" class="btn btn-primary w-100">Xem Giỏ hàng Đã lưu</a>
+                
+                <a href="@Url.Action("Index", "Cart")" class="btn btn-primary w-100 btn-border-dark">
+                    Xem Giỏ hàng Đã lưu
+                </a>
             </div>
         </div>
     </div>
@@ -199,7 +293,36 @@
     // =================================================================
     // HÀM QUẢN LÝ DỮ LIỆU CHUNG (NAVBAR)
     // =================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryContainer = document.getElementById('full-width-category-container');
+        
+        if (!categoryContainer) return; // Thoát nếu không tìm thấy phần tử
 
+        // Lấy vị trí ban đầu của phần tử so với đỉnh trang
+        // Offset Top là vị trí mà container bắt đầu bị cuộn qua
+        const stickyOffset = categoryContainer.offsetTop; 
+
+        function handleScroll() {
+            // Kiểm tra xem vị trí cuộn hiện tại có lớn hơn vị trí ban đầu của container không
+            if (window.scrollY > stickyOffset) {
+                // Thêm lớp is-fixed khi cuộn qua
+                if (!categoryContainer.classList.contains('is-fixed')) {
+                    categoryContainer.classList.add('is-fixed');
+                }
+            } else {
+                // Xóa lớp is-fixed khi cuộn ngược lại lên trên
+                if (categoryContainer.classList.contains('is-fixed')) {
+                    categoryContainer.classList.remove('is-fixed');
+                }
+            }
+        }
+
+        // Lắng nghe sự kiện cuộn
+        window.addEventListener('scroll', handleScroll);
+        
+        // Gọi hàm một lần để xử lý trạng thái nếu trang được tải ở vị trí đã cuộn
+        handleScroll();
+    });
     window.loadCartCount = async function (user) { /* ... (Giữ nguyên) ... */
         const cartCountSpan = document.getElementById("cartCount");
         if (!user || !cartCountSpan) return;

@@ -20,7 +20,7 @@ namespace WebApplication1.Controllers
         {
             // 💡 LẤY CÁC ĐƠN HÀNG CÓ STATUS LÀ "Processed"
             var orders = await _context.Orders
-                .Where(o => o.Status == "Processed") // Hoặc dùng OrderStatus.Processed nếu bạn dùng Enum
+                .Where(o => o.Status == "Paid") // Hoặc dùng OrderStatus.Processed nếu bạn dùng Enum
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                 .OrderBy(o => o.OrderDate) // Sắp xếp theo thứ tự cũ nhất làm trước
@@ -28,7 +28,7 @@ namespace WebApplication1.Controllers
 
             if (!orders.Any())
             {
-                return Ok("No orders are currently in the 'Processed' status. ✨");
+                return Ok("Không có đơn hàng nào cần xử lý :))))))✨");
             }
 
             var processingOrders = orders.Select(o => new OrderHistoryDto
@@ -61,7 +61,7 @@ namespace WebApplication1.Controllers
 
             if (!history.Any())
             {
-                return Ok(new { Message = "Chưa có đơn hàng nào được đánh dấu 'Done' trong hệ thống. 🎉" });
+                return Ok(new { Message = "Chưa có lịch sử đơn hàng thành công" });
             }
 
             var historyViewModels = history.Select(o => new OrderHistoryDto
@@ -98,10 +98,10 @@ namespace WebApplication1.Controllers
                 return BadRequest($"Order ID {orderId} is already marked as Done.");
             }
 
-            if (order.Status != "Processed")
+            if (order.Status != "Paid")
             {
                 // Tránh chuyển các đơn hàng Pending, Cancelled trực tiếp thành Done
-                return BadRequest($"Cannot mark order as Done. Current status is '{order.Status}'. Only 'Processed' orders can be marked Done.");
+                return BadRequest($"Đơn hàng {orderId} chưa được thanh toán cho nên không thể nào có thể done được");
             }
 
             // 3. Cập nhật trạng thái
@@ -112,7 +112,7 @@ namespace WebApplication1.Controllers
             return Ok(new
             {
                 OrderId = orderId,
-                Message = "Order status updated successfully.",
+                Message = "Đơn hàng hoàn thành thành công!",
                 NewStatus = order.Status
             });
         }

@@ -1,8 +1,71 @@
 @{
     ViewData["Title"] = "Giỏ hàng của bạn";
 }
+<style>
+    .footer-wrapper-white { 
+        background-color: #dbcb9c; 
+        border-radius: 12px; 
+        padding: 15px; 
+        /* ĐÃ LOẠI BỎ bottom: 0; */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+        text-align: left;
+        width: 100%; 
+        bottom:0;
+        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
+        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
+        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
+        position: static; 
+        z-index: 0; 
 
-<h2 class="mb-4">🛒 Giỏ hàng của bạn</h2>
+        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
+        margin-top: 30px; 
+    }
+    /* Thêm đoạn CSS này vào thẻ <style> của bạn */
+    .cart-table-centered th, 
+    .cart-table-centered td {
+        text-align: center;
+    }
+    /* Riêng cột sản phẩm (ảnh) thường không muốn căn giữa hoàn toàn */
+    .cart-table-centered td:first-child { 
+        text-align: center; 
+    }
+    /* CSS TÙY CHỈNH CHO NÚT THANH TOÁN */
+    .btn-checkout-custom {
+        color: #000 !important; /* Chữ đen */
+        background-color: #ffc107; /* Màu vàng (Bootstrap Warning) */
+        border-color: #020202; /* Viền cùng màu */
+        opacity: 0.9;
+        font-weight: bold; /* Thêm độ đậm để dễ nhìn hơn */
+        transition: opacity 0.2s; /* Thêm hiệu ứng hover */
+    }
+    .btn-checkout-custom:hover {
+        opacity: 1;
+        background-color: #ffcd39; /* Vàng nhạt hơn khi hover */
+    }
+    #cart-container {
+        background-color: white; /* Đặt nền trắng */
+        padding: 20px; /* Thêm padding cho đẹp */
+        border-radius: 8px; /* Bo góc nhẹ */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Thêm bóng đổ nhẹ */
+        margin-bottom: 200px;
+    }
+    .cart-header-wrapper {
+        background-color: rgb(237, 235, 112); /* Nền trắng */
+        padding: 15px 20px; /* Padding trên dưới 15px, trái phải 20px */
+        border-radius: 8px; /* Bo góc nhẹ, cùng với cart-container */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ, cùng với cart-container */
+        margin-bottom: 20px; /* Khoảng cách với phần nội dung giỏ hàng bên dưới */
+        /* Đảm bảo tiêu đề nằm giữa div nếu cần */
+        display: flex; 
+        align-items: center;
+        justify-content: center; /* Để tiêu đề ở bên trái */
+
+    }
+</style>
+<div class="cart-header-wrapper">
+    <h2 class="mb-0">🛒 Giỏ hàng của <span id="cart-username-display">bạn</span></h2>
+    </div>
+
 
 <div id="cart-container">
     <div class="text-center p-5">
@@ -18,7 +81,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const cartContainer = document.getElementById('cart-container');
         const cartCountSpan = document.getElementById('cartCount'); 
-
+        const cartUsernameDisplay = document.getElementById('cart-username-display');
         const username = localStorage.getItem('username');
         const token = localStorage.getItem('jwtToken');
         const LOGIN_URL = '@Url.Action("Login", "Account")';
@@ -28,7 +91,9 @@
             "accept": "application/json", 
             "Content-Type": "application/json"
         };
-        
+        if (username && cartUsernameDisplay) {
+            cartUsernameDisplay.textContent = username;
+        }
         const apiUrl = `${API_BASE_URL}/${username}`; 
 
         if (!username) {
@@ -74,8 +139,8 @@
 
             let totalAmount = 0;
             let cartHtml = `
-                <table class="table table-bordered align-middle">
-                    <thead class="table-light">
+                <table class="table table-bordered align-middle cart-table-centered">
+                    <thead class="table-light">
                         <tr>
                             <th>Sản phẩm</th>
                             <th>Tên</th>
@@ -124,8 +189,7 @@
                     </tfoot>
                 </table>
                 <div class="text-end mt-3">
-                    <button class="btn btn-danger" id="clear-cart-btn">Xóa hết giỏ hàng</button>
-                    <a href="@Url.Action("Index", "Checkout")" class="btn btn-primary">Tiến hành thanh toán</a>
+                    <a href="@Url.Action("Index", "Checkout")" class="btn btn-checkout-custom">Tiến hành thanh toán</a>
                 </div>
             `;
             cartContainer.innerHTML = cartHtml;

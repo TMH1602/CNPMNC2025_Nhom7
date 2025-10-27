@@ -10,7 +10,8 @@
         font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
     }
     .profile-avatar {
-        width: 100px; height: 100px; border-radius: 50%;
+        
+        width: 100px;height :100px; border-radius: 50%;
         background-color: #ff6a00; color: #ffffff; font-weight: 600;
         font-size: 3rem; display: flex; align-items: center; justify-content: center;
         margin-bottom: 1rem;
@@ -60,6 +61,71 @@
     .card-footer {
         padding: 15px;
     }
+    .footer-wrapper-white { 
+        background-color: #dbcb9c; /* Nền trắng */
+        border-radius: 12px; /* Bo góc */
+        padding: 15px; /* Padding bên trong */
+        bottom: 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bóng đổ nhẹ */
+        text-align: left;
+        width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+        position: fixed; /* Hoặc 'absolute' */
+        z-index: 0;
+    }
+    #history-content {
+    /* Kích thước cố định */
+    width: 1200px;  /* Chiều rộng 100px */
+    height: 1000px; /* Chiều cao 100px */
+    
+    /* Cho phép cuộn */
+    overflow: auto; /* Kích hoạt thanh cuộn (cả ngang và dọc) khi nội dung tràn */
+    margin-bottom: 100px;
+    }
+    Chắc chắn rồi! Để thay đổi màu nền và màu chữ cho trạng thái đơn hàng (order.status) trong lịch sử đơn hàng, bạn cần chỉnh sửa hai phần:
+
+CSS: Định nghĩa các lớp CSS mới cho trạng thái "Done" và trạng thái "Khác".
+
+JavaScript: Cập nhật logic trong hàm renderOrderHistoryPanel để gán lớp CSS phù hợp.
+
+Dưới đây là các bước chỉnh sửa:
+
+1. Cập nhật CSS (Thêm order-status-done và order-status-other)
+Thêm đoạn CSS sau vào phần <style> của bạn. Tôi sẽ thay thế lớp bg-secondary text-white p-1 rounded hiện tại bằng một lớp mới cho trạng thái không phải là "Done" hoặc "Paid".
+
+CSS
+
+<style>
+    /* ... (CSS hiện tại của bạn) ... */
+
+    /* CSS BỔ SUNG CHO LỊCH SỬ ĐƠN HÀNG */
+    /* ... (Giữ nguyên .order-card, .order-header) ... */
+
+    /* Trạng thái PAID (Giữ nguyên) */
+    .order-status-paid {
+        background-color: #d4edda; /* Xanh lá nhạt */
+        color: #155724; /* Xanh lá đậm */
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    /* 🎯 MÀU XANH CHO TRẠNG THÁI 'DONE' */
+    .order-status-done {
+        background-color: #cce5ff; /* Xanh dương nhạt */
+        color: #004085; /* Xanh dương đậm */
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    /* 🎯 MÀU ĐỎ CHO CÁC TRẠNG THÁI KHÁC (PENDING, CANCEL, v.v.) */
+    .order-status-other {
+        background-color: #f8d7da; /* Đỏ nhạt */
+        color: #721c24; /* Đỏ đậm */
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
 </style>
 
 <div id="message-panel" class="mb-3"></div>
@@ -79,6 +145,10 @@
                     <a class="nav-link active" href="#" data-panel="profile" id="link-profile">Cập nhật tài khoản</a>
                     <a class="nav-link" href="#" data-panel="history" id="link-history">Lịch sử đơn hàng</a>
                 </nav>
+                <hr class="mt-3">
+                    <div id="total-spent-summary" class="p-2 border rounded bg-light small">
+                        <strong>Tổng chi tiêu:</strong> <span id="total-spent-amount">...</span>
+                    </div>
             </div>
         </div>
         </div>
@@ -219,76 +289,113 @@
         // === HÀM TẢI & RENDER LỊCH SỬ ĐƠN HÀNG ===
         // ===============================================
         async function renderOrderHistoryPanel() {
-            messagePanel.innerHTML = "";
-            contentPanel.innerHTML = `
-                <h4 class="mb-4">📜 Lịch sử đơn hàng</h4>
-                <div id="history-content" class="text-center p-5">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-2">Đang tải lịch sử đơn hàng...</p>
-                </div>
-            `;
-            
-            try {
-                const response = await fetch(HISTORY_API_URL, {
-                    method: 'GET',
-                    headers: { 'accept': 'text/plain' }
-                });
+    messagePanel.innerHTML = "";
+    contentPanel.innerHTML = `
+        <h4 class="mb-4">📜 Lịch sử đơn hàng</h4>
+        <div id="history-content" class="text-center p-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Đang tải lịch sử đơn hàng...</p>
+        </div>
+    `;
+    
+    updateSidebarTotalSpent(null); // Hiển thị 'Đang tải...' ở sidebar
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Lỗi ${response.status}: ${errorText || 'Không thể tải lịch sử đơn hàng.'}`);
+    try {
+        const response = await fetch(HISTORY_API_URL, {
+            method: 'GET',
+            headers: { 'accept': 'text/plain' }
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Lỗi ${response.status}: ${errorText || 'Không thể tải lịch sử đơn hàng.'}`);
+        }
+        
+        const orders = await response.json(); 
+        
+        let historyHtml = '';
+        let totalSpent = 0; // BIẾN TÍNH TỔNG TIỀN
+
+        if (!orders || orders.length === 0) {
+            historyHtml = '<div class="alert alert-info">Bạn chưa có đơn hàng nào.</div>';
+        } else {
+            orders.forEach(order => {
+                const statusLower = order.status ? order.status.toLowerCase() : '';
+
+                // Chỉ cộng tổng tiền của đơn hàng có trạng thái là 'Paid' (hoặc status bạn muốn tính)
+                if (statusLower === 'paid' || statusLower === 'done') {
+                    totalSpent += order.totalAmount;
                 }
                 
-                const orders = await response.json(); 
+                const orderDate = new Date(order.orderDate).toLocaleString('vi-VN');
+                const totalAmount = order.totalAmount.toLocaleString('vi-VN');
                 
-                let historyHtml = '';
-
-                if (!orders || orders.length === 0) {
-                    historyHtml = '<div class="alert alert-info">Bạn chưa có đơn hàng nào.</div>';
+                // === LOGIC XÁC ĐỊNH CLASS MỚI ===
+                let statusClass;
+                if (statusLower === 'done') {
+                    statusClass = 'order-status-done'; // Màu xanh dương cho DONE
+                } else if (statusLower === 'paid') {
+                    statusClass = 'order-status-paid'; // Màu xanh lá cho PAID (Giữ nguyên)
                 } else {
-                    orders.forEach(order => {
-                        const orderDate = new Date(order.orderDate).toLocaleString('vi-VN');
-                        const totalAmount = order.totalAmount.toLocaleString('vi-VN');
-                        const statusClass = order.status && order.status.toLowerCase() === 'paid' ? 'order-status-paid' : 'bg-secondary text-white p-1 rounded';
-
-                        let itemsHtml = order.items.map(item => `
-                            <div class="item-detail row">
-                                <div class="col-8 text-muted">${item.productName}</div>
-                                <div class="col-4 text-end">
-                                    ${item.quantity} x ${(item.priceAtTime || 0).toLocaleString('vi-VN')} VNĐ
-                                </div>
-                            </div>
-                        `).join('');
-
-                        historyHtml += `
-                            <div class="card order-card">
-                                <div class="order-header d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>Đơn hàng #${order.orderId}</strong>
-                                        <div class="small text-muted">${orderDate}</div>
-                                    </div>
-                                    <span class="${statusClass}">${order.status || 'N/A'}</span>
-                                </div>
-                                <div class="card-body p-0">
-                                    ${itemsHtml}
-                                </div>
-                                <div class="card-footer d-flex justify-content-between align-items-center">
-                                    <strong>Tổng tiền:</strong>
-                                    <strong class="text-primary">${totalAmount} VNĐ</strong>
-                                </div>
-                            </div>
-                        `;
-                    });
+                    statusClass = 'order-status-other'; // Màu đỏ cho các trạng thái còn lại
                 }
-                
-                document.getElementById('history-content').innerHTML = historyHtml;
+                // ================================
 
-            } catch (error) {
-                console.error("Lỗi fetch lịch sử đơn hàng:", error);
-                document.getElementById('history-content').innerHTML = `<div class="alert alert-danger">Lỗi khi tải lịch sử đơn hàng: ${error.message}</div>`;
+                let itemsHtml = order.items.map(item => `
+                    <div class="item-detail row">
+                        <div class="col-8 text-muted">${item.productName}</div>
+                        <div class="col-4 text-end">
+                            ${item.quantity} x ${(item.priceAtTime || 0).toLocaleString('vi-VN')} VNĐ
+                        </div>
+                    </div>
+                `).join('');
+
+                historyHtml += `
+                    <div class="card order-card">
+                        <div class="order-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Đơn hàng #${order.orderId}</strong>
+                                <div class="small text-muted">${orderDate}</div>
+                            </div>
+                            <span class="${statusClass}">${order.status || 'N/A'}</span>
+                        </div>
+                        <div class="card-body p-0">
+                            ${itemsHtml}
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <strong>Tổng tiền:</strong>
+                            <strong class="text-primary">${totalAmount} VNĐ</strong>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        document.getElementById('history-content').innerHTML = historyHtml;
+        // CẬP NHẬT TỔNG CHI TIÊU SAU KHI TẢI DỮ LIỆU
+        updateSidebarTotalSpent(totalSpent); 
+
+    } catch (error) {
+        console.error("Lỗi fetch lịch sử đơn hàng:", error);
+        document.getElementById('history-content').innerHTML = `<div class="alert alert-danger">Lỗi khi tải lịch sử đơn hàng: ${error.message}</div>`;
+        updateSidebarTotalSpent(0); // Đặt lại 0 hoặc 'Lỗi' nếu cần
+    }
+}
+        function updateSidebarTotalSpent(totalAmount) {
+            const totalSpentEl = document.getElementById("total-spent-summary");
+            const totalSpentAmountEl = document.getElementById("total-spent-amount");
+
+            if (totalSpentEl && totalSpentAmountEl) {
+                if (totalAmount !== null) {
+                    totalSpentAmountEl.textContent = totalAmount.toLocaleString('vi-VN') + ' VNĐ';
+                    totalSpentEl.style.display = 'block'; // Hiển thị nếu có dữ liệu
+                } else {
+                    // Ẩn hoặc reset khi chuyển tab nếu cần, hoặc để giữ nguyên giá trị cuối cùng.
+                    totalSpentAmountEl.textContent = 'Đang tải...';
+                    totalSpentEl.style.display = 'block'; 
+                }
             }
         }
-
         // ============================================
         // === HÀM GẮN LẮNG NGHE SỰ KIỆN ĐỔI MẬT KHẨU ===
         // ============================================

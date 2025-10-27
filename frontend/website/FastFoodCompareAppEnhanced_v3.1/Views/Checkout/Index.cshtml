@@ -1,47 +1,110 @@
 @{
     ViewData["Title"] = "Thanh toán";
 }
+<style>
+.footer-wrapper-white { 
+        background-color: #dbcb9c; 
+        border-radius: 12px; 
+        padding: 15px; 
+        /* ĐÃ LOẠI BỎ bottom: 0; */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+        text-align: left;
+        width: 100%; 
+        bottom:0;
+        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
+        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
+        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
+        position: fixed; 
+        z-index: 0; 
 
-<h2 class="mb-4">Thông tin thanh toán</h2>
+        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
+        margin-top: 30px; 
+    }
+    /* CSS cho Tiêu đề Thanh toán */
+    .checkout-header-wrapper {
+        background-color: rgb(245, 156, 156); /* Nền trắng */
+        padding: 15px 20px; /* Padding */
+        border-radius: 8px; /* Bo góc */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ */
+        margin-bottom: 20px; /* Khoảng cách với nội dung bên dưới */
+        display: flex; 
+        align-items: center;
+        justify-content: flex-start;
+    }
+    /* Đảm bảo h2 bên trong không có margin dưới */
+    .checkout-header-wrapper h2 {
+        margin-bottom: 0 !important; 
+    }
+    .checkout-content-wrapper {
+    /* 🎯 THAY ĐỔI TẠI ĐÂY: Dùng rgba() với kênh alpha 0.6 */
+    background-color: rgba(212, 174, 174, 0.6); 
+
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    margin-top: 0px; 
+    margin-bottom: 20px;
+    
+    /* ❌ LOẠI BỎ thuộc tính opacity: 0.6; */
+}
+    .btn-warning-custom {
+        /* Nút chính (Review) - Dùng màu vàng sáng và chữ đen */
+        color: #000 !important; /* Chữ đen */
+        background-color: #ffc107 !important; /* Màu vàng (Bootstrap Warning) */
+        border-color: #020202 !important; /* Viền màu đen */
+        opacity: 0.9;
+        font-weight: bold;
+        transition: opacity 0.2s, background-color 0.2s;
+    }
+    .btn-warning-custom:hover {
+        opacity: 1;
+        background-color: #ffcd39 !important; /* Vàng nhạt hơn khi hover */
+    }
+    #review-panel {
+        margin-bottom: 200px;
+    }
+</style>
+<div class="checkout-header-wrapper">
+    <h2 class="mb-0">Thông tin thanh toán</h2> 
+</div>
 
 <div id="message-panel" class="mb-3"></div>
-
-<div class="row g-5">
-    <div class="col-md-7" id="shipping-input-panel">
-        <h4>Nhập thông tin giao hàng</h4>
-        <form id="checkout-form" novalidate>
-            <div class="mb-3">
-                <label for="fullName" class="form-label">Họ và tên</label>
-                <input type="text" class="form-control" id="fullName" required placeholder="Đang tải...">
-            </div>
-            <div class="mb-3">
-                <label for="address" class="form-label">Địa chỉ</label>
-                <input type="text" class="form-control" id="address" required>
-            </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Số điện thoại</label>
-                <input type="tel" class="form-control" id="phone" required>
-            </div>
-            <div class="mb-3">
-                <label for="notes" class="form-label">Ghi chú (tùy chọn)</label>
-                <textarea class="form-control" id="notes" rows="3"></textarea>
-            </div>
-            <button type="button" id="review-btn" class="btn btn-primary w-100 btn-lg" disabled>Kiểm tra thông tin lần nữa</button>
-        </form>
-    </div>
-
-    <div class="col-md-5">
-        <h4>Đơn hàng của bạn</h4>
-        <div id="order-summary" class="border p-3 rounded bg-light">
-            <p>Đang tải tóm tắt đơn hàng...</p>
+<div class="checkout-content-wrapper">
+    <div class="row g-5">
+        <div class="col-md-7" id="shipping-input-panel">
+            <h4>Nhập thông tin giao hàng</h4>
+            <form id="checkout-form" novalidate>
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Họ và tên</label>
+                    <input type="text" class="form-control" id="fullName" required placeholder="Đang tải...">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Số điện thoại</label>
+                    <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <div class="mb-3">
+                    <label for="notes" class="form-label">Ghi chú (tùy chọn)</label>
+                    <textarea class="form-control" id="notes" rows="3"></textarea>
+                </div>
+                <button type="button" id="review-btn" class="btn btn-warning-custom w-100 btn-lg" disabled>Kiểm tra thông tin lần nữa</button>
+            </form>
         </div>
-        
-        <div id="review-panel" class="border p-3 rounded mt-3 d-none bg-warning-subtle">
-            <h5 class="text-danger">Xác nhận thanh toán</h5>
-            <div id="review-shipping-info"></div>
-            <hr>
-            <button type="button" id="confirm-checkout-btn" class="btn btn-danger w-100 btn-lg">HOÀN TẤT ĐẶT HÀNG</button>
-            <button type="button" id="edit-info-btn" class="btn btn-link w-100 mt-2">Chỉnh sửa thông tin</button>
+
+        <div class="col-12 col-md-5 mx-auto">
+            <h4 class="text-center">Đơn hàng của bạn</h4> <div id="order-summary" class="border p-3 rounded bg-light">
+                <p>Đang tải tóm tắt đơn hàng...</p>
+            </div>
+
+            <div id="review-panel" class="border p-3 rounded mt-3 d-none bg-warning-subtle">
+                <h5 class="text-danger text-center">Xác nhận thanh toán</h5> <div id="review-shipping-info"></div>
+                <hr>
+                <button type="button" id="confirm-checkout-btn" class="btn btn-warning-custom w-100 btn-lg">HOÀN TẤT ĐẶT HÀNG</button>
+                <button type="button" id="edit-info-btn" class="btn btn-link w-100 mt-2">Chỉnh sửa thông tin</button>
+            </div>
         </div>
     </div>
 </div>
