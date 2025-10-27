@@ -1,0 +1,23 @@
+@page // 🔥 Bắt buộc cho Razor Pages
+@model FastFoodCompareAppEnhanced_v3_1.Areas.Admin.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Quản lý Sản phẩm";
+    // Layout sẽ được thiết lập trong _ViewStart
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Danh sách Sản phẩm</h2>
+    </div>
+
+@section Scripts {
+    <script>
+        const apiUrl = "https://localhost:7132/api/Menu"; 
+        
+        $(document).ready(function() {
+            loadProducts();
+        });
+        
+        // ... (hàm loadProducts, handleDelete, v.v. giống hệt code cũ) ...
+    </script>
+}
