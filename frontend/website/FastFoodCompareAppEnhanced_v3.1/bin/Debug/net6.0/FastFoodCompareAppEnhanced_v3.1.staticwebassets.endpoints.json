@@ -167,8 +167,8 @@
       ]
     },
     {
-      "Route": "images/BackGround.e4mgo0u2kc.jpg",
-      "AssetFile": "images/BackGround.jpg",
+      "Route": "images/BackGround1.e4mgo0u2kc.jpg",
+      "AssetFile": "images/BackGround1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -207,13 +207,13 @@
         },
         {
           "Name": "label",
-          "Value": "images/BackGround.jpg"
+          "Value": "images/BackGround1.jpg"
         }
       ]
     },
     {
-      "Route": "images/BackGround.jpg",
-      "AssetFile": "images/BackGround.jpg",
+      "Route": "images/BackGround1.jpg",
+      "AssetFile": "images/BackGround1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {

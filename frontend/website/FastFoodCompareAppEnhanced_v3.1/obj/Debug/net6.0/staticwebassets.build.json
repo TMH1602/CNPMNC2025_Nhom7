@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "NcXkd0+kVdnVIX/jq7BVUUZUXyXHZNlCQcUHZxtlF3c=",
+  "Hash": "qhzd1QU5MsqrEPAW9q45mlALiwkrWypGD/mXG7/AS6k=",
   "Source": "FastFoodCompareAppEnhanced_v3.1",
   "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
   "Mode": "Default",
@@ -80,12 +80,12 @@
       "OriginalItemSpec": "wwwroot\\images\\ads1.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
-      "RelativePath": "images/BackGround#[.{fingerprint}]?.jpg",
+      "RelativePath": "images/BackGround1#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -98,7 +98,7 @@
       "Integrity": "/ktX6eCks8gmSFU+PYE9rMt/ujcxOcFtai8Ew2q4iSw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\BackGround.jpg"
+      "OriginalItemSpec": "wwwroot\\images\\BackGround1.jpg"
     },
     {
       "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\banner.jpg",
@@ -475,8 +475,8 @@
       ]
     },
     {
-      "Route": "images/BackGround.e4mgo0u2kc.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
+      "Route": "images/BackGround1.e4mgo0u2kc.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -511,7 +511,7 @@
         },
         {
           "Name": "label",
-          "Value": "images/BackGround.jpg"
+          "Value": "images/BackGround1.jpg"
         },
         {
           "Name": "integrity",
@@ -520,8 +520,8 @@
       ]
     },
     {
-      "Route": "images/BackGround.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
+      "Route": "images/BackGround1.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
