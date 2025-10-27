@@ -4,7 +4,22 @@
 
 <style>
     /* CSS CỦA BẠN (Giữ nguyên) */
-    
+    .btn-border-dark {
+        border-color: #000 !important;
+        border-width: 1px;
+        border-style: solid;
+        radius: 20%;
+        /* === TRẠNG THÁI BÌNH THƯỜNG === */
+        transition: all 0.2s ease-in-out; /* Thêm transition cho độ mượt */
+        transform: translateY(0);          /* Vị trí ban đầu: không dịch chuyển */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Bóng đổ nhẹ ban đầu */
+    }
+
+    .btn-border-dark:hover {
+        /* === TRẠNG THÁI HOVER: Áp dụng hiệu ứng nâng lên và bóng đổ mạnh hơn === */
+        transform: translateY(-2px); /* Nâng lên 2px */
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Bóng đổ mạnh hơn khi hover */
+    }
     .user-avatar {
         display: inline-flex;
         align-items: center;
@@ -230,14 +245,17 @@
             </div>
 
             <div class="mt-3">
-                <button id="clear-local-cart-btn" class="btn btn-outline-danger w-100 mb-2">
+                <button id="clear-local-cart-btn" class="btn btn-outline-danger w-100 mb-2 btn-border-dark">
                     Xóa tất cả món ăn đã chọn
                 </button>
                 
-                <button id="commit-cart-btn" class="btn btn-success w-100 mb-2" disabled>
+                <button id="commit-cart-btn" class="btn btn-success w-100 mb-2 btn-border-dark" disabled>
                     Thêm Vào giỏ hàng
                 </button>
-                <a href="@Url.Action("Index", "Cart")" class="btn btn-primary w-100">Xem Giỏ hàng Đã lưu</a>
+                
+                <a href="@Url.Action("Index", "Cart")" class="btn btn-primary w-100 btn-border-dark">
+                    Xem Giỏ hàng Đã lưu
+                </a>
             </div>
         </div>
     </div>
