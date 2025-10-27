@@ -9,7 +9,16 @@ public class AccountController : Controller
     {
         return View();
     }
-
+    [HttpGet]
+    public IActionResult Restaurant()
+    {
+        return View();
+    }
+    [HttpGet]
+    public IActionResult RegisterRestaurant()
+    {
+        return View();
+    }
     // Trả về trang Views/Account/Register.cshtml
     [HttpGet]
     public IActionResult Register()
