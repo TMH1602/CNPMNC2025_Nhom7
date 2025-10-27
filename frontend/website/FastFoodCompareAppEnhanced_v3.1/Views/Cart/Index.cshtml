@@ -2,6 +2,24 @@
     ViewData["Title"] = "Giỏ hàng của bạn";
 }
 <style>
+    .footer-wrapper-white { 
+        background-color: #dbcb9c; 
+        border-radius: 12px; 
+        padding: 15px; 
+        /* ĐÃ LOẠI BỎ bottom: 0; */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+        text-align: left;
+        width: 100%; 
+        bottom:0;
+        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
+        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
+        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
+        position: static; 
+        z-index: 0; 
+
+        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
+        margin-top: 30px; 
+    }
     /* Thêm đoạn CSS này vào thẻ <style> của bạn */
     .cart-table-centered th, 
     .cart-table-centered td {
@@ -29,6 +47,7 @@
         padding: 20px; /* Thêm padding cho đẹp */
         border-radius: 8px; /* Bo góc nhẹ */
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Thêm bóng đổ nhẹ */
+        margin-bottom: 200px;
     }
     .cart-header-wrapper {
         background-color: rgb(237, 235, 112); /* Nền trắng */
