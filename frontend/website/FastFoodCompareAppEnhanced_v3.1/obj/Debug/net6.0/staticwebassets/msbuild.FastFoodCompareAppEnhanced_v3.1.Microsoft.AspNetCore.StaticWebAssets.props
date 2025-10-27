@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>66rzfhruye</Fingerprint>
-      <Integrity>Tveqy93IpVBkOmnYlTJIpgNbQd11b9bXA9d3onqZagw=</Integrity>
+      <Fingerprint>e4mgo0u2kc</Fingerprint>
+      <Integrity>/ktX6eCks8gmSFU+PYE9rMt/ujcxOcFtai8Ew2q4iSw=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\BackGround.jpg'))</OriginalItemSpec>

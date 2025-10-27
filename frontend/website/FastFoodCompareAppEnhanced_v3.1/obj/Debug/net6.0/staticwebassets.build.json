@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "qjhMkfJT31eYnol04gCzYLk3zoBrx6On6K0wc7BOQJE=",
+  "Hash": "NcXkd0+kVdnVIX/jq7BVUUZUXyXHZNlCQcUHZxtlF3c=",
   "Source": "FastFoodCompareAppEnhanced_v3.1",
   "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
   "Mode": "Default",
@@ -94,8 +94,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "66rzfhruye",
-      "Integrity": "Tveqy93IpVBkOmnYlTJIpgNbQd11b9bXA9d3onqZagw=",
+      "Fingerprint": "e4mgo0u2kc",
+      "Integrity": "/ktX6eCks8gmSFU+PYE9rMt/ujcxOcFtai8Ew2q4iSw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\BackGround.jpg"
@@ -475,7 +475,7 @@
       ]
     },
     {
-      "Route": "images/BackGround.66rzfhruye.jpg",
+      "Route": "images/BackGround.e4mgo0u2kc.jpg",
       "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
       "Selectors": [],
       "ResponseHeaders": [
@@ -485,7 +485,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "921040"
+          "Value": "1922937"
         },
         {
           "Name": "Content-Type",
@@ -493,11 +493,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"Tveqy93IpVBkOmnYlTJIpgNbQd11b9bXA9d3onqZagw=\""
+          "Value": "\"/ktX6eCks8gmSFU+PYE9rMt/ujcxOcFtai8Ew2q4iSw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 26 Oct 2025 17:44:00 GMT"
+          "Value": "Sun, 26 Oct 2025 17:41:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -507,7 +507,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "66rzfhruye"
+          "Value": "e4mgo0u2kc"
         },
         {
           "Name": "label",
@@ -515,7 +515,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-Tveqy93IpVBkOmnYlTJIpgNbQd11b9bXA9d3onqZagw="
+          "Value": "sha256-/ktX6eCks8gmSFU+PYE9rMt/ujcxOcFtai8Ew2q4iSw="
         }
       ]
     },
@@ -530,7 +530,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "921040"
+          "Value": "1922937"
         },
         {
           "Name": "Content-Type",
@@ -538,11 +538,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"Tveqy93IpVBkOmnYlTJIpgNbQd11b9bXA9d3onqZagw=\""
+          "Value": "\"/ktX6eCks8gmSFU+PYE9rMt/ujcxOcFtai8Ew2q4iSw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 26 Oct 2025 17:44:00 GMT"
+          "Value": "Sun, 26 Oct 2025 17:41:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -552,7 +552,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-Tveqy93IpVBkOmnYlTJIpgNbQd11b9bXA9d3onqZagw="
+          "Value": "sha256-/ktX6eCks8gmSFU+PYE9rMt/ujcxOcFtai8Ew2q4iSw="
         }
       ]
     },
