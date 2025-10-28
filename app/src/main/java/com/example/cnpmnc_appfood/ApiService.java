@@ -7,7 +7,8 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Path; // ✅ ĐÃ THÊM
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 public interface ApiService {
 
     // Phương thức login từ trước
@@ -72,4 +73,11 @@ public interface ApiService {
     })
     @POST("api/Auth/change-password")
     Call<com.example.cnpmnc_appfood.ChangePasswordResponse> changePassword(@Body com.example.cnpmnc_appfood.ChangePasswordRequest request);
+    @Headers({
+            "accept: */*" // Hoặc "text/plain" nếu API trả về text
+    })
+    @GET("api/VnPay/CreatePayment") // API dùng GET với Query Parameter
+    Call<com.example.cnpmnc_appfood.VnPayCreatePaymentResponse> createVnPayPayment(@Query("orderId") int orderId,@Query("source") String source);
+    @POST("api/Cart/checkout")
+    Call<CheckoutApiResponse> checkoutCart(@Query("username") String username);
 }

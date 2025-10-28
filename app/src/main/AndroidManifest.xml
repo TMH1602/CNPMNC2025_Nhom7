@@ -21,6 +21,25 @@
         <activity android:name=".MainActivity"
             android:exported="false"/>
 
+        <!-- === BẮT ĐẦU SỬA ĐỔI === -->
+        <activity
+            android:name=".CheckoutActivity"
+            android:label="Xác Nhận Đơn Hàng"
+            android:launchMode="singleTop"
+            android:exported="true"> <!-- THÊM: Bắt buộc cho Android 12+ vì có intent-filter -->
+
+            <!-- THÊM BỘ LỌC DEEP LINK NÀY VÀO -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Đây là URL tùy chỉnh: cnpmapp://checkout -->
+                <data android:scheme="cnpmapp" android:host="checkout" />
+            </intent-filter>
+
+        </activity>
+        <!-- === KẾT THÚC SỬA ĐỔI === -->
+
         <activity android:name=".AuthActivity"
             android:exported="true">
             <intent-filter>
@@ -28,6 +47,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
+

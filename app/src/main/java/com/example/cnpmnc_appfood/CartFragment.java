@@ -1,14 +1,19 @@
 package com.example.cnpmnc_appfood;
 
 import android.content.Context;
+import android.content.Intent; // THÊM import Intent
 import android.content.SharedPreferences;
+import android.net.Uri; // THÊM import Uri
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button; // THÊM import Button
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast; // THÊM import Toast
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,27 +27,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-// 💡 Loại bỏ việc implements DishRepository.OnDishDataChangeListener
 public class CartFragment extends Fragment implements CartAdapter.CartItemChangeListener {
 
     private ListView lvCartItems;
     private TextView tvTotalCost;
+    private Button btnCheckout; // THÊM Button Thanh Toán
     private CartAdapter cartAdapter;
-    // 💡 cartList giờ lưu trữ CartApiItemDetail trực tiếp
     private List<CartApiItemDetail> cartList;
     private String currentUsername;
+    private ApiService apiService; // THÊM ApiService
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Lấy username từ SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        // "string" là giá trị mặc định nếu chưa đăng nhập
         currentUsername = prefs.getString("USERNAME", "string");
 
-        // Khởi tạo list
         cartList = new ArrayList<>();
+        apiService = RetrofitClient.getApiService(); // Khởi tạo ApiService
     }
 
     @Nullable
@@ -54,10 +57,13 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemChange
 
         lvCartItems = view.findViewById(R.id.listCart);
         tvTotalCost = view.findViewById(R.id.tvTotalPrice);
+        btnCheckout = view.findViewById(R.id.btnCheckout); // Tìm nút Thanh Toán
 
-        // 💡 Adapter giờ nhận List<CartApiItemDetail>
         cartAdapter = new CartAdapter(requireContext(), R.layout.item_cart, cartList, this);
         lvCartItems.setAdapter(cartAdapter);
+
+        // GÁN LISTENER CHO NÚT THANH TOÁN
+        btnCheckout.setOnClickListener(v -> startPaymentProcess());
 
         updateTotalCost();
 
@@ -67,25 +73,19 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemChange
     @Override
     public void onResume() {
         super.onResume();
-
-        // Gọi API tải giỏ hàng ngay khi Fragment hiển thị
         fetchCartFromServer();
     }
 
-    // --- LOGIC GỌI API CART GET ---
+    /**
+     * Phương thức Getter để CartAdapter có thể lấy username hiện tại.
+     */
+    public String getCurrentUsername() {
+        return currentUsername;
+    }
+
+    // --- LOGIC GỌI API CART GET (Tải lại toàn bộ giỏ hàng) ---
     private void fetchCartFromServer() {
 
-        if (currentUsername.equals("string")) {
-            Log.w("CartFragment", "Chưa đăng nhập, sử dụng username mặc định 'string' hoặc giỏ hàng rỗng.");
-            // Giả định 'string' là username tạm thời, nếu là guest thực sự, bạn nên clear list
-            // cartList.clear();
-            // updateUIAfterSync();
-            // return;
-        }
-
-        ApiService apiService = RetrofitClient.getApiService();
-
-        // Gọi API: https://localhost:7132/api/Cart/{username}
         apiService.getCartDetails(currentUsername).enqueue(new Callback<CartApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<CartApiResponse> call, @NonNull Response<CartApiResponse> response) {
@@ -93,14 +93,12 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemChange
 
                     List<CartApiItemDetail> serverCartItems = response.body().getItems();
 
-                    // Cập nhật list Adapter
                     cartList.clear();
                     cartList.addAll(serverCartItems);
 
                     updateUIAfterSync();
                 } else {
                     Log.e("CartFragment", "Lỗi server khi tải giỏ hàng: " + response.code() + ", Message: " + response.message());
-                    // Xóa list nếu lỗi hoặc dữ liệu rỗng
                     cartList.clear();
                     updateUIAfterSync();
                 }
@@ -109,7 +107,7 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemChange
             @Override
             public void onFailure(@NonNull Call<CartApiResponse> call, @NonNull Throwable t) {
                 Log.e("CartFragment", "Lỗi kết nối khi tải giỏ hàng: " + t.getMessage());
-                cartList.clear(); // Xóa list nếu lỗi kết nối
+                cartList.clear();
                 updateUIAfterSync();
             }
         });
@@ -121,23 +119,16 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemChange
         Log.d("CartFragment", "UI đã cập nhật. Số món: " + cartList.size());
     }
 
-    // --- CÁC PHẦN KHÁC ---
-
     @Override
     public void onCartItemQuantityChanged() {
-        // Phương thức này được gọi khi người dùng thay đổi số lượng qua Adapter
-        Log.d("CartFragment", "Dữ liệu giỏ hàng cục bộ đã thay đổi, cập nhật UI.");
-        updateTotalCost();
-
-        // 🎯 CẦN LÀM: Gọi API PUT/POST để lưu thay đổi lên server
-        // Ví dụ: sendUpdateCartToServer();
-        // Sau khi server thành công, bạn có thể gọi lại fetchCartFromServer() để đồng bộ hoàn toàn.
+        Log.d("CartFragment", "Yêu cầu cập nhật giỏ hàng. Tải lại dữ liệu.");
+        // Giữ lại fetchCartFromServer để đồng bộ sau khi nút tăng/giảm (chỉ cập nhật cục bộ) được nhấn
+        fetchCartFromServer();
     }
 
     private void updateTotalCost() {
         double total = 0;
 
-        // Tính tổng tiền từ List<CartApiItemDetail>
         for (CartApiItemDetail item : cartList) {
             total += item.getPrice() * item.getQuantity();
         }
@@ -148,4 +139,65 @@ public class CartFragment extends Fragment implements CartAdapter.CartItemChange
             tvTotalCost.setText(formattedTotal);
         }
     }
+
+    // --- LOGIC XỬ LÝ THANH TOÁN (ĐÃ SỬA LẠI HOÀN TOÀN) ---
+
+    /**
+     * Bắt đầu quy trình: Bước 1 là gọi API /Cart/checkout CỦA BẠN.
+     */
+    private void startPaymentProcess() {
+
+        Toast.makeText(requireContext(), "Đang xử lý checkout...", Toast.LENGTH_SHORT).show();
+
+        // Gọi API checkout mới (API của bạn, không phải VnPay)
+        apiService.checkoutCart(currentUsername).enqueue(new Callback<CheckoutApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<CheckoutApiResponse> call, @NonNull Response<CheckoutApiResponse> response) {
+                // 1. KIỂM TRA THÀNH CÔNG
+                if (response.isSuccessful() && response.body() != null) {
+
+                    CheckoutApiResponse checkoutData = response.body();
+
+                    // 2. CHUYỂN SANG TRANG XÁC NHẬN (CheckoutActivity)
+                    Intent intent = new Intent(requireContext(), CheckoutActivity.class);
+
+                    // 3. GỬI DỮ LIỆU SANG
+                    // (Chúng ta dùng Serializable để gửi cả object)
+                    intent.putExtra("CHECKOUT_DATA", checkoutData);
+
+                    startActivity(intent);
+
+                    // 4. (Quan trọng) Tải lại giỏ hàng vì nó đã được checkout (giờ trống)
+                    fetchCartFromServer();
+
+                } else {
+                    // 5. XỬ LÝ LỖI (Ví dụ: 400 Bad Request nếu giỏ hàng rỗng?)
+                    Log.e("CartFragment", "Lỗi khi gọi /api/Cart/checkout: " + response.code() + " - " + response.message());
+                    Toast.makeText(requireContext(), "Lỗi khi checkout. Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CheckoutApiResponse> call, @NonNull Throwable t) {
+                // 6. XỬ LÝ LỖI KẾT NỐI
+                Log.e("CartFragment", "Lỗi kết nối khi gọi /api/Cart/checkout: " + t.getMessage());
+                Toast.makeText(requireContext(), "Lỗi kết nối mạng.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    /**
+     * Hàm này KHÔNG CÒN DÙNG Ở ĐÂY NỮA.
+     * Chúng ta đã chuyển nó sang CheckoutActivity.java
+     */
+    // private void createVnPayPaymentLink(int orderId) { ... }
+
+
+    /**
+     * Hàm này KHÔNG CÒN DÙNG Ở ĐÂY NỮA.
+     * Chúng ta đã chuyển nó sang CheckoutActivity.java
+     */
+    // private void openPaymentUrlInBrowser(String url) { ... }
 }
+
