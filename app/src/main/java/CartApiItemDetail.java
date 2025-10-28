@@ -1,30 +1,23 @@
 package com.example.cnpmnc_appfood;
 
-import com.google.gson.annotations.SerializedName;
-
+// 💡 Cần import annotations của Gson
+// import com.google.gson.annotations.SerializedName;
 public class CartApiItemDetail {
-
-    // Các trường cần thiết để đồng bộ hóa
-    @SerializedName("productId")
     private int productId;
-
-    @SerializedName("quantity")
-    private int quantity;
-
-    // Các trường chi tiết món ăn (để có thể hiển thị mà không cần getDishById)
-    @SerializedName("productName")
     private String productName;
-
-    @SerializedName("price")
-    private double price; // Giá đơn vị
-
-    @SerializedName("imageUrl")
+    private double price;
+    private int quantity;
     private String imageUrl;
+    private double totalItemPrice;
 
     // Getters
     public int getProductId() { return productId; }
-    public int getQuantity() { return quantity; }
     public String getProductName() { return productName; }
     public double getPrice() { return price; }
+    public int getQuantity() { return quantity; }
     public String getImageUrl() { return imageUrl; }
+    public double getTotalItemPrice() { return totalItemPrice; }
+
+    // Setters (Cần thiết cho Adapter cập nhật cục bộ)
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 }

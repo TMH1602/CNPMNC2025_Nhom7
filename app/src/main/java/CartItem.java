@@ -9,10 +9,7 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    // Getters and Setters
     public Dish getDish() { return dish; }
-    public void setDish(Dish dish) { this.dish = dish; }
-
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
 }

@@ -2,7 +2,7 @@ package com.example.cnpmnc_appfood;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.util.Log; // Cần thiết cho Log.w
+import android.util.Log;
 
 public class CartManager {
 
@@ -27,6 +27,7 @@ public class CartManager {
      * Phương thức này cần DishRepository để tìm chi tiết Dish (khắc phục lỗi hiển thị).
      */
     public void syncCartFromServer(List<CartApiItemDetail> serverItemDetails) {
+        // Giả định DishRepository tồn tại
         DishRepository dishRepository = DishRepository.getInstance();
         cartItems.clear();
 
@@ -34,17 +35,13 @@ public class CartManager {
             Dish dish = dishRepository.getDishById(apiItem.getProductId());
 
             if (dish == null) {
-                // 🎯 KHẮC PHỤC LỖI: TẠO DISH TẠM THỜI TỪ DỮ LIỆU API GIỎ HÀNG 🎯
-
-                // Nếu DishRepository chưa tải hoặc món ăn bị xóa, ta tự tạo Dish object
+                // 🎯 KHẮC PHỤC LỖI: TẠO DISH TẠM THỜI 🎯
                 dish = new Dish();
                 dish.setId(apiItem.getProductId());
-                // Cần getters/setters trong CartApiItemDetail để lấy các trường này
-                // Giả sử đã có getters trong CartApiItemDetail:
                 dish.setName(apiItem.getProductName());
                 dish.setPrice(apiItem.getPrice());
                 dish.setImageUrl(apiItem.getImageUrl());
-                dish.setActive(true); // Giả định là Active
+                dish.setActive(true);
 
                 Log.w("CartManager", "Dish ID " + apiItem.getProductId() + " được tạo tạm thời.");
             }
@@ -55,7 +52,7 @@ public class CartManager {
         }
     }
 
-    // --- LOGIC GIỎ HÀNG CƠ BẢN ---
+    // --- LOGIC GIỎ HÀNG CƠ BẢN (Cho nút Tăng/Giảm Cục bộ) ---
 
     public void addItemToCart(Dish dish) {
         for (CartItem item : cartItems) {

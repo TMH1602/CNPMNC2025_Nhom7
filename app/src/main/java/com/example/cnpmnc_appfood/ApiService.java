@@ -48,10 +48,28 @@ public interface ApiService {
             "Content-Type: application/json"
     })
     @POST("api/Cart/add")
-    Call<AddToCartResponse> addToCart(@Body AddToCartRequest request);
+    Call<com.example.cnpmnc_appfood.AddToCartResponse> addToCart(@Body AddToCartRequest request);
     @Headers({
             "accept: text/plain"
     })
     @GET("api/Cart/{username}")
-    Call<CartApiResponse> getCartDetails(@Path("username") String username);
+    Call<com.example.cnpmnc_appfood.CartApiResponse> getCartDetails(@Path("username") String username);
+    @Headers({
+            "accept: text/plain"
+    })
+    @GET("api/Auth/account/{username}")
+    Call<com.example.cnpmnc_appfood.UserProfileResponse> getUserProfile(@Path("username") String username);
+
+    // THÊM PHƯƠNG THỨC NÀY: GET Order History
+    @Headers({
+            "accept: text/plain"
+    })
+    @GET("api/Cart/history/{username}")
+    Call<List<com.example.cnpmnc_appfood.OrderHistoryResponse>> getOrderHistory(@Path("username") String username);
+    @Headers({
+            "accept: text/plain",
+            "Content-Type: application/json"
+    })
+    @POST("api/Auth/change-password")
+    Call<com.example.cnpmnc_appfood.ChangePasswordResponse> changePassword(@Body com.example.cnpmnc_appfood.ChangePasswordRequest request);
 }

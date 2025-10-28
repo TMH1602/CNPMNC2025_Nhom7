@@ -1,234 +1,296 @@
 package com.example.cnpmnc_appfood;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-// Thêm import Log
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
-// Thêm import ProgressBar (nếu bạn muốn hiển thị tiến trình)
-// import android.widget.ProgressBar;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.bumptech.glide.Glide;
-// Thêm import Cloudinary
-import com.cloudinary.android.MediaManager;
-import com.cloudinary.android.callback.ErrorInfo;
-import com.cloudinary.android.callback.UploadCallback;
-import java.util.Map; // Import Map
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.text.NumberFormat;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DishManagementFragment extends Fragment {
 
-    private static final String TAG = "DishManagementFragment"; // Thêm TAG để log dễ hơn
+    private ListView lvUserProfile;
+    private ListView lvOrderHistory;
+    private Button btnLogout;
+    private Button btnHome;
+    private Button btnChangePassword; // KHAI BÁO BIẾN CHO NÚT ĐỔI MẬT KHẨU
+    private String currentUsername;
+    private ApiService apiService;
 
-    private EditText etName, etDescription, etPrice;
-    private ImageView ivDishPreview;
-    private Button btnAdd, btnSelectImage;
-    // private ProgressBar progressBar; // Thêm ProgressBar nếu muốn
-    private String selectedImageUriString = null; // Vẫn lưu URI dạng String sau khi chọn
-    private Uri imageUriToUpload = null; // Biến lưu Uri để tải lên
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    private DishRepository dishRepository;
-
-    // --- Sửa lại Launcher để an toàn hơn và lưu Uri ---
-    private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                // Thêm kiểm tra null kỹ hơn
-                if (result.getResultCode() == Activity.RESULT_OK
-                        && result.getData() != null
-                        && result.getData().getData() != null) {
-
-                    imageUriToUpload = result.getData().getData(); // Lưu Uri trực tiếp
-                    selectedImageUriString = imageUriToUpload.toString(); // Vẫn lưu String để kiểm tra null
-
-                    // Hiển thị ảnh preview (thêm kiểm tra null)
-                    if (getContext() != null && ivDishPreview != null) {
-                        Glide.with(getContext())
-                                .load(imageUriToUpload) // Load từ Uri
-                                .placeholder(android.R.drawable.ic_menu_gallery) // Ảnh chờ tải
-                                .error(android.R.drawable.ic_dialog_alert) // Ảnh khi lỗi
-                                .into(ivDishPreview);
-                    }
-                    Log.d(TAG, "Ảnh đã chọn: " + selectedImageUriString);
-                } else {
-                    Log.w(TAG, "Người dùng hủy chọn ảnh hoặc có lỗi.");
-                    // Giữ nguyên ảnh preview cũ hoặc xóa ảnh preview
-                    // imageUriToUpload = null; // Có thể reset nếu muốn
-                    // selectedImageUriString = null;
-                }
-            }
-    );
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        currentUsername = prefs.getString("USERNAME", "guest");
+        apiService = RetrofitClient.getApiService();
+    }
 
     @SuppressLint("MissingInflatedId")
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_dish_management, container, false);
 
-        // Ánh xạ views
-        etName = view.findViewById(R.id.etDishName);
-        etDescription = view.findViewById(R.id.etDishDescription);
-        etPrice = view.findViewById(R.id.etDishPrice);
-        ivDishPreview = view.findViewById(R.id.ivDishPreview);
-        btnAdd = view.findViewById(R.id.btnAddDish);
-        btnSelectImage = view.findViewById(R.id.btnSelectImage);
-        // progressBar = view.findViewById(R.id.progressBarUpload); // Ánh xạ ProgressBar nếu có
+        lvUserProfile = view.findViewById(R.id.lvUserProfile);
+        lvOrderHistory = view.findViewById(R.id.lvOrderHistory);
+        btnLogout = view.findViewById(R.id.button);
+        btnHome = view.findViewById(R.id.btnHome);
+        // 🎯 THÊM DÒNG TÌM KIẾM NÚT ĐỔI MẬT KHẨU
+        btnChangePassword = view.findViewById(R.id.btnChangePassword);
 
-        // Lấy instance của Repository
-        dishRepository = DishRepository.getInstance();
+        // Gán Listener Đăng Xuất
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> handleLogout());
+        } else {
+            Log.e("DishManagement", "Nút Đăng xuất (R.id.button) không tìm thấy!");
+        }
 
-        // Gán sự kiện click
-        btnSelectImage.setOnClickListener(v -> openImageChooser());
-        btnAdd.setOnClickListener(v -> addDish());
+        // GÁN LISTENER HOME
+        if (btnHome != null) {
+            btnHome.setOnClickListener(v -> navigateToHome());
+        } else {
+            Log.e("DishManagement", "Nút Home (R.id.btnHome) không tìm thấy!");
+        }
+
+        // 🎯 GÁN LISTENER CHO NÚT ĐỔI MẬT KHẨU
+        if (btnChangePassword != null) {
+            btnChangePassword.setOnClickListener(v -> navigateToChangePassword());
+        } else {
+            Log.e("DishManagement", "Nút Đổi mật khẩu (R.id.btnChangePassword) không tìm thấy!");
+        }
+
+
+        loadUserProfile();
+        loadOrderHistory();
 
         return view;
     }
 
-    // Mở trình chọn ảnh (Giữ nguyên)
-    private void openImageChooser() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        imagePickerLauncher.launch(intent);
+    /**
+     * Chuyển về HomeFragment.
+     */
+    private void navigateToHome() {
+        if (getActivity() != null) {
+            Fragment homeFragment = new HomeFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, homeFragment)
+                    .commit();
+        }
     }
 
-    // --- Sửa lại hoàn toàn hàm addDish ---
-    private void addDish() {
-        // Lấy thông tin từ EditText
-        String name = etName.getText().toString().trim();
-        String desc = etDescription.getText().toString().trim();
-        String priceStr = etPrice.getText().toString().trim();
-        double price;
+    /**
+     * Chuyển đến ChangePasswordFragment.
+     */
+    private void navigateToChangePassword() {
+        if (getActivity() != null) {
+            Fragment changePasswordFragment = new ChangePasswordFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, changePasswordFragment)
+                    .addToBackStack(null) // Thêm vào stack để có thể quay lại
+                    .commit();
+        }
+    }
 
-        // Kiểm tra thông tin nhập (Quan trọng: kiểm tra imageUriToUpload thay vì selectedImageUriString)
-        if (name.isEmpty() || priceStr.isEmpty() || desc.isEmpty() || imageUriToUpload == null) {
-            Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin và chọn ảnh.", Toast.LENGTH_LONG).show();
+    /**
+     * Xử lý ĐĂNG XUẤT: Xóa SharedPreferences và chuyển về LoginFragment.
+     */
+    private void handleLogout() {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.remove("USERNAME");
+        editor.apply();
+
+        Toast.makeText(requireContext(), "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+
+        if (getActivity() != null) {
+            Fragment loginFragment = new LoginFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, loginFragment)
+                    .commit();
+        }
+    }
+
+    // --- TẢI HỒ SƠ NGƯỜI DÙNG ---
+
+    private void loadUserProfile() {
+        if (currentUsername.equals("guest")) {
+            displayUserProfile(null);
             return;
         }
 
-        try {
-            price = Double.parseDouble(priceStr);
-        } catch (NumberFormatException e) {
-            Toast.makeText(getContext(), "Giá không hợp lệ.", Toast.LENGTH_SHORT).show();
+        apiService.getUserProfile(currentUsername).enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<UserProfileResponse> call, @NonNull Response<UserProfileResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    displayUserProfile(response.body());
+                } else {
+                    Log.e("UserManagement", "Lỗi tải hồ sơ: " + response.code());
+                    displayUserProfile(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UserProfileResponse> call, @NonNull Throwable t) {
+                Log.e("UserManagement", "Lỗi kết nối tải hồ sơ: " + t.getMessage());
+                displayUserProfile(null);
+            }
+        });
+    }
+
+    private void displayUserProfile(@Nullable UserProfileResponse profile) {
+        List<String> profileData = new ArrayList<>();
+        if (profile != null) {
+            String formattedDate = profile.getCreatedDate();
+            try {
+                SimpleDateFormat apiFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                Date date = apiFormat.parse(profile.getCreatedDate());
+
+                SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                formattedDate = displayFormat.format(date);
+            } catch (Exception e) {
+                Log.e("UserManagement", "Lỗi định dạng ngày: " + e.getMessage());
+                formattedDate = "Không rõ";
+            }
+
+            profileData.add("Tên tài khoản: " + profile.getDisplayName());
+            profileData.add("Email: " + profile.getEmail());
+            profileData.add("Ngày tham gia: " + formattedDate);
+        } else {
+            profileData.add("Không thể tải hồ sơ người dùng.");
+            profileData.add("Vui lòng thử lại hoặc đăng nhập.");
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, profileData);
+        lvUserProfile.setAdapter(adapter);
+        setListViewHeightBasedOnItems(lvUserProfile);
+    }
+
+    // --- TẢI LỊCH SỬ MUA HÀNG ---
+
+    private void loadOrderHistory() {
+        if (currentUsername.equals("guest")) {
+            displayOrderHistory(new ArrayList<>());
             return;
         }
 
-        // --- BẮT ĐẦU TẢI ẢNH LÊN CLOUDINARY ---
-        setLoadingState(true); // Hiển thị trạng thái đang tải
-        Log.d(TAG, "Bắt đầu tải ảnh lên Cloudinary: " + imageUriToUpload.toString());
+        apiService.getOrderHistory(currentUsername).enqueue(new Callback<List<OrderHistoryResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<OrderHistoryResponse>> call, @NonNull Response<List<OrderHistoryResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    displayOrderHistory(response.body());
+                } else {
+                    Log.e("UserManagement", "Lỗi tải lịch sử: " + response.code());
+                    displayOrderHistory(new ArrayList<>());
+                }
+            }
 
-        // Sử dụng Uri đã lưu để tải lên
-        String requestId = MediaManager.get().upload(imageUriToUpload)
-                // QUAN TRỌNG: Vào Cloudinary -> Settings -> Upload -> Upload Presets
-                // Tạo một preset mới, chọn Signing Mode là "Unsigned", ghi lại tên preset đó.
-                .unsigned("ml_default") // <-- THAY TÊN UPLOAD PRESET (UNSIGNED) CỦA BẠN VÀO ĐÂY
-                .option("resource_type", "image") // Chỉ định loại tài nguyên là ảnh
-                .callback(new UploadCallback() {
-                    @Override
-                    public void onStart(String requestId) {
-                        Log.d(TAG, "Bắt đầu tải lên Cloudinary (onStart): " + requestId);
-                        // UI đã ở trạng thái loading
-                    }
-
-                    @Override
-                    public void onProgress(String requestId, long bytes, long totalBytes) {
-                        // Cập nhật tiến trình nếu muốn
-                        // int progress = (int) ((double) bytes / totalBytes * 100);
-                        // Log.d(TAG, "Tiến trình tải lên Cloudinary: " + progress + "%");
-                    }
-
-                    @Override
-                    public void onSuccess(String requestId, Map resultData) {
-                        setLoadingState(false); // Tắt trạng thái đang tải
-                        Log.d(TAG, "Tải lên Cloudinary thành công. Data: " + resultData.toString());
-
-                        // Lấy URL công khai từ kết quả trả về
-                        String publicUrl = (String) resultData.get("secure_url"); // Ưu tiên HTTPS
-                        if (publicUrl == null) {
-                            publicUrl = (String) resultData.get("url"); // Thử HTTP nếu không có HTTPS
-                        }
-
-                        if (publicUrl != null) {
-                            Log.i(TAG, "URL ảnh Cloudinary: " + publicUrl);
-
-                            // *** CHỈ GỌI REPOSITORY SAU KHI CÓ URL CÔNG KHAI ***
-                            dishRepository.addDish(name, desc, price, publicUrl);
-
-                            Toast.makeText(getContextSafe(), "Đã thêm món ăn '" + name + "' thành công!", Toast.LENGTH_LONG).show();
-
-                            // Xóa form sau khi mọi thứ thành công
-                            clearForm();
-                        } else {
-                            // Lỗi không mong muốn: Cloudinary không trả về URL
-                            Log.e(TAG, "Không tìm thấy 'secure_url' hoặc 'url' trong kết quả Cloudinary.");
-                            Toast.makeText(getContextSafe(), "Lỗi: Không lấy được URL ảnh sau khi tải lên.", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onError(String requestId, ErrorInfo error) {
-                        setLoadingState(false); // Tắt trạng thái đang tải
-                        Log.e(TAG, "Lỗi tải lên Cloudinary: " + error.getDescription() + ", Code: " + error.getCode());
-                        Toast.makeText(getContextSafe(), "Lỗi tải ảnh lên: " + error.getDescription(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onReschedule(String requestId, ErrorInfo error) {
-                        setLoadingState(false); // Tắt trạng thái đang tải
-                        Log.w(TAG, "Tải lên Cloudinary bị hoãn: " + error.getDescription());
-                        Toast.makeText(getContextSafe(), "Tải ảnh lên bị hoãn, vui lòng thử lại.", Toast.LENGTH_LONG).show();
-                    }
-                })
-                .dispatch(); // Gửi yêu cầu tải lên
+            @Override
+            public void onFailure(@NonNull Call<List<OrderHistoryResponse>> call, @NonNull Throwable t) {
+                Log.e("UserManagement", "Lỗi kết nối tải lịch sử: " + t.getMessage());
+                displayOrderHistory(new ArrayList<>());
+            }
+        });
     }
 
-    // Hàm dọn dẹp form sau khi thêm thành công hoặc khi cần reset
-    private void clearForm() {
-        if (etName != null) etName.setText("");
-        if (etDescription != null) etDescription.setText("");
-        if (etPrice != null) etPrice.setText("");
-        selectedImageUriString = null;
-        imageUriToUpload = null; // Reset cả Uri
-        if (ivDishPreview != null && getContext() != null) {
-            // Đặt lại ảnh preview về mặc định
-            Glide.with(getContext()).clear(ivDishPreview); // Xóa ảnh cũ
-            ivDishPreview.setImageResource(android.R.drawable.ic_menu_gallery); // Đặt ảnh placeholder
+    private void displayOrderHistory(List<OrderHistoryResponse> historyList) {
+        List<String> historySummary = new ArrayList<>();
+        if (historyList.isEmpty()) {
+            historySummary.add("Không có lịch sử mua hàng nào.");
+        } else {
+            NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+            for (OrderHistoryResponse order : historyList) {
+                String statusVn = mapStatusToVietnamese(order.getStatus());
+
+                // Tránh lỗi khi items rỗng (nếu API có trả về đơn hàng không có mục)
+                String itemSummary = "";
+                if (order.getItems() != null && !order.getItems().isEmpty()) {
+                    itemSummary = order.getItems().get(0).getProductName()
+                            + (order.getItems().size() > 1 ? " và " + (order.getItems().size() - 1) + " món khác" : "");
+                }
+
+                String summary = String.format(
+                        "Đơn hàng #%d | %s\nTổng tiền: %s VNĐ | Trạng thái: %s",
+                        order.getOrderId(),
+                        order.getOrderDate().substring(0, 10),
+                        nf.format(order.getTotalAmount()),
+                        statusVn
+                );
+                historySummary.add(summary);
+            }
         }
-        Log.d(TAG, "Form đã được xóa.");
+
+        // Sử dụng simple_list_item_1 thay vì simple_list_item_2 để tránh lỗi NullPointerException
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, historySummary);
+        lvOrderHistory.setAdapter(adapter);
+        setListViewHeightBasedOnItems(lvOrderHistory);
     }
 
-    // Hàm quản lý trạng thái đang tải (ví dụ: vô hiệu hóa nút, hiển thị ProgressBar)
-    private void setLoadingState(boolean isLoading) {
-        if (btnAdd != null) {
-            btnAdd.setEnabled(!isLoading); // Vô hiệu hóa/Kích hoạt nút Add
+    private String mapStatusToVietnamese(String status) {
+        switch (status) {
+            case "Paid": return "Đã Thanh Toán";
+            case "Pending": return "Chờ Xử Lý";
+            case "Done": return "Hoàn Thành";
+            case "PaymentFailed": return "Thanh Toán Thất Bại";
+            default: return status;
         }
-        if (btnSelectImage != null) {
-            btnSelectImage.setEnabled(!isLoading); // Vô hiệu hóa/Kích hoạt nút Chọn Ảnh
-        }
-        // if (progressBar != null) {
-        //     progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE); // Hiển thị/Ẩn ProgressBar
-        // }
-        // Bạn cũng có thể thêm lớp phủ mờ lên màn hình
     }
 
-    // Hàm lấy Context an toàn, tránh lỗi khi Fragment đã detach
-    private Context getContextSafe() {
-        Context context = getContext();
-        if (context == null && getActivity() != null) {
-            context = getActivity().getApplicationContext();
+    /**
+     * Phương thức giúp tính toán và đặt lại chiều cao của ListView (Phiên bản an toàn).
+     * KHẮC PHỤC: Sử dụng kiểm tra chiều rộng an toàn để tránh lỗi đo lường.
+     */
+    public static boolean setListViewHeightBasedOnItems(ListView listView) {
+        ArrayAdapter listAdapter = (ArrayAdapter) listView.getAdapter();
+        if (listAdapter == null) {
+            return false;
         }
-        return context;
+
+        int totalHeight = 0;
+
+        // Trường hợp 2: Lỗi xảy ra nếu ListView chưa được vẽ (width = 0)
+        int desiredWidth = listView.getWidth() > 0 ? listView.getWidth() : View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        if (desiredWidth == 0) {
+            // Dùng giá trị mặc định nếu chưa đo được
+            desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getResources().getDisplayMetrics().widthPixels, View.MeasureSpec.AT_MOST);
+        } else {
+            desiredWidth = View.MeasureSpec.makeMeasureSpec(desiredWidth, View.MeasureSpec.AT_MOST);
+        }
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+        return true;
     }
 }

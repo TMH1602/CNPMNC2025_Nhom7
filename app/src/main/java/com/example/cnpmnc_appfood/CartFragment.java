@@ -12,25 +12,37 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import java.util.List;
+
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CartFragment extends Fragment implements
-        CartAdapter.CartItemChangeListener, DishRepository.OnDishDataChangeListener {
+// 💡 Loại bỏ việc implements DishRepository.OnDishDataChangeListener
+public class CartFragment extends Fragment implements CartAdapter.CartItemChangeListener {
 
     private ListView lvCartItems;
     private TextView tvTotalCost;
     private CartAdapter cartAdapter;
-    private List<CartItem> cartList;
-    private DishRepository dishRepository;
+    // 💡 cartList giờ lưu trữ CartApiItemDetail trực tiếp
+    private List<CartApiItemDetail> cartList;
+    private String currentUsername;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dishRepository = DishRepository.getInstance();
+
+        // Lấy username từ SharedPreferences
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        // "string" là giá trị mặc định nếu chưa đăng nhập
+        currentUsername = prefs.getString("USERNAME", "string");
+
+        // Khởi tạo list
+        cartList = new ArrayList<>();
     }
 
     @Nullable
@@ -43,8 +55,7 @@ public class CartFragment extends Fragment implements
         lvCartItems = view.findViewById(R.id.listCart);
         tvTotalCost = view.findViewById(R.id.tvTotalPrice);
 
-        cartList = CartManager.getInstance().getCartItems();
-
+        // 💡 Adapter giờ nhận List<CartApiItemDetail>
         cartAdapter = new CartAdapter(requireContext(), R.layout.item_cart, cartList, this);
         lvCartItems.setAdapter(cartAdapter);
 
@@ -56,52 +67,41 @@ public class CartFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        // 1. Đăng ký Listener Menu (để tải Menu trước)
-        dishRepository.addListener(this);
-        dishRepository.loadDishesFromServer();
 
-        // 2. Gửi trạng thái giỏ hàng cục bộ lên server (Đồng bộ POST)
-        sendCartToServer();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        dishRepository.removeListener(this);
-    }
-
-    // 🎯 PHƯƠNG THỨC GỌI KHI MENU TẢI XONG 🎯
-    @Override
-    public void onDishDataChanged() {
-        Log.d("CartFragment", "Dữ liệu Menu đã sẵn sàng. Bắt đầu tải Giỏ hàng.");
+        // Gọi API tải giỏ hàng ngay khi Fragment hiển thị
         fetchCartFromServer();
     }
 
-    // --- LOGIC GỌI API CART GET (LẤY DỮ LIỆU) ---
+    // --- LOGIC GỌI API CART GET ---
     private void fetchCartFromServer() {
-        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        String username = prefs.getString("USERNAME", "guest");
 
-        if (username.equals("guest")) {
-            Log.w("CartFragment", "Chưa đăng nhập, không tải giỏ hàng từ server.");
-            return;
+        if (currentUsername.equals("string")) {
+            Log.w("CartFragment", "Chưa đăng nhập, sử dụng username mặc định 'string' hoặc giỏ hàng rỗng.");
+            // Giả định 'string' là username tạm thời, nếu là guest thực sự, bạn nên clear list
+            // cartList.clear();
+            // updateUIAfterSync();
+            // return;
         }
 
         ApiService apiService = RetrofitClient.getApiService();
 
-        apiService.getCartDetails(username).enqueue(new Callback<CartApiResponse>() {
+        // Gọi API: https://localhost:7132/api/Cart/{username}
+        apiService.getCartDetails(currentUsername).enqueue(new Callback<CartApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<CartApiResponse> call, @NonNull Response<CartApiResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    // Lấy mảng items từ đối tượng cha (để khắc phục lỗi parsing)
+                if (response.isSuccessful() && response.body() != null && response.body().getItems() != null) {
+
                     List<CartApiItemDetail> serverCartItems = response.body().getItems();
 
-                    // ĐỒNG BỘ VÀ CẬP NHẬT CARTMANAGER
-                    CartManager.getInstance().syncCartFromServer(serverCartItems);
+                    // Cập nhật list Adapter
+                    cartList.clear();
+                    cartList.addAll(serverCartItems);
 
                     updateUIAfterSync();
                 } else {
                     Log.e("CartFragment", "Lỗi server khi tải giỏ hàng: " + response.code() + ", Message: " + response.message());
+                    // Xóa list nếu lỗi hoặc dữ liệu rỗng
+                    cartList.clear();
                     updateUIAfterSync();
                 }
             }
@@ -109,16 +109,13 @@ public class CartFragment extends Fragment implements
             @Override
             public void onFailure(@NonNull Call<CartApiResponse> call, @NonNull Throwable t) {
                 Log.e("CartFragment", "Lỗi kết nối khi tải giỏ hàng: " + t.getMessage());
+                cartList.clear(); // Xóa list nếu lỗi kết nối
                 updateUIAfterSync();
             }
         });
     }
 
     private void updateUIAfterSync() {
-        // Cập nhật danh sách Adapter
-        cartList.clear();
-        cartList.addAll(CartManager.getInstance().getCartItems());
-
         cartAdapter.notifyDataSetChanged();
         updateTotalCost();
         Log.d("CartFragment", "UI đã cập nhật. Số món: " + cartList.size());
@@ -126,64 +123,29 @@ public class CartFragment extends Fragment implements
 
     // --- CÁC PHẦN KHÁC ---
 
-    private void sendCartToServer() {
-        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        String currentUsername = prefs.getString("USERNAME", "guest");
-
-        if (currentUsername.equals("guest")) {
-            return;
-        }
-
-        List<CartItem> localCartItems = CartManager.getInstance().getCartItems();
-
-        if (localCartItems.isEmpty()) {
-            Log.i("CartFragment", "Giỏ hàng cục bộ rỗng, không gửi API sync.");
-            return;
-        }
-
-        List<CartItemRequest> itemRequests = new ArrayList<>();
-        for (CartItem item : localCartItems) {
-            int productId = item.getDish().getId();
-            int quantity = item.getQuantity();
-            itemRequests.add(new CartItemRequest(productId, quantity));
-        }
-
-        AddToCartRequest request = new AddToCartRequest(currentUsername, itemRequests);
-
-        ApiService apiService = RetrofitClient.getApiService();
-
-        apiService.addToCart(request).enqueue(new Callback<AddToCartResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<AddToCartResponse> call, @NonNull Response<AddToCartResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.i("CartFragment", "Đồng bộ giỏ hàng lên server thành công.");
-                } else {
-                    Log.e("CartFragment", "Lỗi Server khi đồng bộ giỏ hàng: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<AddToCartResponse> call, @NonNull Throwable t) {
-                Log.e("CartFragment", "Lỗi kết nối khi đồng bộ giỏ hàng: " + t.getMessage());
-            }
-        });
-    }
-
     @Override
     public void onCartItemQuantityChanged() {
-        Log.d("CartFragment", "Dữ liệu giỏ hàng đã thay đổi, cập nhật UI.");
+        // Phương thức này được gọi khi người dùng thay đổi số lượng qua Adapter
+        Log.d("CartFragment", "Dữ liệu giỏ hàng cục bộ đã thay đổi, cập nhật UI.");
         updateTotalCost();
+
+        // 🎯 CẦN LÀM: Gọi API PUT/POST để lưu thay đổi lên server
+        // Ví dụ: sendUpdateCartToServer();
+        // Sau khi server thành công, bạn có thể gọi lại fetchCartFromServer() để đồng bộ hoàn toàn.
     }
 
     private void updateTotalCost() {
         double total = 0;
 
-        for (CartItem item : cartList) {
-            total += item.getDish().getPrice() * item.getQuantity();
+        // Tính tổng tiền từ List<CartApiItemDetail>
+        for (CartApiItemDetail item : cartList) {
+            total += item.getPrice() * item.getQuantity();
         }
 
         if (tvTotalCost != null) {
-            tvTotalCost.setText(String.format("Tổng cộng: %,.0f VNĐ", total));
+            NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+            String formattedTotal = nf.format(total) + " VNĐ";
+            tvTotalCost.setText(formattedTotal);
         }
     }
 }

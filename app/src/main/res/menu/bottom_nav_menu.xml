@@ -12,9 +12,6 @@
         android:title="@string/title_cart" />
 
     <item
-        android:id="@+id/navigation_compare"
-        android:icon="@drawable/ic_compare"
-        android:title="So sánh" /> <item
     android:id="@+id/navigation_settings"
     android:icon="@drawable/ic_menu_settings"
     android:title="@string/title_settings" />

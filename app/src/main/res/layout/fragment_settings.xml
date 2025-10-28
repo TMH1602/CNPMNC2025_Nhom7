@@ -11,9 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Màn hình CÀI ĐẶT"
+        android:textColor="@android:color/black"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"/>
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"

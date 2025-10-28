@@ -4,7 +4,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
+import com.example.cnpmnc_appfood.DishManagementFragment;
+import com.example.cnpmnc_appfood.HomeFragment;
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -29,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
             fragment = new HomeFragment();
         } else if (itemId == R.id.navigation_cart) {
             fragment = new CartFragment();
-        } else if (itemId == R.id.navigation_compare) {
-            fragment = new ComparisonFragment();
         }
         else if (itemId == R.id.navigation_settings) {
             fragment = new DishManagementFragment();
