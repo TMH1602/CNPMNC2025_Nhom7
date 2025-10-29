@@ -74,12 +74,12 @@ namespace WebApplication1.Controllers
                     order.Status = "Paid";
                     await _context.SaveChangesAsync();
                 }
-                return Redirect("https://localhost:5000/Checkout/Success");
+                return Redirect("https://trinidad-avid-unappetisingly.ngrok-free.dev/Checkout/Success");
             }
             else
             {
                 // Thanh toán thất bại hoặc bị hủy
-                order.Status = "PaymentFailed";
+                order.Status = "Processed";
                 await _context.SaveChangesAsync();
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
             }

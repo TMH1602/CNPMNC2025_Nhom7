@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontendOrigin",
         builder =>
         {
-            builder.WithOrigins("https://localhost:5000")
+            builder.WithOrigins("https://localhost:5000", "https://trinidad-avid-unappetisingly.ngrok-free.dev")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
             // Nếu bạn cần gửi cookie hoặc chứng chỉ, hãy thêm: .AllowCredentials();
