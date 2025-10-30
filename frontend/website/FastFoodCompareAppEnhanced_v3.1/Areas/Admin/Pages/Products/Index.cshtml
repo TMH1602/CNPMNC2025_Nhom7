@@ -1,0 +1,429 @@
+@page
+@model FastFoodCompareAppEnhanced_v3_1.Areas.Admin.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Quản lý Sản phẩm";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Danh sách Sản phẩm</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal" id="btn-add-new">
+        Thêm sản phẩm mới
+    </button>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá (VNĐ)</th>
+            <th>Hình ảnh</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody id="product-table-body">
+        <tr><td colspan="5" class="text-center">Đang tải...</td></tr>
+    </tbody>
+</table>
+
+<div class="modal fade" id="productModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">Thêm sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <input type="hidden" id="productId">
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productPrice" class="form-label">Giá</label>
+                        <input type="number" step="any" class="form-control" id="productPrice" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="productImageFile" class="form-label">Hình ảnh (Upload)</label>
+                        <input type="file" class="form-control" id="productImageFile" accept="image/*">
+                        <small id="file-upload-warning" class="form-text text-muted" style="display:none;">Lưu ý: Thay đổi hình ảnh chỉ áp dụng khi THÊM MỚI. Cập nhật (PUT) không hỗ trợ đổi file qua form này.</small>
+                    </div>
+                    <div class="mb-3" id="current-image-container" style="display:none;">
+                        <label class="form-label">Hình ảnh hiện tại:</label><br>
+                        <img id="currentProductImage" src="" alt="Hình ảnh hiện tại" style="max-width: 100px; max-height: 100px;">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Mô tả</label>
+                        <textarea class="form-control" id="productDescription"></textarea>
+                    </div>
+                     <div class="mb-3">
+                        <label for="productCategory" class="form-label">Loại</label>
+                        <input type="text" class="form-control" id="productCategory">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btn-save-product" disabled>Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // --- KHAI BÁO BIẾN ---
+        const apiUrl = "https://localhost:7132/api/Menu";
+        let jwtToken = ''; 
+        const ADMIN_LOGIN_URL = window.ADMIN_LOGIN_URL || '/Account/Login';
+
+        let originalProductData = null; 
+        let btnSaveProduct; 
+
+        // --- HÀM LẤY VÀ XỬ LÝ TOKEN ---
+        function getToken() {
+            let token = '';
+            try {
+                const rawDataString = localStorage.getItem("jwtToken");
+                if (rawDataString && typeof rawDataString === 'string') {
+                    let cleanedJsonString = rawDataString.trim();
+                    if ((cleanedJsonString.startsWith("'") && cleanedJsonString.endsWith("'")) || (cleanedJsonString.startsWith('"') && cleanedJsonString.endsWith('"'))) {
+                        cleanedJsonString = cleanedJsonString.substring(1, cleanedJsonString.length - 1);
+                    }
+                    const tokenData = JSON.parse(cleanedJsonString);
+                    if (tokenData && tokenData.token) {
+                        token = tokenData.token.trim(); 
+                    } else {
+                        console.error("Lỗi: Không tìm thấy 'token' trong JSON.");
+                    }
+                } else {
+                    console.warn("Không tìm thấy jwtToken trong localStorage hoặc không phải chuỗi.");
+                }
+            } catch (e) {
+                console.error("Lỗi khi xử lý jwtToken từ localStorage:", e);
+                const directToken = localStorage.getItem("jwtToken");
+                 if(directToken && typeof directToken === 'string'){
+                      token = directToken.trim();
+                      if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
+                           token = token.substring(1, token.length - 1);
+                      }
+                      console.warn("Đã thử dùng giá trị trực tiếp vì parse lỗi:", token);
+                 }
+            }
+            return token;
+        }
+
+        // --- HÀM KIỂM TRA THAY ĐỔI CỦA FORM ---
+        function checkFormChanges() {
+            if (!btnSaveProduct) return; 
+
+            const productId = $('#productId').val();
+            const isUpdating = productId !== '';
+
+            const currentName = $('#productName').val();
+            const currentPriceStr = $('#productPrice').val();
+            const currentPrice = parseFloat(currentPriceStr);
+            const currentDescription = $('#productDescription').val();
+            const currentCategory = $('#productCategory').val();
+            
+            const currentFile = $('#productImageFile')[0].files[0]; 
+
+            let hasChanges = false;
+            
+            if (isUpdating && originalProductData) {
+                // --- CHẾ ĐỘ SỬA (UPDATE) ---
+                if (currentName !== originalProductData.name) hasChanges = true;
+                if (currentPriceStr !== originalProductData.price) hasChanges = true; 
+                if (currentDescription !== originalProductData.description) hasChanges = true;
+                if (currentCategory !== originalProductData.category) hasChanges = true;
+            } else {
+                // --- CHẾ ĐỘ THÊM MỚI (CREATE) ---
+                if (currentName.trim() !== '' && currentPriceStr.trim() !== '' && !isNaN(currentPrice) && currentPrice > 0) {
+                    hasChanges = true;
+                }
+            }
+            btnSaveProduct.prop('disabled', !hasChanges);
+        }
+
+        // --- HÀM CHẠY KHI TRANG TẢI XONG ---
+        $(document).ready(function() {
+            jwtToken = getToken(); 
+            btnSaveProduct = $('#btn-save-product'); 
+
+            if (!jwtToken) {
+                console.error("Lỗi: Token không hợp lệ...");
+                alert("Token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.");
+                window.location.href = ADMIN_LOGIN_URL;
+                return; 
+            }
+            
+            loadProducts(); 
+
+            $('#productModal').on('hidden.bs.modal', function () { 
+                 $('#product-form')[0].reset();
+                 $('#productId').val('');
+                 $('#productModalLabel').text('Thêm sản phẩm');
+                 $('#current-image-container').hide(); 
+                 $('#currentProductImage').attr('src', '');
+                 $('#file-upload-warning').hide(); 
+                 originalProductData = null; 
+                 btnSaveProduct.prop('disabled', true); 
+             });
+
+            $('#btn-add-new').on('click', function() {
+                originalProductData = null; 
+                btnSaveProduct.prop('disabled', true); 
+                $('#file-upload-warning').hide(); 
+            });
+            
+            $('#product-form').on('input change paste', 'input, textarea', checkFormChanges);
+            $('#btn-save-product').on('click', saveProduct);
+        });
+
+        // --- READ: Hàm tải danh sách sản phẩm ---
+        function loadProducts() {
+            const tableBody = $('#product-table-body');
+            tableBody.html('<tr><td colspan="5" class="text-center">Đang tải...</td></tr>');
+            const authHeaders = { 'accept': 'application/json', 'Authorization': `Bearer ${jwtToken}` };
+
+            fetch(apiUrl, { method: 'GET', headers: authHeaders })
+                .then(response => { 
+                    if (response.status === 401) { alert("Phiên hết hạn..."); window.location.href = ADMIN_LOGIN_URL; throw new Error('Unauthorized');}
+                    if (!response.ok) { console.error(`LỖI API [${response.status}]`); throw new Error(`Lỗi API: ${response.status}`); }
+                    return response.json();
+                })
+                .then(products => { 
+                    tableBody.empty();
+                    if (!products || products.length === 0) { 
+                        tableBody.html('<tr><td colspan="5" class="text-center">Không có sản phẩm nào.</td></tr>'); 
+                        return; 
+                    }
+                    products.forEach((product, index) => { 
+                         try {
+                             const priceFormatted = (product.price || 0).toLocaleString('vi-VN');
+                             const imageUrl = product.imageUrl || '/images/default-food.png'; 
+                             const productName = product.name || 'N/A';
+                             const productId = product.id;
+
+                             if (productId === undefined || productId === null) {
+                                 console.warn(`Sản phẩm #${index} thiếu ID, bỏ qua.`);
+                                 return; 
+                             }
+                             const rowHtml = `
+                                <tr>
+                                    <td>${productId}</td>
+                                    <td>${productName}</td>
+                                    <td>${priceFormatted}</td>
+                                    <td><img src="${imageUrl}" alt="${productName}" width="60" /></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning" onclick="handleEdit(${productId})">Sửa</button>
+                                        <button class="btn btn-sm btn-danger" onclick="handleDelete(${productId})">Xóa</button>
+                                    </td>
+                                </tr>
+                            `;
+                             tableBody.append(rowHtml); 
+                         } catch (e) {
+                             console.error(`Lỗi khi render sản phẩm #${index}:`, product, e);
+                             tableBody.append(`<tr><td colspan="5" class="text-danger">Lỗi hiển thị sản phẩm ID: ${product ? product.id : 'unknown'}</td></tr>`);
+                         }
+                    });
+                })
+                .catch(error => { 
+                    if (error.message !== 'Unauthorized') {
+                        console.error('LỖI KẾT NỐI API:', error);
+                        tableBody.html('<tr><td colspan="5" class="text-center text-danger">LỖI KHI GỌI API. Xem Console (F12).</td></tr>');
+                    }
+                });
+        }
+
+        // --- HÀM XỬ LÝ CREATE/UPDATE (PUT/POST) ---
+        function saveProduct() { 
+             btnSaveProduct.prop('disabled', true);
+
+             if (!jwtToken) { 
+                 alert("Token không hợp lệ..."); 
+                 window.location.href = ADMIN_LOGIN_URL; 
+                 return; 
+             }
+
+             const productId = $('#productId').val();
+             const isUpdating = productId !== '';
+             const name = $('#productName').val();
+             const price = parseFloat($('#productPrice').val());
+             const description = $('#productDescription').val(); 
+             const category = $('#productCategory').val(); 
+
+             if (isNaN(price) || price <= 0 || !name) {
+                 alert("Vui lòng nhập đầy đủ Tên và Giá hợp lệ.");
+                 checkFormChanges(); 
+                 return;
+             }
+
+             const method = isUpdating ? 'PUT' : 'POST';
+             const url = isUpdating ? `${apiUrl}/${productId}` : apiUrl; 
+
+             let headers = {
+                 'accept': 'application/json', // Sẽ dùng 'accept' này cho cả PUT và POST
+                 'Authorization': `Bearer ${jwtToken}`
+             };
+             let body;
+
+             if (isUpdating) {
+                 // --- LOGIC CHO PUT (THEO cURL, GỬI JSON) ---
+                 console.log("Đang thực hiện PUT (Update) bằng JSON.");
+                 headers['Content-Type'] = 'application/json';
+                 
+                 const originalImageUrl = (originalProductData && originalProductData.imageUrl) ? originalProductData.imageUrl : '';
+
+                 const payload = {
+                     name: name,
+                     price: price,
+                     description: description || '',
+                     category: category || '',
+                     imageUrl: originalImageUrl 
+                 };
+                 body = JSON.stringify(payload);
+
+                 if ($('#productImageFile')[0].files[0]) {
+                    console.warn("Đã chọn file mới, nhưng PUT không hỗ trợ upload file. File mới sẽ bị bỏ qua.");
+                 }
+
+             } else {
+                 // --- LOGIC CHO POST (THÊM MỚI, GỬI FORMDATA) ---
+                 console.log("Đang thực hiện POST (Create) bằng FormData.");
+                 const formData = new FormData();
+                 formData.append('Name', name);
+                 formData.append('Price', price);
+                 formData.append('Description', description || ''); 
+                 formData.append('Category', category || ''); 
+                 
+                 const imageFileInput = document.getElementById('productImageFile');
+                 if (imageFileInput && imageFileInput.files[0]) {
+                     formData.append('ImageFile', imageFileInput.files[0]);
+                 }
+                 
+                 // KHÔNG set 'Content-Type' cho FormData
+                 body = formData;
+             }
+             
+
+             fetch(url, {
+                 method: method,
+                 headers: headers,
+                 body: body 
+             })
+             .then(response => {
+                 if (response.ok) {
+                     loadProducts();
+                     $('#productModal').modal('hide'); 
+                 } else if (response.status === 401) {
+                     alert("Bạn không có quyền..."); 
+                     window.location.href = ADMIN_LOGIN_URL;
+                 } else {
+                     response.text().then(text => {
+                         console.error("Lỗi API:", text);
+                         alert(`Lỗi ${isUpdating ? 'cập nhật' : 'thêm'}. Status: ${response.status}. Lỗi: ${text || 'Không có thông tin'}`);
+                     }).catch(() => alert(`Lỗi ${isUpdating ? 'cập nhật' : 'thêm'}. Status: ${response.status}`));
+                     
+                     checkFormChanges(); 
+                 }
+             })
+             .catch(error => {
+                 console.error(`LỖI KHI ${isUpdating ? 'CẬP NHẬT' : 'THÊM'} SẢN PHẨM:`, error);
+                 alert(`Lỗi khi ${isUpdating ? 'cập nhật' : 'thêm'} sản phẩm.`);
+                 checkFormChanges(); 
+             });
+        }
+
+        // --- HÀM XỬ LÝ DELETE ---
+        window.handleDelete = function(id) { 
+             if (!confirm(`Bạn có chắc muốn xóa sản phẩm ID: ${id} không?`)) { return; }
+             if (!jwtToken) { alert("Token không hợp lệ..."); window.location.href = ADMIN_LOGIN_URL; return; }
+
+             fetch(`${apiUrl}/${id}`, {
+                 method: 'DELETE',
+                 headers: {
+                     // SỬA ĐỔI: Cập nhật 'accept' theo cURL
+                     'accept': '*/*', 
+                     'Authorization': `Bearer ${jwtToken}` 
+                 }
+             })
+             .then(response => {
+                 if (response.ok) {
+                     loadProducts();
+                 } else if (response.status === 401) {
+                     alert("Bạn không có quyền..."); window.location.href = ADMIN_LOGIN_URL;
+                 } else {
+                     // Dùng response.text() là an toàn, vì 'accept: */*' có thể trả về text
+                     response.text().then(text => alert(`Lỗi khi xóa. Status: ${response.status}. Lỗi: ${text || 'Không có thông tin'}`));
+                 }
+             })
+             .catch(error => {
+                 console.error('LỖI KHI XÓA SẢN PHẨM:', error);
+                 alert("Lỗi khi xóa sản phẩm.");
+             });
+        }
+
+        // --- HÀM XỬ LÝ EDIT (LOAD DATA VÀO MODAL) ---
+        window.handleEdit = function(id) { 
+             if (!jwtToken) { alert("Token không hợp lệ..."); window.location.href = ADMIN_LOGIN_URL; return; }
+
+             fetch(`${apiUrl}/${id}`, {
+                 method: 'GET',
+                 headers: {
+                     // Giữ 'application/json' vì hàm này DÙNG .json()
+                     'accept': 'application/json', 
+                     'Authorization': `Bearer ${jwtToken}` 
+                 }
+             })
+             .then(response => {
+                 if (response.status === 401) { throw new Error('Unauthorized'); }
+                 if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
+                 return response.json(); // Phụ thuộc vào đây
+             })
+             .then(product => {
+                 originalProductData = {
+                     name: product.name,
+                     price: String(product.price), 
+                     description: product.description || '',
+                     category: product.category || '',
+                     imageUrl: product.imageUrl || '' 
+                 };
+
+                 $('#productId').val(product.id);
+                 $('#productName').val(product.name);
+                 $('#productPrice').val(product.price);
+                 $('#productDescription').val(product.description || '');
+                 $('#productCategory').val(product.category || '');
+
+                 if (product.imageUrl) {
+                    $('#currentProductImage').attr('src', product.imageUrl);
+                    $('#current-image-container').show();
+                 } else {
+                    $('#current-image-container').hide();
+                 }
+                 $('#productImageFile').val(null); 
+                 
+                 $('#file-upload-warning').show();
+
+                 $('#productModalLabel').text('Cập nhật Sản phẩm ID: ' + product.id);
+                 btnSaveProduct.prop('disabled', true); 
+                 
+                 $('#productModal').modal('show');
+             })
+             .catch(error => {
+                 if (error.message === 'Unauthorized') {
+                     alert("Bạn không có quyền..."); window.location.href = ADMIN_LOGIN_URL;
+                 } else {
+                     console.error('Lỗi khi tải chi tiết:', error);
+                     alert("Lỗi khi tải chi tiết sản phẩm. (Có thể do lỗi parse JSON, kiểm tra Console F12)");
+                 }
+             });
+        }
+
+    </script>
+}
