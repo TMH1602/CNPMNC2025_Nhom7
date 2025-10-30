@@ -76,7 +76,7 @@ public interface ApiService {
     @Headers({
             "accept: */*" // Hoặc "text/plain" nếu API trả về text
     })
-    @GET("api/VnPay/CreatePayment") // API dùng GET với Query Parameter
+    @GET("api/VnPay/CreatePayment2") // API dùng GET với Query Parameter
     Call<com.example.cnpmnc_appfood.VnPayCreatePaymentResponse> createVnPayPayment(@Query("orderId") int orderId,@Query("source") String source);
     @POST("api/Cart/checkout")
     Call<CheckoutApiResponse> checkoutCart(@Query("username") String username);
