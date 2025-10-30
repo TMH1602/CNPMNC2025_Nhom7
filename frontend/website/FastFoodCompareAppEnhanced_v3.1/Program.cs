@@ -4,27 +4,28 @@ using FastFoodCompareAppEnhanced_v3_1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Đặt một tên cho chính sách CORS
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-// BƯỚC 1: Thêm dịch vụ CORS vào service container
+// BƯỚC 1: Thêm dịch vụ CORS (Cho phép gọi API Backend)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          // URL của trang web front-end của bạn
-                          // Dựa trên lỗi bạn gặp, nó có thể là http://localhost:5000 hoặc cổng khác
-                          policy.WithOrigins("http://localhost:5000") 
-                                .AllowAnyHeader()
-                                .AllowAnyMethod();
-                      });
+        policy =>
+        {
+            // Giữ nguyên HTTPS
+            policy.WithOrigins("https://localhost:5000") 
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
 });
 
 
 // Add services
 builder.Services.AddHttpClient();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(); // Hỗ trợ Controller/View
+builder.Services.AddRazorPages();          // 🔥 Hỗ trợ Razor Pages (Cho Admin Area)
+
+// Cấu hình In-Memory DB (Chỉ dùng cho các trang User View)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("FastFoodDb"));
 
@@ -37,10 +38,12 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Seed data
+// Seed data 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    
+    // Giữ lại Seed Data cho Món ăn (Dishes)
     if (!db.Dishes.Any())
     {
         db.Dishes.AddRange(new List<Dish>
@@ -53,15 +56,8 @@ using (var scope = app.Services.CreateScope())
         });
     }
 
-    if (!db.Users.Any())
-    {
-        db.Users.AddRange(new List<UserAccount>
-        {
-            new UserAccount { Id = 1, Username = "admin", Password = "123", FullName = "Quản trị viên" },
-            new UserAccount { Id = 2, Username = "user", Password = "123", FullName = "Người dùng" },
-        });
-    }
-
+    // 🔥🔥 ĐÃ BỎ Seed Data cho UserAccount vì bạn lấy từ SQL Server thật
+    
     db.SaveChanges();
 }
 
@@ -74,16 +70,30 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
-// BƯỚC 2: Kích hoạt CORS middleware. Đặt ở đúng vị trí này là rất quan trọng.
+// BƯỚC 2: Kích hoạt CORS middleware
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseSession();
-app.UseAuthorization(); // Thêm dòng này nếu bạn có xác thực
+app.UseAuthorization(); 
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Menu}/{action=Index}/{id?}");
-    
-app.MapControllers(); // Thêm dòng này để ánh xạ các API controllers
+// =======================================================================
+// ROUTING CUỐI CÙNG CHO RAZOR PAGES VÀ MVC
+// =======================================================================
+app.UseEndpoints(endpoints =>
+{
+    // 🔥 1. ĐỊNH TUYẾN RAZOR PAGES (Ưu tiên cao nhất)
+    // Dòng này giúp hệ thống tìm thấy các trang trong thư mục Pages (bao gồm cả Areas/Admin/Pages)
+    endpoints.MapRazorPages(); 
 
+    // 2. ROUTING CHO MVC AREAS (Dành cho các Controller MVC khác có thể tồn tại trong Areas)
+    endpoints.MapControllerRoute(
+        name: "areas",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+
+    // 3. ROUTING MẶC ĐỊNH CHO MVC (Dành cho Menu/Cart)
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Menu}/{action=Index}/{id?}");
+});
 app.Run();
