@@ -139,6 +139,7 @@ namespace WebApplication1.Controllers
                 order.Status = "Processed";
                 await _context.SaveChangesAsync();
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
+                return Redirect("https://10.0.2.2:5000/Checkout/Success");
             }
         }
         }
