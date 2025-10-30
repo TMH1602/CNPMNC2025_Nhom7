@@ -617,8 +617,34 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.VnPayController",
+    "Method": "CreatePayment2",
+    "RelativePath": "api/VnPay/CreatePayment2",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.VnPayController",
     "Method": "VnpayReturn",
     "RelativePath": "api/VnPay/VnpayReturn",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.VnPayController",
+    "Method": "VnpayReturn2",
+    "RelativePath": "api/VnPay/VnpayReturn2",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

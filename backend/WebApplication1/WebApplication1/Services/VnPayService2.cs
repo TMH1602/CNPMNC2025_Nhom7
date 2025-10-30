@@ -14,11 +14,11 @@ namespace WebApplication1.Services
     // Giả định IVnPayService đã được định nghĩa ở đâu đó
 
 
-    public class VnPayService : IVnPayService
+    public class VnPayService2 : IVnPayService2
     {
         private readonly IConfiguration _config;
         private readonly ILogger<VnPayService> _logger; // <-- KHAI BÁO LOGGER
-        public VnPayService(IConfiguration config, ILogger<VnPayService> logger)
+        public VnPayService2(IConfiguration config, ILogger<VnPayService> logger)
         {
             _config = config;
             _logger = logger; // <-- GÁN LOGGER
@@ -92,7 +92,7 @@ namespace WebApplication1.Services
                 {"vnp_TmnCode", tmnCode},
                 {"vnp_TxnRef", orderId.ToString()},
                 {"vnp_Version", "2.0.0"},
-                {"vnp_ExpireDate", expireDate}, 
+                {"vnp_ExpireDate", expireDate},
             };
 
             // 3. Tạo chuỗi Hash và URL
@@ -137,7 +137,7 @@ namespace WebApplication1.Services
             string tmnCode = _config["Vnpay:TmnCode"] ?? throw new ArgumentNullException("TmnCode is missing.");
             string hashSecret = _config["Vnpay:HashSecret"] ?? throw new ArgumentNullException("HashSecret is missing.");
             string baseUrl = _config["Vnpay:PaymentUrl"] ?? throw new ArgumentNullException("PaymentUrl is missing.");
-            string returnUrl = _config["Vnpay:ReturnUrl"] ?? "";
+            string returnUrl = _config["Vnpay:ReturnUrl2"] ?? "";
 
             // Đảm bảo không có dấu và xử lý lỗi encoding trước khi hash
             string encodedOrderInfo = HttpUtility.UrlEncode(orderInfo, Encoding.GetEncoding("iso-8859-1"));
@@ -169,6 +169,6 @@ namespace WebApplication1.Services
             // 4. Hoàn thiện URL (Sử dụng vnp_SecureHash - S và H hoa)
             return $"{baseUrl}?{dataHash}&vnp_SecureHash={secureHash}";
         }
-        
+
     }
 }

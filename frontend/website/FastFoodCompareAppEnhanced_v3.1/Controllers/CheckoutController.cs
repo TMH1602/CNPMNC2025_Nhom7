@@ -15,5 +15,9 @@ namespace FastFoodCompareAppEnhanced_v3_1.Controllers
         {
             return View();
         }
+        public IActionResult Failed()
+        {
+            return View();
+        }
     }
 }
