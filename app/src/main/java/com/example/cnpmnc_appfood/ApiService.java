@@ -38,7 +38,6 @@ public interface ApiService {
     // ********************************************
     /**
      * Gửi một đối tượng Dish mới lên server qua HTTP POST.
-     * @Body newDish: Retrofit sẽ tự động chuyển đối tượng Dish này thành JSON.
      * Trả về Call<Dish> (giả sử server trả lại đối tượng đã được tạo,
      * bao gồm cả 'id' mới).
      */
