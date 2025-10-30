@@ -131,5 +131,44 @@ namespace WebApplication1.Services
             // 4. So sánh (Không phân biệt hoa thường)
             return computedHash.Equals(receivedHash, StringComparison.OrdinalIgnoreCase);
         }
+        public string CreatePaymentUrl2(int orderId, decimal amount, string orderInfo, HttpContext context)
+        {
+            // 1. Lấy cấu hình
+            string tmnCode = _config["Vnpay:TmnCode"] ?? throw new ArgumentNullException("TmnCode is missing.");
+            string hashSecret = _config["Vnpay:HashSecret"] ?? throw new ArgumentNullException("HashSecret is missing.");
+            string baseUrl = _config["Vnpay:PaymentUrl"] ?? throw new ArgumentNullException("PaymentUrl is missing.");
+            string returnUrl = _config["Vnpay:ReturnUrl"] ?? "";
+
+            // Đảm bảo không có dấu và xử lý lỗi encoding trước khi hash
+            string encodedOrderInfo = HttpUtility.UrlEncode(orderInfo, Encoding.GetEncoding("iso-8859-1"));
+
+            string expireDate = DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss");
+
+            // 2. Chuẩn bị tham số (SortedList tự động sắp xếp A-Z cho Hash)
+            var vnpParams = new SortedList<string, string>
+            {
+                {"vnp_Amount", ((long)amount * 100).ToString()},
+                {"vnp_Command", "pay"},
+                {"vnp_CreateDate",DateTime.Now.ToString("yyyyMMddHHmmss")},
+                {"vnp_CurrCode", "VND"},
+                {"vnp_IpAddr", GetValidIpAddress(context)},
+                {"vnp_Locale", "vn"},
+                {"vnp_OrderInfo", encodedOrderInfo},
+                {"vnp_OrderType", "180000"},
+                {"vnp_ReturnUrl", returnUrl},
+                {"vnp_TmnCode", tmnCode},
+                {"vnp_TxnRef", orderId.ToString()},
+                {"vnp_Version", "2.0.0"},
+                {"vnp_ExpireDate", expireDate},
+            };
+
+            // 3. Tạo chuỗi Hash và URL
+            var dataHash = string.Join("&", vnpParams.Select(p => p.Key + "=" + p.Value));
+            string secureHash = HmacSha512(hashSecret, dataHash);
+
+            // 4. Hoàn thiện URL (Sử dụng vnp_SecureHash - S và H hoa)
+            return $"{baseUrl}?{dataHash}&vnp_SecureHash={secureHash}";
+        }
+        
     }
 }

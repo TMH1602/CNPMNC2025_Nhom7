@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontendOrigin",
         builder =>
         {
-            builder.WithOrigins("https://localhost:5000")
+            builder.WithOrigins("https://localhost:5000", "https://trinidad-avid-unappetisingly.ngrok-free.dev", "https://10.0.2.2:5000")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
             // Nếu bạn cần gửi cookie hoặc chứng chỉ, hãy thêm: .AllowCredentials();
@@ -30,6 +30,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<IVnPayService2, VnPayService2>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
