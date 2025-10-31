@@ -59,8 +59,6 @@
 @section Scripts {
     <script>
         // --- KHAI BÁO BIẾN API ---
-        // SỬA LỖI: Cung cấp đường dẫn tuyệt đối đến API
-        // (Giả sử API của bạn chạy ở cổng 7132, hãy thay đổi nếu cần)
         const API_BASE_URL = "https://localhost:7132/api/Restaurant/Restaurant";
         
         const GET_PROCESSING_URL = `${API_BASE_URL}/Processing`;
@@ -115,56 +113,49 @@
         function loadProcessingOrders() {
             const tableBody = $('#processing-orders-body');
             tableBody.html('<tr><td colspan="5" class="text-center">Đang tải...</td></tr>');
-            const authHeaders = { 'accept': 'application/json', 'Authorization': `Bearer ${jwtToken}` };
+            const authHeaders = { 'accept': 'text/plain', 'Authorization': `Bearer ${jwtToken}` };
 
             fetch(GET_PROCESSING_URL, { method: 'GET', headers: authHeaders })
                 .then(response => {
                     if (response.status === 401) { throw new Error('Unauthorized'); }
                     if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
-                    return response.json(); 
+                    return response.text(); 
                 })
-                .then(orders => {
+                .then(text => { 
                     tableBody.empty();
+                    let orders;
+                    try {
+                        orders = JSON.parse(text); 
+                    } catch (e) {
+                        orders = []; 
+                    }
                     
-                    // --- SỬA LỖI (BẮT ĐẦU) ---
-                    // Log dữ liệu trả về để kiểm tra
-                    console.log("Dữ liệu trả về từ API Processing:", orders);
-
-                    // Tạo một mảng rỗng để chứa các đơn hàng
                     let ordersArray = [];
-
                     if (Array.isArray(orders)) {
-                        // Tốt! API trả về một mảng
                         ordersArray = orders;
-                    } else if (orders && typeof orders === 'object') {
-                        // Lỗi: API trả về MỘT object, không phải mảng
-                        // Tự bọc nó vào mảng để xử lý
-                        console.warn("API Processing trả về 1 object, không phải mảng. Đang tự bọc lại...");
+                    } else if (orders && typeof orders === 'object' && orders !== null) {
                         ordersArray = [orders]; 
                     }
-                    // Nếu 'orders' là null hoặc không phải 2 trường hợp trên,
-                    // mảng 'ordersArray' sẽ rỗng
-                    // --- SỬA LỖI (KẾT THÚC) ---
-
 
                     if (ordersArray.length === 0) {
                         tableBody.html('<tr><td colspan="5" class="text-center">Không có đơn hàng nào đang xử lý.</td></tr>');
                         return;
                     }
 
-                    // Dùng mảng đã được xử lý an toàn
                     ordersArray.forEach(order => {
-                        const priceFormatted = (order.totalPrice || 0).toLocaleString('vi-VN');
-                        const tableNumber = order.tableNumber || 'Mang về'; 
+                        // SỬA LỖI: Dùng tên thuộc tính camelCase
+                        const priceFormatted = (order.totalAmount || 0).toLocaleString('vi-VN');
+                        const tableNumber = order.tableNumber || 'Mang về'; // Giả sử tên này đúng
+                        const orderId = order.orderId || 0; // Lấy orderId
                         
                         const rowHtml = `
                             <tr>
-                                <td><strong>#${order.id}</strong></td>
+                                <td><strong>#${orderId}</strong></td>
                                 <td>${tableNumber}</td>
                                 <td>${priceFormatted} VNĐ</td>
                                 <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-success" onclick="markAsDone(${order.id})">
+                                    <button class="btn btn-sm btn-success" onclick="markAsDone(${orderId})">
                                         <i class="bi bi-check-lg"></i> Hoàn thành
                                     </button>
                                 </td>
@@ -188,37 +179,45 @@
         function loadDoneHistory() {
             const tableBody = $('#done-history-body');
             tableBody.html('<tr><td colspan="4" class="text-center">Đang tải...</td></tr>');
-            const authHeaders = { 'accept': 'application/json', 'Authorization': `Bearer ${jwtToken}` };
+            const authHeaders = { 'accept': 'text/plain', 'Authorization': `Bearer ${jwtToken}` };
 
             fetch(GET_DONE_HISTORY_URL, { method: 'GET', headers: authHeaders })
                 .then(response => {
                     if (response.status === 401) { throw new Error('Unauthorized'); }
                     if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
-                    return response.json();
+                    return response.text();
                 })
-                .then(orders => {
+                .then(text => { 
                     tableBody.empty();
+                    let orders;
+                    try {
+                        orders = JSON.parse(text);
+                    } catch (e) {
+                        orders = [];
+                    }
                     
-                    // Thêm log để kiểm tra (bạn có thể xóa sau)
-                    console.log("Dữ liệu trả về từ API DoneHistory:", orders);
+                    console.log("Dữ liệu trả về từ API DoneHistory (đã parse):", orders);
 
-                    // API này được cho là đã hoạt động, nhưng chúng ta vẫn nên kiểm tra
-                    if (!Array.isArray(orders)) {
-                        console.error("API DoneHistory không trả về mảng!");
+                    let ordersArray = [];
+                    if (Array.isArray(orders)) {
+                        ordersArray = orders;
+                    } else if (orders && typeof orders === 'object' && orders !== null) {
+                        ordersArray = [orders];
+                    }
+
+                    if (ordersArray.length === 0) {
                         tableBody.html('<tr><td colspan="4" class="text-center">Chưa có đơn hàng nào hoàn thành.</td></tr>');
                         return;
                     }
+                    ordersArray.forEach(order => {
+                        // SỬA LỖI: Dùng tên thuộc tính camelCase
+                        const priceFormatted = (order.totalAmount || 0).toLocaleString('vi-VN');
+                        const tableNumber = order.tableNumber || 'Mang về'; // Giả sử tên này đúng
+                        const orderId = order.orderId || 'N/A'; // Lấy orderId
 
-                    if (orders.length === 0) {
-                        tableBody.html('<tr><td colspan="4" class="text-center">Chưa có đơn hàng nào hoàn thành.</td></tr>');
-                        return;
-                    }
-                    orders.forEach(order => {
-                        const priceFormatted = (order.totalPrice || 0).toLocaleString('vi-VN');
-                        const tableNumber = order.tableNumber || 'Mang về';
                         const rowHtml = `
                             <tr>
-                                <td><strong>#${order.id}</strong></td>
+                                <td><strong>#${orderId}</strong></td>
                                 <td>${tableNumber}</td>
                                 <td>${priceFormatted} VNĐ</td>
                                 <td><span class="badge bg-success">Đã hoàn thành</span></td>
@@ -235,6 +234,10 @@
 
         // --- ĐÁNH DẤU "HOÀN THÀNH" (POST CheckDone) ---
         window.markAsDone = function(orderId) {
+            if (!orderId || orderId === 0) {
+                 alert("Lỗi: Không thể hoàn thành đơn hàng không có ID.");
+                 return;
+            }
             if (!confirm(`Bạn có chắc muốn hoàn thành đơn hàng #${orderId}?`)) { return; }
 
             const url = `${POST_CHECK_DONE_URL}/${orderId}`;
@@ -244,14 +247,13 @@
                 .then(response => {
                     if (response.ok) {
                         alert(`Đã hoàn thành đơn hàng #${orderId}.`);
-                        // Tải lại cả hai bảng
                         loadProcessingOrders();
                         loadDoneHistory();
                     } else if (response.status === 401) {
                          alert("Phiên hết hạn..."); 
                          window.location.href = RESTAURANT_LOGIN_URL;
                     } else {
-                        response.text().then(text => alert(`Lỗi khi hoàn thành đơn. Lỗi: ${text || 'Không có thông tin'}`));
+                        response.text().then(text => alert(`Lỗi khi hoàn thành đơn: ${text || 'Không có thông tin'}`));
                     }
                 })
                 .catch(error => console.error("Lỗi API CheckDone:", error));
