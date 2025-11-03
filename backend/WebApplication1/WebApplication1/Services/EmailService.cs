@@ -38,7 +38,7 @@ namespace WebApplication1.Services
                 using (var message = new MailMessage())
                 using (var smtpClient = new SmtpClient(_smtpHost, _smtpPort))
                 {
-                    message.From = new MailAddress(_smtpUser, "Tên Cửa Hàng Của Bạn");
+                    message.From = new MailAddress(_smtpUser, "CÔNG NGHỆ PHẦN MỀM NÂNG CAO NHÓM 4");
                     message.To.Add(toEmail);
                     message.Subject = subject;
                     message.Body = body;
@@ -52,9 +52,7 @@ namespace WebApplication1.Services
             }
             catch (Exception ex)
             {
-                // Ghi log lỗi
                 Console.WriteLine($"Error sending email to {toEmail}: {ex.Message}");
-                // Bạn có thể cân nhắc gửi cảnh báo nội bộ nếu lỗi này xảy ra thường xuyên
             }
         }
     }

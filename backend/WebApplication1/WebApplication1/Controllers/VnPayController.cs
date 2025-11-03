@@ -196,7 +196,7 @@ namespace WebApplication1.Controllers
                         
                         <h3 style='color: #333;'>Tổng cộng: <strong>{order.TotalAmount:N0} VND</strong></h3>
                         <p>Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất.</p>
-                        <p>Trân trọng,<br>Đội ngũ [Tên Cửa Hàng Của Bạn]</p>
+                        <p>Trân trọng,<br>Đội ngũ CÔNG NGHỆ PHẦN MỀM HUFLIT</p>
                     </div>
                 </body>
                 </html>";
