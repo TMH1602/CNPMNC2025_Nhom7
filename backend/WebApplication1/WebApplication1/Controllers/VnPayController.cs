@@ -20,12 +20,14 @@ namespace WebApplication1.Controllers
         private readonly IVnPayService _vnPayService;
         private readonly IVnPayService2 _vnPayService2;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public VnPayController(IVnPayService vnPayService, IVnPayService2 vnPayService2, ApplicationDbContext context)
+        public VnPayController(IVnPayService vnPayService, IVnPayService2 vnPayService2, ApplicationDbContext context, IEmailService emailService)
         {
             _vnPayService = vnPayService;
             _vnPayService2 = vnPayService2;
             _context = context;
+            _emailService = emailService;
         }
 
         // 💡 Giả định hàm lấy ID người dùng hiện tại
@@ -91,7 +93,10 @@ namespace WebApplication1.Controllers
                 if (order.Status != "Paid")
                 {
                     order.Status = "Paid";
+                    
                     await _context.SaveChangesAsync();
+
+                    await SendConfirmationEmail(order);
                 }
                 return Redirect("https://localhost:5000/Checkout/Success");
             }
@@ -130,6 +135,7 @@ namespace WebApplication1.Controllers
                 {
                     order.Status = "Paid";
                     await _context.SaveChangesAsync();
+                    await SendConfirmationEmail(order);
                 }
                 return Redirect("https://10.0.2.2:5000/Checkout/Success");
             }
@@ -139,8 +145,62 @@ namespace WebApplication1.Controllers
                 order.Status = "Processed";
                 await _context.SaveChangesAsync();
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
-                return Redirect("https://10.0.2.2:5000/Checkout/Success");
             }
         }
+        private async Task SendConfirmationEmail(Order order)
+        {
+            // 1. Tìm thông tin người dùng để lấy Email
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == order.Username);
+
+            if (user != null && !string.IsNullOrEmpty(user.Email))
+            {
+                string emailSubject = $"🎉 Xác nhận Đơn hàng #{order.Id} đã thanh toán thành công!";
+                string emailBody = CreateOrderConfirmationEmailBody(order);
+
+                await _emailService.SendEmailAsync(user.Email, emailSubject, emailBody);
+            }
         }
+
+        private string CreateOrderConfirmationEmailBody(Order order)
+        {
+            var itemDetails = string.Join("", order.OrderDetails.Select(od =>
+                $@"<tr>
+                    <td style='border: 1px solid #ddd; padding: 8px;'>{od.Product?.Name ?? "Sản phẩm đã xóa"}</td>
+                    <td style='border: 1px solid #ddd; padding: 8px;'>{od.Quantity}</td>
+                    <td style='border: 1px solid #ddd; padding: 8px;'>{od.PriceAtTime:N0} VND</td>
+                    <td style='border: 1px solid #ddd; padding: 8px;'>{(od.Quantity * od.PriceAtTime):N0} VND</td>
+                  </tr>"
+            ));
+
+            return $@"
+                <html>
+                <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
+                    <div style='max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px;'>
+                        <h1 style='color: #4CAF50;'>Cảm ơn bạn đã mua hàng!</h1>
+                        <p>Đơn hàng <strong>#{order.Id}</strong> của bạn đã được thanh toán thành công vào lúc {order.OrderDate.ToLocalTime():HH:mm:ss dd/MM/yyyy}.</p>
+                        
+                        <h2>Chi tiết đơn hàng:</h2>
+                        <table style='width: 100%; border-collapse: collapse; margin-bottom: 20px;'>
+                            <thead>
+                                <tr style='background-color: #f2f2f2;'>
+                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>Sản phẩm</th>
+                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>SL</th>
+                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>Đơn giá</th>
+                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {itemDetails}
+                            </tbody>
+                        </table>
+                        
+                        <h3 style='color: #333;'>Tổng cộng: <strong>{order.TotalAmount:N0} VND</strong></h3>
+                        <p>Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất.</p>
+                        <p>Trân trọng,<br>Đội ngũ [Tên Cửa Hàng Của Bạn]</p>
+                    </div>
+                </body>
+                </html>";
+        }
+    }
+
 }
