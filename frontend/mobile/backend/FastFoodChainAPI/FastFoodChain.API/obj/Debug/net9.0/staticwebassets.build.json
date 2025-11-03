@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "GXx1mzYSmE+YZD9b/KfEAIGFBmhMMINNKyov5aZsF4E=",
+  "Source": "FastFoodChain.API",
+  "BasePath": "_content/FastFoodChain.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
