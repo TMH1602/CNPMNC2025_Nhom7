@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<!-- CORE PACKAGE: Cần thiết cho mọi thứ hoạt động -->
+		<PackageReference Include="CloudinaryDotNet" Version="1.27.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />
+
+		<!-- PROVIDER PACKAGE: Cần thiết để kết nối với SQL Server -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.25" />
+
+		<!-- TOOLS PACKAGE: Cần thiết để chạy các lệnh `dotnet ef migrations...` -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.25">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
+
+
+</Project>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">App Food</string>
+
+    <string name="title_home">Trang chủ</string>
+    <string name="title_cart">Giỏ hàng</string>
+    <string name="title_settings">Cài đặt</string>
+
+</resources>

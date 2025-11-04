@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFoodChain.API", "FastFoodChain.API.csproj", "{0776AFB3-8378-3E37-FEB6-8694AA05EFFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0776AFB3-8378-3E37-FEB6-8694AA05EFFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0776AFB3-8378-3E37-FEB6-8694AA05EFFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0776AFB3-8378-3E37-FEB6-8694AA05EFFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0776AFB3-8378-3E37-FEB6-8694AA05EFFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88DB6A8E-3A48-406F-B058-4F9EB58C54E2}
+	EndGlobalSection
+EndGlobal

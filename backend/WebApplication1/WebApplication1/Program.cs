@@ -31,6 +31,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IVnPayService2, VnPayService2>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
