@@ -179,20 +179,9 @@ namespace WebApplication1.Controllers
                         <h1 style='color: #4CAF50;'>Cảm ơn bạn đã mua hàng!</h1>
                         <p>Đơn hàng <strong>#{order.Id}</strong> của bạn đã được thanh toán thành công vào lúc {order.OrderDate.ToLocalTime():HH:mm:ss dd/MM/yyyy}.</p>
                         
-                        <h2>Chi tiết đơn hàng:</h2>
-                        <table style='width: 100%; border-collapse: collapse; margin-bottom: 20px;'>
-                            <thead>
-                                <tr style='background-color: #f2f2f2;'>
-                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>Sản phẩm</th>
-                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>SL</th>
-                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>Đơn giá</th>
-                                    <th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>Thành tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {itemDetails}
-                            </tbody>
-                        </table>
+                        <h2>Cảm ơn Người dùng có tài khoản#{order.Username}đã thanh toán và tin tưởng chúng tôi</h2>
+                        <p>Chúng tôi rất cảm kích #{order.Username} đã sử dụng sản phẩm của chúng tôi chúc bạn 1 ngày tốt lành</p>
+                        <p>Vui lòng kiểm tra điện thoại và đơn hàng của bạn đã được cập nhật trên web <3 </p>
                         
                         <h3 style='color: #333;'>Tổng cộng: <strong>{order.TotalAmount:N0} VND</strong></h3>
                         <p>Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất.</p>
