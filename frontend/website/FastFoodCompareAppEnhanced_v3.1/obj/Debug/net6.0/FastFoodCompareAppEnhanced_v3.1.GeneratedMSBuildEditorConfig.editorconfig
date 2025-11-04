@@ -68,11 +68,19 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/LENOVO/Documents/GitHub/CNPMNC2025/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/Checkout/Failed.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcRmFpbGVkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/LENOVO/Documents/GitHub/CNPMNC2025/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/Checkout/Index.cshtml]
+=======
+[C:/Users/ADMIN/Documents/GitHub/CNPMNC2025_Nhom7/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/Checkout/Failed.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcRmFpbGVkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/Documents/GitHub/CNPMNC2025_Nhom7/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/Checkout/Index.cshtml]
+>>>>>>> 49284e9370eb7b1f14fdb2f3ac8f8e0f88bcab33
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hlY2tvdXRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
@@ -88,15 +96,23 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/LENOVO/Documents/GitHub/CNPMNC2025/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/MobilePayment/MobilePayment.cshtml]
+=======
+[C:/Users/ADMIN/Documents/GitHub/CNPMNC2025_Nhom7/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/MobilePayment/MobilePayment.cshtml]
+>>>>>>> 49284e9370eb7b1f14fdb2f3ac8f8e0f88bcab33
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW9iaWxlUGF5bWVudFxNb2JpbGVQYXltZW50LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/LENOVO/Documents/GitHub/CNPMNC2025/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/MobilePayment/Success.cshtml]
+[C:/Users/ADMIN/Documents/GitHub/CNPMNC2025_Nhom7/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/MobilePayment/Success.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW9iaWxlUGF5bWVudFxTdWNjZXNzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/LENOVO/Documents/GitHub/CNPMNC2025/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/Shared/Components/FastFoodFooter/Default.cshtml]
+=======
+[C:/Users/ADMIN/Documents/GitHub/CNPMNC2025_Nhom7/frontend/website/FastFoodCompareAppEnhanced_v3.1/Views/Shared/Components/FastFoodFooter/Default.cshtml]
+>>>>>>> 49284e9370eb7b1f14fdb2f3ac8f8e0f88bcab33
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcRmFzdEZvb2RGb290ZXJcRGVmYXVsdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
