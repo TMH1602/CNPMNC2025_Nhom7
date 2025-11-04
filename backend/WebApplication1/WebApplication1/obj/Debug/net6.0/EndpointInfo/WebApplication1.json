@@ -1650,8 +1650,8 @@
             "type": "string"
           },
           "price": {
-            "maximum": 10000,
-            "minimum": 0.01,
+            "maximum": 100000000,
+            "minimum": 1,
             "type": "number",
             "format": "double"
           },
@@ -1664,10 +1664,6 @@
           "category": {
             "maxLength": 50,
             "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "imageUrl": {
             "type": "string",
             "nullable": true
           }

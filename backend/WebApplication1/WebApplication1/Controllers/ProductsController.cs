@@ -146,9 +146,7 @@ namespace MyFastFoodApi.Controllers
             existingProduct.Price = updatedProductDto.Price;
             existingProduct.Description = updatedProductDto.Description;
             existingProduct.Category = updatedProductDto.Category;
-            // *** Cập nhật ImageUrl (chỉ là string, không phải upload file) ***
-            existingProduct.ImageUrl = updatedProductDto.ImageUrl;
-
+            
             // 3. Lưu thay đổi vào Database
             await _context.SaveChangesAsync();
 

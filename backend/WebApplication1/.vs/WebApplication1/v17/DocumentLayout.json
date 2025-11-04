@@ -325,8 +325,7 @@
               "RelativeToolTip": "WebApplication1\\Controllers\\RestaurantController.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAA1wA8AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T08:34:54.133Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-22T08:34:54.133Z"
             },
             {
               "$type": "Document",
@@ -396,7 +395,7 @@
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\ProductsController.cs",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\ProductsController.cs",
               "RelativeToolTip": "WebApplication1\\Controllers\\ProductsController.cs",
-              "ViewState": "AgIAAF4AAAAAAAAAAAAvwEUAAABLAAAAAAAAAA==",
+              "ViewState": "AgIAAHkAAAAAAAAAAAAvwIAAAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-14T13:14:18.875Z",
               "EditorCaption": ""
@@ -411,8 +410,7 @@
               "RelativeToolTip": "WebApplication1\\appsettings.json",
               "ViewState": "AgIAAA8AAAAAAAAAAAAuwB0AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-14T13:20:56.305Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T13:20:56.305Z"
             },
             {
               "$type": "Document",
@@ -456,9 +454,9 @@
               "Title": "ProductCreationDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductCreationDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\ProductCreationDto.cs",
-              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductCreationDto.cs",
-              "RelativeToolTip": "WebApplication1\\ViewModels\\ProductCreationDto.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAmwA8AAAARAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductCreationDto.cs*",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\ProductCreationDto.cs*",
+              "ViewState": "AgIAAAkAAAAAAAAAAAA+wBMAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-17T02:52:23.17Z",
               "EditorCaption": ""

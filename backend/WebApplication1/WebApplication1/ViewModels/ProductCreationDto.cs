@@ -18,7 +18,5 @@ namespace WebApplication1.ViewModels
 
         [StringLength(50)]
         public string? Category { get; set; }
-
-        public string? ImageUrl { get; set; }
     }
 }
