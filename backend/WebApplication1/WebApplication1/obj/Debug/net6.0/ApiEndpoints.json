@@ -358,6 +358,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApplication1.Controllers.ChatController",
+    "Method": "SendContext",
+    "RelativePath": "api/Chat/Send",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "WebApplication1.ViewModels.UserInputDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "MyFastFoodApi.Controllers.MenuController",
     "Method": "GetAllMenu",
     "RelativePath": "api/Menu",

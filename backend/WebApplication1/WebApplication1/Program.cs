@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
             // Nếu bạn cần gửi cookie hoặc chứng chỉ, hãy thêm: .AllowCredentials();
         });
 });
-
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
