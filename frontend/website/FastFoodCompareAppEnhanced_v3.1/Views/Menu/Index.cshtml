@@ -159,17 +159,10 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
         text-align: left;
         width: 100%; 
-        
-        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
-        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
-        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
         position: static; 
         z-index: 0; 
-
-        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
         margin-top: 30px; 
     }
-    /* KHỐI CHỨA CÁC NÚT CATEGORY */
     #full-width-category-container {
         background-color: rgba(255, 255, 255, 0.95);
         margin-top:50px;
@@ -189,37 +182,7 @@
         margin-top: 0;
         margin-bottom: 10px;
     }
-    .is-fixed {
-    /* Cố định vị trí */
-        position: fixed;
-        top: 30px; /* Cố định sát mép trên */
-        right: 30px; /* Cố định sát mép trái */
-        z-index: 1030; /* Đảm bảo nó nằm trên các nội dung khác */
-        max-width: 350px; /* Đảm bảo chiều rộng này nhỏ hơn khoảng trống bù trừ */
-        width: 350px;
-        max-height: 350px; /* Chiều cao tối đa là 90% chiều cao viewport */
-        overflow-y: auto; /* Tự động hiển thị thanh cuộn dọc nếu nội dung tràn */
-        overflow-x: hidden;
-        /* Thay đổi kích thước và kiểu dáng để nhỏ gọn hơn */
-        width: auto; /* Chiều rộng tự động (hoặc đặt giá trị nhỏ hơn nếu muốn) */
-        max-width: 300px; /* Ví dụ: Giới hạn chiều rộng nhỏ hơn */
-        
-        /* Giảm padding để nhỏ gọn hơn */
-        padding: 10px 15px; 
-        
-        /* Xóa margin đã đặt ban đầu */
-        margin: 0; 
-        
-        /* Bo góc chỉ ở bên phải để trông như thanh sidebar nhỏ */
-        border-radius: 12px 0 0 12px;
-        text-align: right; /* Căn lề trái khi cố định */
-        -ms-overflow-style: none; /* IE and Edge */
-    }
-    .is-fixed::-webkit-scrollbar {
-        display: none; /* Hoặc width: 0px; */
-        width: 0px; 
-        background: transparent; /* Giúp đảm bảo trong suốt */
-    }
+    
 
 </style>
 
@@ -631,7 +594,101 @@
             if(cartLink) cartLink.innerHTML = `🛒 Giỏ`;
         }
         window.loadCartCount(username); 
+        const CHAT_API_URL = 'https://localhost:7132/api/Chat/Send';
+            const chatToggleButton = document.getElementById("chat-toggle-button");
+            const chatWindow = document.getElementById("chat-window");
+            const chatCloseButton = document.getElementById("chat-close-button");
+            const chatBody = document.getElementById("chat-body");
+            const chatInput = document.getElementById("chat-input");
+            const chatSendButton = document.getElementById("chat-send-button");
+            if (chatToggleButton && chatWindow && chatCloseButton) {
+                
+                // 1. Mở/Đóng khi bấm nút chat 💬
+                chatToggleButton.addEventListener("click", function() {
+                    chatWindow.classList.toggle("show");
+                });
 
+                // 2. Đóng khi bấm nút X
+                chatCloseButton.addEventListener("click", function() {
+                    chatWindow.classList.remove("show");
+                });
+            }
+            async function handleChatSend() {
+            const message = chatInput.value.trim();
+            if (message === '') return; // Không gửi tin nhắn rỗng
+
+            // 1. Hiển thị ngay tin nhắn của người dùng
+            addMessageToChat(message, 'user');
+
+            // 2. Xóa nội dung input
+            chatInput.value = '';
+            chatSendButton.disabled = true; // Vô hiệu hóa nút Gửi
+
+            // 3. Chuẩn bị dữ liệu gửi API
+            const postData = {
+                context: message
+            };
+
+            try {
+                // 4. Gọi API
+                const response = await fetch(CHAT_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'text/plain',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                // 5. Lấy kết quả JSON
+                const result = await response.json();
+
+                // 6. Hiển thị phản hồi của Bot
+                if (result && result.responseContext) {
+                    addMessageToChat(result.responseContext, 'bot');
+                } else {
+                    addMessageToChat("Lỗi: Không nhận được phản hồi hợp lệ.", 'bot');
+                }
+
+            } catch (error) {
+                console.error('Lỗi khi gọi API Chat:', error);
+                addMessageToChat("Xin lỗi, đã có lỗi kết nối. Vui lòng thử lại.", 'bot');
+            } finally {
+                // 7. Kích hoạt lại nút Gửi
+                chatSendButton.disabled = false;
+            }
+        }
+
+        // 8. Gắn sự kiện cho nút Gửi và phím Enter
+        if (chatSendButton && chatInput && chatBody) {
+            
+            // Bấm nút Gửi
+            chatSendButton.addEventListener('click', handleChatSend);
+
+            // Bấm phím Enter
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Ngăn xuống dòng (nếu là textarea)
+                    handleChatSend();
+                }
+            });
+        }
+        function addMessageToChat(message, type = 'bot') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message-${type}`; // 'chat-message-user' hoặc 'chat-message-bot'
+
+            // Dùng innerText để giữ lại định dạng xuống dòng (\n)
+            messageDiv.innerText = message; 
+
+            chatBody.appendChild(messageDiv);
+
+            // Tự động cuộn xuống tin nhắn mới nhất
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
         const logoutButton = document.getElementById("logout-button");
         if(logoutButton) {
             logoutButton.addEventListener("click", function (e) {
