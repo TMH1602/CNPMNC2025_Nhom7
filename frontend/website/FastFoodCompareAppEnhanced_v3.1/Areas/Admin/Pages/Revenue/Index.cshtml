@@ -1,0 +1,231 @@
+@page
+@model FastFoodCompareAppEnhanced_v3_1.Areas.Admin.Pages.RevenueModel
+
+@{
+    ViewData["Title"] = "Báo cáo Doanh thu";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h2 class="text-center mb-0">Báo cáo Doanh thu</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                Thiết lập Báo cáo
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="targetRevenue" class="form-label">
+                        Nhập mục tiêu doanh thu (VNĐ):
+                    </label>
+                    <input type="number" step="1000" class="form-control" id="targetRevenue" value="500000">
+                </div>
+                
+                <hr>
+
+                <h4>Thông số Thực tế</h4>
+                <div class="mb-2">
+                    <strong>Tổng doanh thu (API):</strong>
+                    <span id="actualRevenueText" class="fw-bold text-success">Đang tải...</span>
+                </div>
+                <div class="mb-2">
+                    <strong>Số đơn hàng (API):</strong>
+                    <span id="orderCountText" class="fw-bold">Đang tải...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                Biểu đồ so sánh (Google Gauge Chart)
+            </div>
+            <div class="card-body" style="display: flex; justify-content: center; align-items: center; min-height: 250px;">
+                <div id="chart_div" style="width: 600px; height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+        // --- KHAI BÁO BIẾN ---
+        const revenueApiUrl = "https://localhost:7132/api/Restaurant/Restaurant/DoneHistory";
+        let jwtToken = '';
+        const ADMIN_LOGIN_URL = window.ADMIN_LOGIN_URL || '/Account/Login'; 
+        
+        let totalActualRevenue = 0;
+        let orderCount = 0;
+        
+        let chart; // Biến giữ biểu đồ
+        let chartData; // Biến giữ data cho biểu đồ
+
+        // --- HÀM LẤY TOKEN (Copy từ code của bạn) ---
+        function getToken() {
+            let token = '';
+            try {
+                const rawDataString = localStorage.getItem("jwtToken");
+                if (rawDataString && typeof rawDataString === 'string') {
+                    let cleanedJsonString = rawDataString.trim();
+                    if ((cleanedJsonString.startsWith("'") && cleanedJsonString.endsWith("'")) || (cleanedJsonString.startsWith('"') && cleanedJsonString.endsWith('"'))) {
+                        cleanedJsonString = cleanedJsonString.substring(1, cleanedJsonString.length - 1);
+                    }
+                    const tokenData = JSON.parse(cleanedJsonString);
+                    if (tokenData && tokenData.token) {
+                        token = tokenData.token.trim();
+                    } else {
+                        console.error("Lỗi: Không tìm thấy 'token' trong JSON.");
+                    }
+                } else {
+                    console.warn("Không tìm thấy jwtToken trong localStorage hoặc không phải chuỗi.");
+                }
+            } catch (e) {
+                console.error("Lỗi khi xử lý jwtToken từ localStorage:", e);
+                const directToken = localStorage.getItem("jwtToken");
+                if(directToken && typeof directToken === 'string'){
+                        token = directToken.trim();
+                        if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
+                            token = token.substring(1, token.length - 1);
+                        }
+                        console.warn("Đã thử dùng giá trị trực tiếp vì parse lỗi:", token);
+                }
+            }
+            return token;
+        }
+
+        // --- HÀM TẢI DỮ LIỆU DOANH THU TỪ API ---
+        async function loadRevenueData() {
+            if (!jwtToken) {
+                console.error("Lỗi: Token không hợp lệ...");
+                alert("Token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.");
+                window.location.href = ADMIN_LOGIN_URL;
+                return;
+            }
+
+            try {
+                const response = await fetch(revenueApiUrl, {
+                    method: 'GET',
+                    headers: {
+                        // Dựa theo cURL của bạn, API này yêu cầu 'accept: text/plain'
+                        'accept': 'text/plain', 
+                        'Authorization': `Bearer ${jwtToken}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    alert("Phiên hết hạn..."); 
+                    window.location.href = ADMIN_LOGIN_URL; 
+                    throw new Error('Unauthorized');
+                }
+                if (!response.ok) {
+                    throw new Error(`Lỗi API: ${response.status}`);
+                }
+
+                // Vì 'accept' là 'text/plain', chúng ta cần đọc text
+                const responseText = await response.text();
+                
+                // Sau đó parse JSON từ text đó
+                const data = JSON.parse(responseText); 
+
+                if (!Array.isArray(data)) {
+                     throw new Error('Dữ liệu trả về không phải là một mảng (Array)');
+                }
+
+                // Tính toán tổng doanh thu (SỬ DỤNG TÊN THUỘC TÍNH ĐÚNG)
+                totalActualRevenue = 0;
+                data.forEach(order => {
+                    // Dùng totalAmount (camelCase) như chúng ta đã sửa ở trang Kitchen
+                    if (order && typeof order.totalAmount === 'number') {
+                        totalActualRevenue += order.totalAmount;
+                    }
+                });
+                orderCount = data.length;
+
+                // Cập nhật text trên giao diện
+                $('#actualRevenueText').text(totalActualRevenue.toLocaleString('vi-VN') + ' VNĐ');
+                $('#orderCountText').text(orderCount + ' đơn');
+
+            } catch (error) {
+                console.error('LỖI KHI TẢI DOANH THU:', error);
+                $('#actualRevenueText').text('Lỗi tải API').addClass('text-danger');
+                $('#orderCountText').text('Lỗi').addClass('text-danger');
+            }
+        }
+
+        // --- HÀM VẼ BIỂU ĐỒ (GOOGLE CHARTS) ---
+        function drawChart() {
+            if (!chart || !chartData) return; // Chỉ vẽ khi đã load xong
+
+            // Lấy mục tiêu doanh thu từ ô input
+            let targetRevenue = parseFloat($('#targetRevenue').val()) || 0;
+            if (targetRevenue < 0) targetRevenue = 0;
+
+            // Cập nhật giá trị cho biểu đồ
+            chartData.setValue(0, 1, totalActualRevenue);
+
+            // Cấu hình các dải màu
+            const redTo = targetRevenue * 0.5;
+            const yellowFrom = targetRevenue * 0.5;
+            const yellowTo = targetRevenue * 0.9;
+            const greenFrom = targetRevenue * 0.9;
+            const greenTo = targetRevenue;
+
+            // Nếu không có mục tiêu, đặt max là doanh thu thực tế (hoặc 100 nếu cả 2 = 0)
+            const maxValue = targetRevenue > 0 ? targetRevenue : (totalActualRevenue > 0 ? totalActualRevenue * 1.2 : 100);
+
+            const options = {
+                width: 600, height: 200,
+                redFrom: 0, redTo: redTo,
+                yellowFrom: yellowFrom, yellowTo: yellowTo,
+                greenFrom: greenFrom, greenTo: greenTo,
+                minorTicks: 5,
+                max: maxValue,
+                format: '#,### VNĐ' // Định dạng tiền tệ
+            };
+
+            // Vẽ lại biểu đồ
+            chart.draw(chartData, options);
+        }
+
+        // --- HÀM KHỞI TẠO (CHẠY KHI TẢI THƯ VIỆN CHART XONG) ---
+        async function initializeChart() {
+            // Khởi tạo biểu đồ
+            chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+            
+            // Tạo data ban đầu
+            chartData = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Doanh thu', 0] // Giá trị ban đầu
+            ]);
+
+            // Lắng nghe sự kiện thay đổi ô input
+            $('#targetRevenue').on('input', drawChart);
+
+            // Tải dữ liệu từ API (chờ xong)
+            await loadRevenueData();
+            
+            // Sau khi có dữ liệu API, vẽ biểu đồ lần đầu
+            drawChart();
+        }
+
+        // --- HÀM CHẠY KHI TRANG TẢI XONG ---
+        $(document).ready(function() {
+            jwtToken = getToken();
+
+            // Tải thư viện Google Charts
+            google.charts.load('current', { 'packages': ['gauge'] });
+            
+            // Khi thư viện load xong, gọi hàm initializeChart
+            google.charts.setOnLoadCallback(initializeChart);
+        });
+
+    </script>
+}

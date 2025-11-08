@@ -81,18 +81,6 @@
     overflow: auto; /* Kích hoạt thanh cuộn (cả ngang và dọc) khi nội dung tràn */
     margin-bottom: 100px;
     }
-    Chắc chắn rồi! Để thay đổi màu nền và màu chữ cho trạng thái đơn hàng (order.status) trong lịch sử đơn hàng, bạn cần chỉnh sửa hai phần:
-
-CSS: Định nghĩa các lớp CSS mới cho trạng thái "Done" và trạng thái "Khác".
-
-JavaScript: Cập nhật logic trong hàm renderOrderHistoryPanel để gán lớp CSS phù hợp.
-
-Dưới đây là các bước chỉnh sửa:
-
-1. Cập nhật CSS (Thêm order-status-done và order-status-other)
-Thêm đoạn CSS sau vào phần <style> của bạn. Tôi sẽ thay thế lớp bg-secondary text-white p-1 rounded hiện tại bằng một lớp mới cho trạng thái không phải là "Done" hoặc "Paid".
-
-CSS
 
 <style>
     /* ... (CSS hiện tại của bạn) ... */
