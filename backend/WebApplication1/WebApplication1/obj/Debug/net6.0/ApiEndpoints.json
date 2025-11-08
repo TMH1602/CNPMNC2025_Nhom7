@@ -1,50 +1,6 @@
 [
   {
     "ContainingType": "MyWebApiWithSwagger.Controllers.AuthController",
-    "Method": "DeleteAccount",
-    "RelativePath": "api/Auth/account",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BDeleteAccountRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BDeleteAccountResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ValidationProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BDeleteAccountResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "MyWebApiWithSwagger.Controllers.AuthController",
     "Method": "GetUserAccount",
     "RelativePath": "api/Auth/account/{identifier}",
     "HttpMethod": "GET",
@@ -80,7 +36,7 @@
   },
   {
     "ContainingType": "MyWebApiWithSwagger.Controllers.AuthController",
-    "Method": "ChangePassword",
+    "Method": "ChangeMyPassword",
     "RelativePath": "api/Auth/change-password",
     "HttpMethod": "POST",
     "IsController": true,
@@ -88,7 +44,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BChangePasswordRequest",
+        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BChangeMyPasswordRequest",
         "IsRequired": true
       }
     ],
@@ -103,13 +59,66 @@
         "StatusCode": 200
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ValidationProblemDetails",
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
         "MediaTypes": [
           "text/plain",
           "application/json",
           "text/json"
         ],
         "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 401
+      }
+    ]
+  },
+  {
+    "ContainingType": "MyWebApiWithSwagger.Controllers.AuthController",
+    "Method": "DeleteMyAccount",
+    "RelativePath": "api/Auth/delete-my-account",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BDeleteMyAccountRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "MyWebApiWithSwagger.Controllers.AuthController\u002BDeleteAccountResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 401
       }
     ]
   },
@@ -145,15 +154,6 @@
           "text/json"
         ],
         "StatusCode": 401
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ValidationProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
       }
     ]
   },
