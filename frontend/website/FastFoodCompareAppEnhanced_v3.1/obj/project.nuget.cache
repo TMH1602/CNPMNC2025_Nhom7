@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< HEAD
+  "dgSpecHash": "6smlg7aA0dY=",
+=======
   "dgSpecHash": "ZAqm9TFsp3c=",
+>>>>>>> dda732300e438573626fcc6a9b9a1c59580923c1
   "success": true,
   "projectFilePath": "C:\\Users\\ADMIN\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
   "expectedPackageFiles": [

@@ -1,9 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using WebApplication1.Data; // Thêm DbContext
-using WebApplication1.Models; // Thêm User Model
-using Microsoft.EntityFrameworkCore; // Thêm cho các hàm Async
-
+using WebApplication1.Data; 
+using WebApplication1.Models; 
+using Microsoft.EntityFrameworkCore; 
+using System.Text;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using BCrypt.Net; 
+using Microsoft.AspNetCore.Authorization; 
+using Microsoft.Extensions.Configuration;
 namespace MyWebApiWithSwagger.Controllers
 {
 
@@ -12,15 +18,34 @@ namespace MyWebApiWithSwagger.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
+        private readonly IConfiguration _config;
         // Dependency Injection cho DbContext
-        public AuthController(ApplicationDbContext context)
+        public AuthController(ApplicationDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
+
 
         // === Khu vực Models (Giữ nguyên) ===
         #region Models (Đăng nhập)
+        public class ChangeMyPasswordRequest
+        {
+            [Required(ErrorMessage = "Mật khẩu cũ là bắt buộc.")]
+            public string OldPassword { get; set; } = string.Empty;
+
+            [Required(ErrorMessage = "Mật khẩu mới là bắt buộc.")]
+            [MinLength(6, ErrorMessage = "Mật khẩu mới phải có ít nhất 6 ký tự.")]
+            public string NewPassword { get; set; } = string.Empty;
+        }
+
+        // Model bảo mật (dùng cho hàm [Authorize])
+        public class DeleteMyAccountRequest
+        {
+            [Required(ErrorMessage = "Mật khẩu xác nhận là bắt buộc.")]
+            public string CurrentPassword { get; set; } = string.Empty;
+        }
+
         public class LoginRequest
         {
             [Required(ErrorMessage = "Tên người dùng là bắt buộc.")]
@@ -105,99 +130,69 @@ namespace MyWebApiWithSwagger.Controllers
         // ------------------------------------------------------------------
         // ENDPOINT: ĐĂNG NHẬP (LOGIN)
         // ------------------------------------------------------------------
-        [HttpPost("login")] // Route: /api/Auth/login
+        [HttpPost("login")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // 1. Tìm người dùng theo Username
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username.ToLower() == request.Username.ToLower());
 
             if (user == null)
             {
-                // Tránh tiết lộ liệu Username có tồn tại hay không
-                return Unauthorized(new LoginResponse
-                {
-                    IsSuccess = false,
-                    Message = "Tên người dùng hoặc mật khẩu không đúng. ❌"
-                });
+                return Unauthorized(new LoginResponse { IsSuccess = false, Message = "Tên người dùng hoặc mật khẩu không đúng. ❌" });
             }
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
 
-            // 2. So sánh mật khẩu (Giả lập: so sánh chuỗi, thực tế phải so sánh Password Hash)
-            if (user.PasswordHash == request.Password)
+            if (isPasswordValid)
             {
-                var expiryTime = DateTime.UtcNow.AddHours(1);
+                var expiryTime = DateTime.UtcNow.AddHours(2);
+                var tokenString = GenerateJwtToken(user, expiryTime);
+
                 var successResponse = new LoginResponse
                 {
                     IsSuccess = true,
                     Message = "Đăng nhập thành công! ✅",
-                    Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.XXX_GENERATED_TOKEN_XXX", // Token giả lập
+                    Token = tokenString,
                     ExpiresIn = expiryTime
                 };
-                return Ok(successResponse); // HTTP 200 OK
+                return Ok(successResponse);
             }
             else
             {
-                return Unauthorized(new LoginResponse
-                {
-                    IsSuccess = false,
-                    Message = "Tên người dùng hoặc mật khẩu không đúng. ❌"
-                }); // HTTP 401 Unauthorized
+                return Unauthorized(new LoginResponse { IsSuccess = false, Message = "Tên người dùng hoặc mật khẩu không đúng. ❌" });
             }
         }
+
 
         // ------------------------------------------------------------------
         // ENDPOINT: ĐĂNG KÝ (REGISTER) - THÊM MỚI ĐỂ DỄ DÙNG
         // ------------------------------------------------------------------
-        [HttpPost("register")] // Route: /api/Auth/register
+        [HttpPost("register")]
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterRQ request)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            // 1. Kiểm tra tồn tại
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == request.Username.ToLower()))
             {
-                return BadRequest(ModelState);
+                return BadRequest(new { IsSuccess = false, Message = "Tên người dùng đã tồn tại." });
+            }
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == request.Email.ToLower()))
+            {
+                return BadRequest(new { IsSuccess = false, Message = "Email đã tồn tại." });
             }
 
-            // 1. Kiểm tra username đã tồn tại chưa
-            var existingUser = await _context.Users
-                .AnyAsync(u => u.Username.ToLower() == request.Username.ToLower());
-            var existingEmail = await _context.Users
-                .AnyAsync(u => u.Email.ToLower() == request.Email.ToLower());
-
-            if (existingEmail)
-            {
-                return BadRequest(new LoginResponse
-                {
-                    IsSuccess = false,
-                    Message = "Email đã tồn tại. Vui lòng chọn email khác."
-                });
-            }
-            if (existingUser)
-            {
-                return BadRequest(new LoginResponse
-                {
-                    IsSuccess = false,
-                    Message = "Tên người dùng đã tồn tại. Vui lòng chọn tên khác."
-                });
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState); // Trả về lỗi Validation 400 Bad Request
-            }
-            // 2. Tạo User mới
+            // 2. SỬA LỖI BẢO MẬT: Dùng BCrypt.HashPassword
             var newUser = new User
             {
                 Username = request.Username,
-                Email =    request.Email, 
-                PasswordHash = request.Password,
+                Email = request.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password), // Băm mật khẩu
                 Address = request.Address,
                 DisplayName = "Khách Hàng",
                 CreatedDate = DateTime.UtcNow
@@ -214,50 +209,36 @@ namespace MyWebApiWithSwagger.Controllers
                 CreatedDate = newUser.CreatedDate
             };
 
-            return CreatedAtAction(nameof(GetUserAccount), new { identifier = newUser.Email }, response);
+            // Trả về 201 Created với thông tin tài khoản mới (không trả về hàm GetMyAccount vì nó cần token)
+            return StatusCode(201, response);
         }
-        [HttpPost("registerRes")] // Route: /api/Auth/register
+
+        // ------------------------------------------------------------------
+        // ENDPOINT: ĐĂNG KÝ NHÀ HÀNG (REGISTERRES)
+        // ------------------------------------------------------------------
+        [HttpPost("registerRes")]
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterRes([FromBody] RegisterRQ request)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            // 1. Kiểm tra tồn tại
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == request.Username.ToLower()))
             {
-                return BadRequest(ModelState);
+                return BadRequest(new { IsSuccess = false, Message = "Tên người dùng đã tồn tại." });
+            }
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == request.Email.ToLower()))
+            {
+                return BadRequest(new { IsSuccess = false, Message = "Email đã tồn tại." });
             }
 
-            // 1. Kiểm tra username đã tồn tại chưa
-            var existingUser = await _context.Users
-                .AnyAsync(u => u.Username.ToLower() == request.Username.ToLower());
-            var existingEmail = await _context.Users
-                .AnyAsync(u => u.Email.ToLower() == request.Email.ToLower());
-
-            if (existingEmail)
-            {
-                return BadRequest(new LoginResponse
-                {
-                    IsSuccess = false,
-                    Message = "Email đã tồn tại. Vui lòng chọn email khác."
-                });
-            }
-            if (existingUser)
-            {
-                return BadRequest(new LoginResponse
-                {
-                    IsSuccess = false,
-                    Message = "Tên người dùng đã tồn tại. Vui lòng chọn tên khác."
-                });
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState); // Trả về lỗi Validation 400 Bad Request
-            }
-            // 2. Tạo User mới
+            // 2. SỬA LỖI BẢO MẬT: Dùng BCrypt.HashPassword
             var newUser = new User
             {
                 Username = request.Username,
                 Email = request.Email,
-                PasswordHash = request.Password,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password), // Băm mật khẩu
                 Address = request.Address,
                 DisplayName = "Nhà hàng",
                 CreatedDate = DateTime.UtcNow
@@ -274,62 +255,49 @@ namespace MyWebApiWithSwagger.Controllers
                 CreatedDate = newUser.CreatedDate
             };
 
-            return CreatedAtAction(nameof(GetUserAccount), new { identifier = newUser.Email }, response);
+            return StatusCode(201, response);
         }
+
 
         // ------------------------------------------------------------------
         // ENDPOINT: ĐỔI MẬT KHẨU
         // ------------------------------------------------------------------
         [HttpPost("change-password")] // Route: /api/Auth/change-password
+        [Authorize]
         [ProducesResponseType(typeof(ChangePasswordResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> ChangeMyPassword([FromBody] ChangeMyPasswordRequest request)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var userIdString = User.FindFirstValue("userId");
+            if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
+
+            var user = await _context.Users.FindAsync(int.Parse(userIdString));
+            if (user == null) return NotFound(new ChangePasswordResponse { IsSuccess = false, Message = "Không tìm thấy tài khoản. ❌" });
+
+            // Xác thực mật khẩu cũ
+            bool isOldPasswordValid = BCrypt.Net.BCrypt.Verify(request.OldPassword, user.PasswordHash);
+            if (!isOldPasswordValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new ChangePasswordResponse { IsSuccess = false, Message = "Mật khẩu cũ không chính xác. ❌" });
             }
 
-            // 1. Tìm người dùng
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username.ToLower() == request.Identifier.ToLower() ||
-                                          u.Email.ToLower() == request.Identifier.ToLower());
-
-            if (user == null)
-            {
-                return BadRequest(new ChangePasswordResponse
-                {
-                    IsSuccess = false,
-                    Message = "Không tìm thấy tài khoản. ❌"
-                });
-            }
-
-            // 2. Xác thực mật khẩu cũ
-            if (user.PasswordHash != request.OldPassword)
-            {
-                return BadRequest(new ChangePasswordResponse
-                {
-                    IsSuccess = false,
-                    Message = "Mật khẩu cũ không chính xác. ❌"
-                });
-            }
-
-            // 3. Cập nhật mật khẩu mới (thực tế: hash trước khi lưu)
-            user.PasswordHash = request.NewPassword;
+            // Băm và cập nhật mật khẩu mới
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new ChangePasswordResponse
-            {
-                IsSuccess = true,
-                Message = $"Mật khẩu cho tài khoản {request.Identifier} đã được đổi thành công. ✅"
-            });
+            return Ok(new ChangePasswordResponse { IsSuccess = true, Message = "Mật khẩu đã được đổi thành công. ✅" });
         }
+
 
         // ------------------------------------------------------------------
         // ENDPOINT: XEM TÀI KHOẢN
         // ------------------------------------------------------------------
         [HttpGet("account/{identifier}")] // Route: /api/Auth/account/{identifier}
+        [Authorize]
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserAccount(string identifier)
@@ -358,50 +326,61 @@ namespace MyWebApiWithSwagger.Controllers
         // ------------------------------------------------------------------
         // ENDPOINT: XÓA TÀI KHOẢN
         // ------------------------------------------------------------------
-        [HttpDelete("account")] // Route: /api/Auth/account
+        [HttpDelete("delete-my-account")]
+        [Authorize]
         [ProducesResponseType(typeof(DeleteAccountResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(DeleteAccountResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteAccount([FromBody] DeleteAccountRequest request)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> DeleteMyAccount([FromBody] DeleteMyAccountRequest request)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var userIdString = User.FindFirstValue("userId");
+            if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
+
+            var user = await _context.Users.FindAsync(int.Parse(userIdString));
+            if (user == null) return NotFound(new DeleteAccountResponse { IsSuccess = false, Message = "Không tìm thấy tài khoản. ❌" });
+
+            // Xác minh mật khẩu
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash);
+            if (!isPasswordValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new DeleteAccountResponse { IsSuccess = false, Message = "Mật khẩu xác nhận không chính xác. 🔒" });
             }
 
-            // 1. Tìm người dùng
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username.ToLower() == request.Identifier.ToLower() ||
-                                          u.Email.ToLower() == request.Identifier.ToLower());
-
-            if (user == null)
-            {
-                return NotFound(new DeleteAccountResponse
-                {
-                    IsSuccess = false,
-                    Message = $"Không tìm thấy tài khoản với Email/Username: {request.Identifier}. ❌"
-                });
-            }
-
-            // 2. Xác minh mật khẩu
-            if (user.PasswordHash != request.CurrentPassword)
-            {
-                return BadRequest(new DeleteAccountResponse
-                {
-                    IsSuccess = false,
-                    Message = "Mật khẩu xác nhận không chính xác. Hành động xóa bị từ chối. 🔒"
-                });
-            }
-
-            // 3. Thực hiện hành động xóa
+            // Xóa tài khoản
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync(); // Lưu thay đổi vào Database
+            await _context.SaveChangesAsync();
 
-            return Ok(new DeleteAccountResponse
-            {
-                IsSuccess = true,
-                Message = $"Tài khoản {request.Identifier} đã được xóa thành công khỏi hệ thống. 👋"
-            });
+            return Ok(new DeleteAccountResponse { IsSuccess = true, Message = "Tài khoản của bạn đã được xóa thành công. 👋" });
         }
+
+        private string GenerateJwtToken(User user, DateTime expiryTime)
+        {
+            var securityKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_config["Jwt:Key"]) // Đọc từ config
+            );
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("userId", user.Id.ToString()), // Claim tùy chỉnh quan trọng
+                new Claim("displayName", user.DisplayName),
+                new Claim(ClaimTypes.Role, user.DisplayName)
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,
+                expires: expiryTime,
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
     }
 }

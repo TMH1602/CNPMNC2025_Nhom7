@@ -10,7 +10,7 @@ namespace WebApplication1.ViewModels
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Giá sản phẩm là bắt buộc.")]
-        [Range(0.01, 10000.00, ErrorMessage = "Giá phải lớn hơn 0.")]
+        [Range(1.00, 100000000.00, ErrorMessage = "Giá phải lớn hơn 0.")]
         public decimal Price { get; set; }
 
         [StringLength(500)]
@@ -18,7 +18,5 @@ namespace WebApplication1.ViewModels
 
         [StringLength(50)]
         public string? Category { get; set; }
-
-        public string? ImageUrl { get; set; }
     }
 }

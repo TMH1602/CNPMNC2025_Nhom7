@@ -13,29 +13,175 @@
     <link href="~/css/auth.css" rel="stylesheet" />
 
     <style>
-    
+        .chat-message-user {
+            background-color: #ff6a00; /* Màu cam chủ đạo */
+            color: white;
+            padding: 10px 14px;
+            border-radius: 18px 18px 0 18px; /* Bo góc ngược lại */
+            max-width: 80%;
+            font-size: 0.95rem;
+            align-self: flex-end; /* Căn lề phải */
+            word-wrap: break-word; /* Tự xuống hàng */
+        }
+        .chat-toggle-button {
+            position: fixed; /* Nổi trên mọi thứ */
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%; /* Bo tròn */
+            background-color: #ff6a00; /* Màu cam chủ đạo */
+            color: white;
+            border: none;
+            font-size: 28px; /* Kích thước emoji */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1050; /* Đảm bảo nó nổi trên cùng */
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .chat-toggle-button:hover {
+            background-color: #e55c00; /* Màu đậm hơn khi hover */
+            transform: scale(1.1); /* Phóng to nhẹ */
+        }
+
+        /* --- Cửa sổ Chat (Container) --- */
+        .chat-window-container {
+            position: fixed;
+            bottom: 100px; /* Cách nút bấm 10px (60px + 30px margin-bottom + 10px) */
+            right: 30px;
+            width: 350px;
+            max-width: 90vw;
+            height: 450px;
+            max-height: 70vh;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+            z-index: 1049; /* Nằm dưới nút bấm 1 chút */
+            
+            /* ẨN BAN ĐẦU */
+            display: none; 
+            
+            /* Dùng flex để chia cột header, body, footer */
+            flex-direction: column; 
+            overflow: hidden; /* Để bo góc hoạt động */
+            
+            /* Hiệu ứng xuất hiện (mờ dần và trượt lên) */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Lớp .show để hiện cửa sổ chat (sẽ được JS thêm/xóa) */
+        .chat-window-container.show {
+            display: flex; /* HIỆN LÊN */
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 1051; /* Nổi lên trên nút bấm khi mở */
+        }
+
+        /* --- Các thành phần bên trong cửa sổ chat --- */
+        .chat-header {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+        .chat-close-btn {
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            font-weight: 300;
+            color: #888;
+            cursor: pointer;
+            padding: 0 5px;
+            line-height: 1;
+        }
+        .chat-close-btn:hover {
+            color: #000;
+        }
+
+        .chat-body {
+            flex-grow: 1; /* Tự động co giãn chiếm phần còn lại */
+            padding: 15px;
+            overflow-y: auto; /* Cho phép cuộn nếu tin nhắn dài */
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        /* Ví dụ 1 tin nhắn của bot */
+        .chat-message-bot {
+            background-color: #e9ecef;
+            padding: 10px 14px;
+            border-radius: 18px 18px 18px 0; /* Bo góc tin nhắn */
+            max-width: 70%;
+            font-size: 0.95rem;
+            color: #212529;
+            align-self: flex-start; /* Căn lề trái */
+            word-wrap: break-word; /* Tự xuống hàng */
+            white-space: pre-wrap; /* Quan trọng: Để giữ lại ký tự \n */
+        }
+
+        .chat-footer {
+            padding: 10px 15px;
+            border-top: 1px solid #e0e0e0;
+            background-color: #fdfdfd;
+            display: flex;
+        }
+        .chat-footer input {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 8px 12px;
+            margin-right: 10px;
+            outline: none;
+        }
+        .chat-footer input:focus {
+            border-color: #ff6a00;
+        }
+        .chat-footer button {
+            border: none;
+            background-color: #ff6a00;
+            color: white;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            font-size: 14px; /* Có thể thay bằng icon Gửi */
+        }
+        .chat-footer button:hover {
+            background-color: #e55c00;
+        }
         /* CSS CỦA BẠN (Giữ nguyên) */
         body::-webkit-scrollbar {
-    width: 8px; /* Chiều rộng của thanh cuộn dọc */
-    height: 8px; /* Chiều cao của thanh cuộn ngang */
-}
+            width: 8px; /* Chiều rộng của thanh cuộn dọc */
+            height: 8px; /* Chiều cao của thanh cuộn ngang */
+        }
 
-/* Background của khu vực thanh cuộn */
-body::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Màu nền của rãnh cuộn (track) */
-    border-radius: 10px; /* Bo góc cho rãnh */
-}
+        /* Background của khu vực thanh cuộn */
+        body::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Màu nền của rãnh cuộn (track) */
+            border-radius: 10px; /* Bo góc cho rãnh */
+        }
 
-/* Thanh trượt (thumb) */
-body::-webkit-scrollbar-thumb {
-    background: #ff6a00; /* Màu của thanh trượt (Màu cam của bạn) */
-    border-radius: 10px; /* Bo góc cho thanh trượt */
-}
+        /* Thanh trượt (thumb) */
+        body::-webkit-scrollbar-thumb {
+            background: #ff6a00; /* Màu của thanh trượt (Màu cam của bạn) */
+            border-radius: 10px; /* Bo góc cho thanh trượt */
+        }
 
-/* Khi hover lên thanh trượt */
-body::-webkit-scrollbar-thumb:hover {
-    background: #e55c00; /* Màu đậm hơn khi hover */
-}
+        /* Khi hover lên thanh trượt */
+        body::-webkit-scrollbar-thumb:hover {
+            background: #e55c00; /* Màu đậm hơn khi hover */
+        }
         .user-avatar {
             display: inline-flex;
             align-items: center;
@@ -314,7 +460,7 @@ body::-webkit-scrollbar-thumb:hover {
                 }
             } else {
                 // Chưa đăng nhập: Ẩn khối user, hiện nút Đăng nhập/Đăng ký
-                if(loggedInState) loggedInState.classList.add("d-none");   // ẨN KHỐI LOGGED IN
+                if(loggedInState) loggedInState.classList.add("d-none");  // ẨN KHỐI LOGGED IN
                 if(loggedOutState) loggedOutState.classList.remove("d-none"); // HIỆN KHỐI LOGGED OUT
                 
                 if(cartLink) {
@@ -322,7 +468,101 @@ body::-webkit-scrollbar-thumb:hover {
                     cartLink.innerHTML = `🛒 Giỏ`;
                 }
             }
+            const CHAT_API_URL = 'https://localhost:7132/api/Chat/Send';
+            const chatToggleButton = document.getElementById("chat-toggle-button");
+            const chatWindow = document.getElementById("chat-window");
+            const chatCloseButton = document.getElementById("chat-close-button");
+            const chatBody = document.getElementById("chat-body");
+            const chatInput = document.getElementById("chat-input");
+            const chatSendButton = document.getElementById("chat-send-button");
+            if (chatToggleButton && chatWindow && chatCloseButton) {
+                
+                // 1. Mở/Đóng khi bấm nút chat 💬
+                chatToggleButton.addEventListener("click", function() {
+                    chatWindow.classList.toggle("show");
+                });
 
+                // 2. Đóng khi bấm nút X
+                chatCloseButton.addEventListener("click", function() {
+                    chatWindow.classList.remove("show");
+                });
+            }
+            async function handleChatSend() {
+            const message = chatInput.value.trim();
+            if (message === '') return; // Không gửi tin nhắn rỗng
+
+            // 1. Hiển thị ngay tin nhắn của người dùng
+            addMessageToChat(message, 'user');
+
+            // 2. Xóa nội dung input
+            chatInput.value = '';
+            chatSendButton.disabled = true; // Vô hiệu hóa nút Gửi
+
+            // 3. Chuẩn bị dữ liệu gửi API
+            const postData = {
+                context: message
+            };
+
+            try {
+                // 4. Gọi API
+                const response = await fetch(CHAT_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'text/plain',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                // 5. Lấy kết quả JSON
+                const result = await response.json();
+
+                // 6. Hiển thị phản hồi của Bot
+                if (result && result.responseContext) {
+                    addMessageToChat(result.responseContext, 'bot');
+                } else {
+                    addMessageToChat("Lỗi: Không nhận được phản hồi hợp lệ.", 'bot');
+                }
+
+            } catch (error) {
+                console.error('Lỗi khi gọi API Chat:', error);
+                addMessageToChat("Xin lỗi, đã có lỗi kết nối. Vui lòng thử lại.", 'bot');
+            } finally {
+                // 7. Kích hoạt lại nút Gửi
+                chatSendButton.disabled = false;
+            }
+        }
+
+        // 8. Gắn sự kiện cho nút Gửi và phím Enter
+        if (chatSendButton && chatInput && chatBody) {
+            
+            // Bấm nút Gửi
+            chatSendButton.addEventListener('click', handleChatSend);
+
+            // Bấm phím Enter
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Ngăn xuống dòng (nếu là textarea)
+                    handleChatSend();
+                }
+            });
+        }
+        function addMessageToChat(message, type = 'bot') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message-${type}`; // 'chat-message-user' hoặc 'chat-message-bot'
+
+            // Dùng innerText để giữ lại định dạng xuống dòng (\n)
+            messageDiv.innerText = message; 
+
+            chatBody.appendChild(messageDiv);
+
+            // Tự động cuộn xuống tin nhắn mới nhất
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
             // 🎯 Gọi hàm tải số lượng giỏ hàng
             window.loadCartCount(username); 
 
@@ -342,5 +582,25 @@ body::-webkit-scrollbar-thumb:hover {
     </script>
     
     @await RenderSectionAsync("Scripts", required: false)
-</body>
+        <button id="chat-toggle-button" class="chat-toggle-button">
+                💬
+            </button>
+
+            <div id="chat-window" class="chat-window-container">
+                <div class="chat-header">
+                    <h5>Hỗ trợ trực tuyến</h5>
+                    <button id="chat-close-button" class="chat-close-btn">&times;</button>
+                </div>
+                
+                <div id="chat-body" class="chat-body">
+                    <div class="chat-message-bot">Chào bạn!! Chúng tôi là đội ngũ phát triển phần mềm này chúng tôi có thể giúp bạn tất cả mọi thứ bạn có thể hỏi ngay bây giờ!</div>
+                </div>
+                
+                <div class="chat-footer">
+                    <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." />
+                    <button id="chat-send-button">Gửi</button>
+                </div>
+            </div>
+    </body>
+
 </html>

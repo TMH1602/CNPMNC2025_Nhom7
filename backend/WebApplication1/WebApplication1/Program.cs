@@ -2,7 +2,9 @@
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Services;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Cấu hình Entity Framework Core ---
@@ -24,7 +26,37 @@ builder.Services.AddCors(options =>
             // Nếu bạn cần gửi cookie hoặc chứng chỉ, hãy thêm: .AllowCredentials();
         });
 });
+builder.Services.AddAuthentication(options =>
+{
+    // Đặt scheme mặc định
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    // Cấu hình cách xác thực token
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        // Yêu cầu xác thực Issuer (người phát hành)
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"], // Đọc từ appsettings
 
+        // Yêu cầu xác thực Audience (người dùng)
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"], // Đọc từ appsettings
+
+        // Yêu cầu xác thực Lifetime (thời gian hết hạn)
+        ValidateLifetime = true,
+
+        // Yêu cầu xác thực và dùng Secret Key
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]) // Đọc key từ appsettings
+        )
+    };
+});
+builder.Services.AddAuthorization();
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -59,7 +91,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontendOrigin");
 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

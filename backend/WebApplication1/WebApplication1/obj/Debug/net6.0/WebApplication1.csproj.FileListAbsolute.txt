@@ -227,4 +227,10 @@ C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplicati
 =======
 >>>>>>> 4583808e77942f12ca80f639c77808ad8646b5fc
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
+<<<<<<< HEAD
+C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\backend\WebApplication1\WebApplication1\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+=======
 C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\backend\WebApplication1\WebApplication1\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
+>>>>>>> dda732300e438573626fcc6a9b9a1c59580923c1

@@ -10,7 +10,9 @@
 
 	<ItemGroup>
 		<!-- CORE PACKAGE: Cần thiết cho mọi thứ hoạt động -->
+		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="CloudinaryDotNet" Version="1.27.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.31" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />
 
 		<!-- PROVIDER PACKAGE: Cần thiết để kết nối với SQL Server -->
