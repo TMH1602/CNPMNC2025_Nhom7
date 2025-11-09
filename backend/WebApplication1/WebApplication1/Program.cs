@@ -57,6 +57,7 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddAuthorization();
 builder.Services.AddHttpClient();
+builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
