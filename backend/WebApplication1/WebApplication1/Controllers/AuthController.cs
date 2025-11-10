@@ -162,7 +162,7 @@ namespace MyWebApiWithSwagger.Controllers
             {
                 _cache.Remove(cacheKey);
 
-                var expiryTime = DateTime.UtcNow.AddMilliseconds(3);
+                var expiryTime = DateTime.UtcNow.AddMinutes(30);
                 var tokenString = GenerateJwtToken(user, expiryTime);
 
                 var successResponse = new LoginResponse

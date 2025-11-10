@@ -25,7 +25,7 @@ public class CartController : ControllerBase
     // Lấy giỏ hàng CHƯA XỬ LÝ (IsProcessed = false)
     // ************************************************************
     [HttpGet("{username}")]
-    [Authorize(Roles = "Khách Hàng")]
+    [Authorize]
     public async Task<ActionResult<CartDto>> GetCart(string username)
     {
         var cart = await _context.Carts

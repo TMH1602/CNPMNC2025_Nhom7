@@ -503,7 +503,6 @@
 
                     if (response.ok && responseData.isSuccess) {
                         messagePanel.innerHTML = `<div class="alert alert-success">${responseData.message || 'Đã xóa tài khoản thành công. Đang đăng xuất...'}</div>`;
-                        // Xóa local storage và đá về trang đăng nhập
                         localStorage.clear();
                         setTimeout(() => {
                             window.location.href = LOGIN_URL;
