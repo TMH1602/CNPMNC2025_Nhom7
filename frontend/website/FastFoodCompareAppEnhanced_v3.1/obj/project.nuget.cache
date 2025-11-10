@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "6smlg7aA0dY=",
-=======
   "dgSpecHash": "ZAqm9TFsp3c=",
->>>>>>> dda732300e438573626fcc6a9b9a1c59580923c1
   "success": true,
   "projectFilePath": "C:\\Users\\ADMIN\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
   "expectedPackageFiles": [
@@ -29,5 +25,15 @@
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.36\\microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.36\\microsoft.netcore.app.host.win-x64.6.0.36.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\ADMIN\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\ADMIN\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\ADMIN\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\FastFoodCompareAppEnhanced_v3.1.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

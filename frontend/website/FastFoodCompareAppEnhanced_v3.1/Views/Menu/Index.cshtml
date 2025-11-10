@@ -12,7 +12,7 @@
         radius: 20%;
         /* === TRẠNG THÁI BÌNH THƯỜNG === */
         transition: all 0.2s ease-in-out; /* Thêm transition cho độ mượt */
-        transform: translateY(0);          /* Vị trí ban đầu: không dịch chuyển */
+        transform: translateY(0);        /* Vị trí ban đầu: không dịch chuyển */
         box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Bóng đổ nhẹ ban đầu */
     }
 
@@ -190,7 +190,7 @@
 <div class="container-fluid page-content-wrapper">
     
     <div id="full-width-category-container" class="mb-4">
-         <h1>Thực đơn dành cho: </h1>
+        <h1>Thực đơn dành cho: </h1>
         <div id="category-filter-container" class="d-flex flex-wrap">
             </div>
     </div>
@@ -257,50 +257,64 @@
     // HÀM QUẢN LÝ DỮ LIỆU CHUNG (NAVBAR)
     // =================================================================
     document.addEventListener('DOMContentLoaded', function() {
+        // ... (Code xử lý scroll của category - giữ nguyên) ...
         const categoryContainer = document.getElementById('full-width-category-container');
-        
-        if (!categoryContainer) return; // Thoát nếu không tìm thấy phần tử
-
-        // Lấy vị trí ban đầu của phần tử so với đỉnh trang
-        // Offset Top là vị trí mà container bắt đầu bị cuộn qua
+        if (!categoryContainer) return; 
         const stickyOffset = categoryContainer.offsetTop; 
-
         function handleScroll() {
-            // Kiểm tra xem vị trí cuộn hiện tại có lớn hơn vị trí ban đầu của container không
             if (window.scrollY > stickyOffset) {
-                // Thêm lớp is-fixed khi cuộn qua
                 if (!categoryContainer.classList.contains('is-fixed')) {
                     categoryContainer.classList.add('is-fixed');
                 }
             } else {
-                // Xóa lớp is-fixed khi cuộn ngược lại lên trên
                 if (categoryContainer.classList.contains('is-fixed')) {
                     categoryContainer.classList.remove('is-fixed');
                 }
             }
         }
-
-        // Lắng nghe sự kiện cuộn
         window.addEventListener('scroll', handleScroll);
-        
-        // Gọi hàm một lần để xử lý trạng thái nếu trang được tải ở vị trí đã cuộn
         handleScroll();
     });
-    window.loadCartCount = async function (user) { /* ... (Giữ nguyên) ... */
+
+    // *** SỬA LỖI 401 (1) ***
+    window.loadCartCount = async function (user) { 
         const cartCountSpan = document.getElementById("cartCount");
         if (!user || !cartCountSpan) return;
 
-        const apiUrl = `https://localhost:7132/api/Cart/${user}`;
+        // 1. Lấy token
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+             console.error('Không tìm thấy token khi tải cart count.');
+             cartCountSpan.textContent = 0; 
+             return;
+        }
+
+        const encodedUser = encodeURIComponent(user);
+        const apiUrl = `https://localhost:7132/api/Cart/${encodedUser}`; // Mã hóa user
 
         try {
             const response = await fetch(apiUrl, {
                 method: 'GET',
-                headers: { 'accept': 'text/plain' }
+                headers: { 
+                    'accept': 'application/json', // Sửa lại thành JSON
+                    // 2. Thêm Authorization
+                    'Authorization': `Bearer ${token}` 
+                }
             });
+            
+            if (!response.ok) {
+                // Nếu 401 (token hết hạn), chỉ cần set là 0
+                if (response.status === 401) {
+                    cartCountSpan.textContent = 0; 
+                    return;
+                }
+                throw new Error(`API error ${response.status}`);
+            }
+
             const cartData = await response.json();
             const totalItems = cartData.items ? 
-                                         cartData.items.reduce((total, item) => total + (item.quantity || 0), 0) : 
-                                         0;
+                                 cartData.items.reduce((total, item) => total + (item.quantity || 0), 0) : 
+                                 0;
             cartCountSpan.textContent = totalItems;
         } catch (error) {
             console.error('Lỗi tải giỏ hàng Navbar:', error);
@@ -373,7 +387,7 @@
         if (items.length === 0) {
             cartHtml = '<p class="text-center text-muted">Chưa có món ăn nào dự định thêm vào giỏ</p>';
             commitCartBtn.disabled = true;
-            if(clearLocalCartBtn) clearLocalCartBtn.disabled = true; // Vô hiệu hóa nút xóa khi trống
+            if(clearLocalCartBtn) clearLocalCartBtn.disabled = true; 
         } else {
             items.forEach(item => {
                 const itemTotal = (item.price || 0) * (item.quantity || 0);
@@ -393,12 +407,12 @@
             });
             cartHtml += '</ul>';
             commitCartBtn.disabled = false;
-            if(clearLocalCartBtn) clearLocalCartBtn.disabled = false; // Kích hoạt nút xóa khi có món
+            if(clearLocalCartBtn) clearLocalCartBtn.disabled = false; 
         }
         
         localCartItemsContainer.innerHTML = cartHtml;
         localCartTotalAmount.textContent = totalAmount.toLocaleString('vi-VN') + ' VNĐ';
-        localCartItemCountSpan.textContent = totalQuantity; // Cập nhật số lượng trên tiêu đề
+        localCartItemCountSpan.textContent = totalQuantity; 
     }
 
     // =================================================================
@@ -408,10 +422,8 @@
     const menuContainer = document.getElementById('menu-container');
     const categoryContainer = document.getElementById('category-filter-container');
 
-    /**
-     * Lọc và render danh sách món ăn dựa trên Category đang chọn.
-     */
     function renderMenuItems(items) {
+        // ... (Hàm này giữ nguyên, không thay đổi) ...
         let itemsToRender = items;
         if (selectedCategory && selectedCategory !== 'Tất cả') {
             itemsToRender = items.filter(item => item.category === selectedCategory);
@@ -449,19 +461,13 @@
             menuContainer.innerHTML += dishCardHtml;
         });
 
-        // Tính giá trung bình
         const avgPrice = itemsToRender.length > 0 ? totalPrice / itemsToRender.length : 0;
         document.getElementById('avgPrice').innerText = avgPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
     }
 
-    /**
-     * Render các nút Category và gắn sự kiện lọc.
-     */
     function renderCategoryFilters(items) {
-        // Lấy danh sách Category duy nhất từ các item đang hoạt động
+        // ... (Hàm này giữ nguyên, không thay đổi) ...
         const categories = [...new Set(items.map(item => item.category))].filter(c => c);
-        
-        // Thêm nút "Tất cả" lên đầu
         categories.unshift('Tất cả');
         
         let categoryHtml = '';
@@ -473,16 +479,11 @@
         categoryContainer.innerHTML = categoryHtml;
     }
     
-    /**
-     * Xử lý click vào nút Category
-     */
     function handleCategoryClick(event) {
+        // ... (Hàm này giữ nguyên, không thay đổi) ...
         const target = event.target;
         if (target.classList.contains('category-btn')) {
-            // Cập nhật Category đang chọn
             selectedCategory = target.dataset.category;
-            
-            // Render lại cả bộ lọc và menu
             renderCategoryFilters(activeMenuItems);
             renderMenuItems(activeMenuItems);
         }
@@ -493,6 +494,7 @@
     // HÀM XỬ LÝ CLICK VÀO MÓN ĂN (Thêm vào LocalStorage)
     // =================================================================
     function addItemToLocalCart(itemData) {
+        // ... (Hàm này giữ nguyên, không thay đổi) ...
         const username = getUsername();
         if (username === null) return;
 
@@ -510,12 +512,20 @@
     }
 
     // =================================================================
-    // HÀM GỬI LÊN API (COMMIT)
+    // HÀM GỬI LÊN API (COMMIT) - (*** ĐÃ SỬA LỖI 401 (2) ***)
     // =================================================================
     async function sendLocalCartToAPI() {
         const username = getUsername();
         if (username === null) return;
         
+        // 1. Lấy token
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+             alert("Không tìm thấy token. Vui lòng đăng nhập lại.");
+             window.location.href = MENU_LOGIN_URL; 
+             return;
+        }
+
         const localItems = getLocalCart();
         if (localItems.length === 0) {
             alert("Giỏ hàng trống. Vui lòng chọn món ăn trước.");
@@ -540,19 +550,28 @@
                 method: 'POST',
                 headers: {
                     'accept': '*/*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    // 2. Thêm Authorization
+                    'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify(postData)
             });
+
+            // 3. Thêm xử lý lỗi 401
+            if (response.status === 401) {
+                 alert("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
+                 localStorage.clear();
+                 window.location.href = MENU_LOGIN_URL;
+                 return;
+            }
 
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Lỗi từ Server: ${response.status} - ${errorText}`);
             }
 
-            // Thành công: Xóa Local Cart và cập nhật Navbar
-            localStorage.removeItem(LOCAL_CART_KEY); // Xóa Local Cart 
-            renderLocalCartPanel(); // Cập nhật giao diện
+            localStorage.removeItem(LOCAL_CART_KEY); 
+            renderLocalCartPanel(); 
             window.loadCartCount(username); 
             
             alert(`✅ Đã gửi thành công ${apiItems.length} món vào Giỏ hàng chính thức trên server!`);
@@ -562,7 +581,7 @@
             alert(`❌ Lỗi: Không thể gửi lên API. ${error.message}`);
             commitCartBtn.disabled = false;
         } finally {
-             commitCartBtn.textContent = '✅ Thêm vào Giỏ hàng (Gửi API)';
+             commitCartBtn.textContent = 'Thêm vào Giỏ hàng';
         }
     }
 
@@ -585,15 +604,21 @@
         if (username) {
             if(displayNameSpan) displayNameSpan.textContent = username; 
             if(avatarSpan && username.length > 0) avatarSpan.textContent = username.charAt(0).toUpperCase();
-            if(loggedInState) loggedInState.classList.remove("d-none");  
+            if(loggedInState) loggedInState.classList.remove("d-none");  
             if(loggedOutState) loggedOutState.classList.add("d-none"); 
             if(cartLink) cartLink.innerHTML = `🛒 Giỏ (<span id="cartCount">0</span>)`;
         } else {
-            if(loggedInState) loggedInState.classList.add("d-none");   
+            if(loggedInState) loggedInState.classList.add("d-none");   
             if(loggedOutState) loggedOutState.classList.remove("d-none"); 
             if(cartLink) cartLink.innerHTML = `🛒 Giỏ`;
         }
-        window.loadCartCount(username); 
+        
+        // Tải đếm giỏ hàng (chỉ khi đã đăng nhập)
+        if(username) {
+            window.loadCartCount(username); 
+        }
+
+        // --- Code Chatbot (Giữ nguyên) ---
         const CHAT_API_URL = 'https://localhost:7132/api/Chat/Send';
             const chatToggleButton = document.getElementById("chat-toggle-button");
             const chatWindow = document.getElementById("chat-window");
@@ -603,34 +628,24 @@
             const chatSendButton = document.getElementById("chat-send-button");
             if (chatToggleButton && chatWindow && chatCloseButton) {
                 
-                // 1. Mở/Đóng khi bấm nút chat 💬
                 chatToggleButton.addEventListener("click", function() {
                     chatWindow.classList.toggle("show");
                 });
 
-                // 2. Đóng khi bấm nút X
                 chatCloseButton.addEventListener("click", function() {
                     chatWindow.classList.remove("show");
                 });
             }
             async function handleChatSend() {
             const message = chatInput.value.trim();
-            if (message === '') return; // Không gửi tin nhắn rỗng
-
-            // 1. Hiển thị ngay tin nhắn của người dùng
+            if (message === '') return; 
             addMessageToChat(message, 'user');
-
-            // 2. Xóa nội dung input
             chatInput.value = '';
-            chatSendButton.disabled = true; // Vô hiệu hóa nút Gửi
-
-            // 3. Chuẩn bị dữ liệu gửi API
+            chatSendButton.disabled = true; 
             const postData = {
                 context: message
             };
-
             try {
-                // 4. Gọi API
                 const response = await fetch(CHAT_API_URL, {
                     method: 'POST',
                     headers: {
@@ -639,63 +654,50 @@
                     },
                     body: JSON.stringify(postData)
                 });
-
                 if (!response.ok) {
                     throw new Error(`API Error: ${response.status}`);
                 }
-
-                // 5. Lấy kết quả JSON
                 const result = await response.json();
-
-                // 6. Hiển thị phản hồi của Bot
                 if (result && result.responseContext) {
                     addMessageToChat(result.responseContext, 'bot');
                 } else {
                     addMessageToChat("Lỗi: Không nhận được phản hồi hợp lệ.", 'bot');
                 }
-
             } catch (error) {
                 console.error('Lỗi khi gọi API Chat:', error);
                 addMessageToChat("Xin lỗi, đã có lỗi kết nối. Vui lòng thử lại.", 'bot');
             } finally {
-                // 7. Kích hoạt lại nút Gửi
                 chatSendButton.disabled = false;
             }
         }
-
-        // 8. Gắn sự kiện cho nút Gửi và phím Enter
         if (chatSendButton && chatInput && chatBody) {
             
-            // Bấm nút Gửi
             chatSendButton.addEventListener('click', handleChatSend);
 
-            // Bấm phím Enter
             chatInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    e.preventDefault(); // Ngăn xuống dòng (nếu là textarea)
+                    e.preventDefault(); 
                     handleChatSend();
                 }
             });
         }
         function addMessageToChat(message, type = 'bot') {
             const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message-${type}`; // 'chat-message-user' hoặc 'chat-message-bot'
-
-            // Dùng innerText để giữ lại định dạng xuống dòng (\n)
+            messageDiv.className = `chat-message-${type}`; 
             messageDiv.innerText = message; 
-
             chatBody.appendChild(messageDiv);
-
-            // Tự động cuộn xuống tin nhắn mới nhất
             chatBody.scrollTop = chatBody.scrollHeight;
         }
+        // --- Kết thúc Chatbot ---
+
+        // --- Code Đăng xuất (Giữ nguyên) ---
         const logoutButton = document.getElementById("logout-button");
         if(logoutButton) {
             logoutButton.addEventListener("click", function (e) {
                 e.preventDefault(); 
                 localStorage.removeItem("username");
                 localStorage.removeItem("jwtToken"); 
-                localStorage.removeItem(LOCAL_CART_KEY); // Xóa giỏ hàng local
+                localStorage.removeItem(LOCAL_CART_KEY); 
                 window.location.href = "@Url.Action("Login", "Account")";
             });
         }
@@ -740,13 +742,8 @@
                 return response.json();
             })
             .then(data => {
-                // 1. Lọc và lưu trữ dữ liệu chính
                 activeMenuItems = data.filter(item => item.isActive === true);
-                
-                // 2. Render các nút Category
                 renderCategoryFilters(activeMenuItems);
-                
-                // 3. Render toàn bộ menu mặc định
                 renderMenuItems(activeMenuItems);
             })
             .catch(error => {

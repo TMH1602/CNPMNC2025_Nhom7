@@ -68,38 +68,36 @@
         let chart; // Biến giữ biểu đồ
         let chartData; // Biến giữ data cho biểu đồ
 
-        // --- HÀM LẤY TOKEN (Copy từ code của bạn) ---
+        // --- HÀM LẤY TOKEN (*** ĐÃ SỬA LỖI ***) ---
+        // Lỗi của bạn là cố gắng JSON.parse() một chuỗi không phải JSON.
+        // Hàm này chỉ lấy chuỗi token trực tiếp.
         function getToken() {
             let token = '';
             try {
-                const rawDataString = localStorage.getItem("jwtToken");
-                if (rawDataString && typeof rawDataString === 'string') {
-                    let cleanedJsonString = rawDataString.trim();
-                    if ((cleanedJsonString.startsWith("'") && cleanedJsonString.endsWith("'")) || (cleanedJsonString.startsWith('"') && cleanedJsonString.endsWith('"'))) {
-                        cleanedJsonString = cleanedJsonString.substring(1, cleanedJsonString.length - 1);
+                // 1. Lấy chuỗi token từ localStorage
+                const rawTokenString = localStorage.getItem("jwtToken");
+
+                if (rawTokenString && typeof rawTokenString === 'string') {
+                    token = rawTokenString.trim(); // Cắt khoảng trắng
+                    
+                    // 2. Xóa các dấu ngoặc kép hoặc ngoặc đơn thừa (phòng trường hợp)
+                    if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
+                        token = token.substring(1, token.length - 1);
                     }
-                    const tokenData = JSON.parse(cleanedJsonString);
-                    if (tokenData && tokenData.token) {
-                        token = tokenData.token.trim();
-                    } else {
-                        console.error("Lỗi: Không tìm thấy 'token' trong JSON.");
-                    }
-                } else {
-                    console.warn("Không tìm thấy jwtToken trong localStorage hoặc không phải chuỗi.");
+                    
+                    // 3. KHÔNG DÙNG JSON.PARSE NỮA
+                    // Chỉ trả về chuỗi ey...
+
+                } else { 
+                    console.warn("Không tìm thấy jwtToken trong localStorage."); 
                 }
             } catch (e) {
-                console.error("Lỗi khi xử lý jwtToken từ localStorage:", e);
-                const directToken = localStorage.getItem("jwtToken");
-                if(directToken && typeof directToken === 'string'){
-                        token = directToken.trim();
-                        if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
-                            token = token.substring(1, token.length - 1);
-                        }
-                        console.warn("Đã thử dùng giá trị trực tiếp vì parse lỗi:", token);
-                }
+                 // Catch này để phòng trường hợp localStorage bị lỗi
+                console.error("Lỗi khi đọc jwtToken từ localStorage:", e);
             }
             return token;
         }
+
 
         // --- HÀM TẢI DỮ LIỆU DOANH THU TỪ API ---
         async function loadRevenueData() {
@@ -129,7 +127,6 @@
                     throw new Error(`Lỗi API: ${response.status}`);
                 }
 
-                // Vì 'accept' là 'text/plain', chúng ta cần đọc text
                 const responseText = await response.text();
                 
                 // Sau đó parse JSON từ text đó

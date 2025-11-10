@@ -90,30 +90,50 @@
         let originalProductData = null; 
         let btnSaveProduct; 
 
-        // --- HÀM LẤY TOKEN ---
+        // --- HÀM LẤY TOKEN (*** ĐÃ SỬA LỖI ***) ---
         function getToken() {
             let token = '';
             try {
-                const rawDataString = localStorage.getItem("jwtToken");
-                if (rawDataString && typeof rawDataString === 'string') {
-                    let cleanedJsonString = rawDataString.trim();
-                    if ((cleanedJsonString.startsWith("'") && cleanedJsonString.endsWith("'")) || (cleanedJsonString.startsWith('"') && cleanedJsonString.endsWith('"'))) {
-                        cleanedJsonString = cleanedJsonString.substring(1, cleanedJsonString.length - 1);
+                // 1. Lấy chuỗi token từ localStorage
+                const rawTokenString = localStorage.getItem("jwtToken");
+
+                if (rawTokenString && typeof rawTokenString === 'string') {
+                    token = rawTokenString.trim(); // Cắt khoảng trắng
+                    
+                    // 2. Xóa các dấu ngoặc kép hoặc ngoặc đơn thừa
+                    if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
+                        token = token.substring(1, token.length - 1);
                     }
-                    const tokenData = JSON.parse(cleanedJsonString);
-                    if (tokenData && tokenData.token) {
-                        token = tokenData.token.trim(); 
-                    } else { console.error("Lỗi: Không tìm thấy 'token' trong JSON."); }
-                } else { console.warn("Không tìm thấy jwtToken trong localStorage."); }
+
+                    // 3. KIỂM TRA LẠI: Nếu token vẫn chứa { (dấu hiệu của JSON),
+                    // thì mới parse. Nếu không, chỉ trả về chuỗi.
+                    if (token.includes("{")) {
+                        console.warn("Phát hiện token dạng JSON, đang thử parse...");
+                        const tokenData = JSON.parse(token); 
+                        if (tokenData && tokenData.token) {
+                            token = tokenData.token.trim(); 
+                        } else {
+                            console.error("Lỗi: JSON không có thuộc tính 'token'.");
+                        }
+                    }
+                    // Nếu token là 'ey...' (không chứa {), nó sẽ được trả về trực tiếp.
+
+                } else { 
+                    console.warn("Không tìm thấy jwtToken trong localStorage."); 
+                }
             } catch (e) {
-                console.error("Lỗi khi xử lý jwtToken từ localStorage:", e);
+                // BẮT LỖI GỐC CỦA BẠN (SyntaxError: Unexpected token 'e')
+                console.error("Lỗi khi xử lý jwtToken:", e);
+                console.log("Đang thử lấy token trực tiếp (fallback)...");
+                
+                // Fallback: Lấy chuỗi thô (raw string)
                 const directToken = localStorage.getItem("jwtToken");
-                 if(directToken && typeof directToken === 'string'){
-                      token = directToken.trim();
-                      if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
-                           token = token.substring(1, token.length - 1);
-                      }
-                 }
+                if(directToken && typeof directToken === 'string'){
+                    token = directToken.trim();
+                    if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
+                        token = token.substring(1, token.length - 1);
+                    }
+                }
             }
             return token;
         }
@@ -168,9 +188,9 @@
              });
 
             $('#btn-add-new').on('click', function() {
-                originalProductData = null; 
-                btnSaveProduct.prop('disabled', true); 
-                $('#file-upload-warning').hide(); 
+                 originalProductData = null; 
+                 btnSaveProduct.prop('disabled', true); 
+                 $('#file-upload-warning').hide(); 
             });
             
             $('#product-form').on('input change paste', 'input, textarea', checkFormChanges);
@@ -350,10 +370,10 @@
                  $('#productDescription').val(product.description || '');
                  $('#productCategory').val(product.category || '');
                  if (product.imageUrl) {
-                    $('#currentProductImage').attr('src', product.imageUrl);
-                    $('#current-image-container').show();
+                     $('#currentProductImage').attr('src', product.imageUrl);
+                     $('#current-image-container').show();
                  } else {
-                    $('#current-image-container').hide();
+                     $('#current-image-container').hide();
                  }
                  $('#productImageFile').val(null); 
                  $('#file-upload-warning').show();

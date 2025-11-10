@@ -13,6 +13,7 @@
     <link href="~/css/auth.css" rel="stylesheet" />
 
     <style>
+        /* ... (Toàn bộ CSS của bạn ở đây - không thay đổi) ... */
         .chat-message-user {
             background-color: #ff6a00; /* Màu cam chủ đạo */
             color: white;
@@ -354,11 +355,11 @@
                     <a class="btn btn-outline-secondary btn-sm me-2 d-none d-lg-block rounded-pill btn-sweep" href="@Url.Action("Profile", "Account")">
                         Lịch sử Đơn hàng
                     </a>
-                                            
+                                        
                     <a class="btn btn-outline-secondary btn-sm me-3 d-none d-lg-block rounded-pill btn-sweep" href="@Url.Action("Profile", "Account")">
                         Cập nhật Tài khoản
                     </a>
-                                            
+                                        
                     <button class="btn btn-sm btn-danger rounded-pill btn-sweep" id="logout-button">
                         Đăng xuất
                     </button>
@@ -390,25 +391,42 @@
 
         // =================================================================
         // HÀM TẢI SỐ LƯỢNG GIỎ HÀNG TỪ API (Cho Navbar)
+        // (*** ĐÃ SỬA LỖI 401 ***)
         // =================================================================
 
         window.loadCartCount = async function (user) {
             const cartCountSpan = document.getElementById("cartCount");
             
-            if (!user) {
+            // 1. Lấy token
+            const token = localStorage.getItem('jwtToken');
+
+            // 2. Kiểm tra (nếu không có user HOẶC token, thì không gọi API)
+            if (!user || !token) { 
                 if(cartCountSpan) cartCountSpan.textContent = 0;
                 return;
             }
 
-            const apiUrl = `https://localhost:7132/api/Cart/${user}`;
+            // 3. Mã hóa username (quan trọng)
+            const encodedUser = encodeURIComponent(user);
+            const apiUrl = `https://localhost:7132/api/Cart/${encodedUser}`;
 
             try {
                 const response = await fetch(apiUrl, {
                     method: 'GET',
-                    headers: { 'accept': 'text/plain' }
+                    headers: { 
+                        // 4. Sửa 'accept' và thêm 'Authorization'
+                        'accept': 'application/json', // API cart trả về JSON (cartData)
+                        'Authorization': `Bearer ${token}` 
+                    }
                 });
-
+                
                 if (!response.ok) {
+                    // Thêm xử lý 401 (token hết hạn)
+                    if (response.status === 401) {
+                         console.error("Token hết hạn hoặc không hợp lệ khi tải cart count.");
+                         if(cartCountSpan) cartCountSpan.textContent = 0; 
+                         return;
+                    }
                     console.error("Lỗi khi tải giỏ hàng từ API:", response.status, response.statusText);
                     if(cartCountSpan) cartCountSpan.textContent = 0; 
                     return;
@@ -416,9 +434,10 @@
 
                 const cartData = await response.json();
                 
+                // Đếm tổng số lượng sản phẩm, không phải số loại
                 const totalItems = cartData.items ? 
-                                             cartData.items.reduce((total, item) => total + (item.quantity || 0), 0) : 
-                                             0;
+                                     cartData.items.reduce((total, item) => total + (item.quantity || 0), 0) : 
+                                     0;
 
                 if (cartCountSpan) {
                     cartCountSpan.textContent = totalItems;
@@ -440,34 +459,31 @@
             const loggedOutState = document.getElementById("user-logged-out-state");
             const displayNameSpan = document.getElementById("user-display-name");
             const avatarSpan = document.getElementById("user-avatar-initial"); 
-            // Lấy thẻ a giỏ hàng để chèn span đếm số lượng
             const cartLink = document.querySelector('a[href="@Url.Action("Index","Cart")"]'); 
 
             const username = localStorage.getItem("username"); 
 
             // --- Logic Navbar (Ẩn/Hiện UI dựa trên trạng thái đăng nhập) ---
             if (username) {
-                // Đã đăng nhập: Hiển thị tên và avatar, ẩn nút Đăng nhập/Đăng ký
                 if(displayNameSpan) displayNameSpan.textContent = username; 
                 if(avatarSpan && username.length > 0) avatarSpan.textContent = username.charAt(0).toUpperCase();
                 
-                if(loggedInState) loggedInState.classList.remove("d-none");  // HIỆN KHỐI LOGGED IN
-                if(loggedOutState) loggedOutState.classList.add("d-none"); // ẨN KHỐI LOGGED OUT
+                if(loggedInState) loggedInState.classList.remove("d-none");  
+                if(loggedOutState) loggedOutState.classList.add("d-none"); 
                 
                 if(cartLink) {
-                    // Cập nhật link giỏ hàng có số đếm
                     cartLink.innerHTML = `🛒 Giỏ (<span id="cartCount">0</span>)`;
                 }
             } else {
-                // Chưa đăng nhập: Ẩn khối user, hiện nút Đăng nhập/Đăng ký
-                if(loggedInState) loggedInState.classList.add("d-none");  // ẨN KHỐI LOGGED IN
-                if(loggedOutState) loggedOutState.classList.remove("d-none"); // HIỆN KHỐI LOGGED OUT
+                if(loggedInState) loggedInState.classList.add("d-none");  
+                if(loggedOutState) loggedOutState.classList.remove("d-none"); 
                 
                 if(cartLink) {
-                    // Cập nhật link giỏ hàng không số đếm
                     cartLink.innerHTML = `🛒 Giỏ`;
                 }
             }
+            
+            // --- Code Chatbot (Giữ nguyên) ---
             const CHAT_API_URL = 'https://localhost:7132/api/Chat/Send';
             const chatToggleButton = document.getElementById("chat-toggle-button");
             const chatWindow = document.getElementById("chat-window");
@@ -477,94 +493,73 @@
             const chatSendButton = document.getElementById("chat-send-button");
             if (chatToggleButton && chatWindow && chatCloseButton) {
                 
-                // 1. Mở/Đóng khi bấm nút chat 💬
                 chatToggleButton.addEventListener("click", function() {
                     chatWindow.classList.toggle("show");
                 });
 
-                // 2. Đóng khi bấm nút X
                 chatCloseButton.addEventListener("click", function() {
                     chatWindow.classList.remove("show");
                 });
             }
             async function handleChatSend() {
-            const message = chatInput.value.trim();
-            if (message === '') return; // Không gửi tin nhắn rỗng
-
-            // 1. Hiển thị ngay tin nhắn của người dùng
-            addMessageToChat(message, 'user');
-
-            // 2. Xóa nội dung input
-            chatInput.value = '';
-            chatSendButton.disabled = true; // Vô hiệu hóa nút Gửi
-
-            // 3. Chuẩn bị dữ liệu gửi API
-            const postData = {
-                context: message
-            };
-
-            try {
-                // 4. Gọi API
-                const response = await fetch(CHAT_API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'accept': 'text/plain',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(postData)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
+                const message = chatInput.value.trim();
+                if (message === '') return; 
+                addMessageToChat(message, 'user');
+                chatInput.value = '';
+                chatSendButton.disabled = true; 
+                const postData = {
+                    context: message
+                };
+                try {
+                    const response = await fetch(CHAT_API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'accept': 'text/plain',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(postData)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    if (result && result.responseContext) {
+                        addMessageToChat(result.responseContext, 'bot');
+                    } else {
+                        addMessageToChat("Lỗi: Không nhận được phản hồi hợp lệ.", 'bot');
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi gọi API Chat:', error);
+                    addMessageToChat("Xin lỗi, đã có lỗi kết nối. Vui lòng thử lại.", 'bot');
+                } finally {
+                    chatSendButton.disabled = false;
                 }
-
-                // 5. Lấy kết quả JSON
-                const result = await response.json();
-
-                // 6. Hiển thị phản hồi của Bot
-                if (result && result.responseContext) {
-                    addMessageToChat(result.responseContext, 'bot');
-                } else {
-                    addMessageToChat("Lỗi: Không nhận được phản hồi hợp lệ.", 'bot');
-                }
-
-            } catch (error) {
-                console.error('Lỗi khi gọi API Chat:', error);
-                addMessageToChat("Xin lỗi, đã có lỗi kết nối. Vui lòng thử lại.", 'bot');
-            } finally {
-                // 7. Kích hoạt lại nút Gửi
-                chatSendButton.disabled = false;
             }
-        }
+            if (chatSendButton && chatInput && chatBody) {
+                
+                chatSendButton.addEventListener('click', handleChatSend);
 
-        // 8. Gắn sự kiện cho nút Gửi và phím Enter
-        if (chatSendButton && chatInput && chatBody) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault(); 
+                        handleChatSend();
+                    }
+                });
+            }
+            function addMessageToChat(message, type = 'bot') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message-${type}`; 
+                messageDiv.innerText = message; 
+                chatBody.appendChild(messageDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+            // --- Kết thúc Chatbot ---
+
             
-            // Bấm nút Gửi
-            chatSendButton.addEventListener('click', handleChatSend);
-
-            // Bấm phím Enter
-            chatInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault(); // Ngăn xuống dòng (nếu là textarea)
-                    handleChatSend();
-                }
-            });
-        }
-        function addMessageToChat(message, type = 'bot') {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message-${type}`; // 'chat-message-user' hoặc 'chat-message-bot'
-
-            // Dùng innerText để giữ lại định dạng xuống dòng (\n)
-            messageDiv.innerText = message; 
-
-            chatBody.appendChild(messageDiv);
-
-            // Tự động cuộn xuống tin nhắn mới nhất
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-            // 🎯 Gọi hàm tải số lượng giỏ hàng
-            window.loadCartCount(username); 
+            // 🎯 Gọi hàm tải số lượng giỏ hàng (chỉ gọi khi đã đăng nhập)
+            if (username) {
+                window.loadCartCount(username); 
+            }
 
             // --- Xử lý nút Đăng xuất ---
             const logoutButton = document.getElementById("logout-button");
@@ -583,24 +578,24 @@
     
     @await RenderSectionAsync("Scripts", required: false)
         <button id="chat-toggle-button" class="chat-toggle-button">
-                💬
-            </button>
+            💬
+        </button>
 
-            <div id="chat-window" class="chat-window-container">
-                <div class="chat-header">
-                    <h5>Hỗ trợ trực tuyến</h5>
-                    <button id="chat-close-button" class="chat-close-btn">&times;</button>
-                </div>
-                
-                <div id="chat-body" class="chat-body">
-                    <div class="chat-message-bot">Chào bạn!! Chúng tôi là đội ngũ phát triển phần mềm này chúng tôi có thể giúp bạn tất cả mọi thứ bạn có thể hỏi ngay bây giờ!</div>
-                </div>
-                
-                <div class="chat-footer">
-                    <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." />
-                    <button id="chat-send-button">Gửi</button>
-                </div>
+        <div id="chat-window" class="chat-window-container">
+            <div class="chat-header">
+                <h5>Hỗ trợ trực tuyến</h5>
+                <button id="chat-close-button" class="chat-close-btn">&times;</button>
             </div>
+            
+            <div id="chat-body" class="chat-body">
+                <div class="chat-message-bot">Chào bạn!! Chúng tôi là đội ngũ phát triển phần mềm này chúng tôi có thể giúp bạn tất cả mọi thứ bạn có thể hỏi ngay bây giờ!</div>
+            </div>
+            
+            <div class="chat-footer">
+                <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." />
+                <button id="chat-send-button">Gửi</button>
+            </div>
+        </div>
     </body>
 
 </html>
