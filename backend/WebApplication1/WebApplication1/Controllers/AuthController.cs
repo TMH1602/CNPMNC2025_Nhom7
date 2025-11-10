@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using BCrypt.Net; 
 using Microsoft.AspNetCore.Authorization; 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Caching.Memory;
 namespace MyWebApiWithSwagger.Controllers
 {
 
@@ -19,15 +20,17 @@ namespace MyWebApiWithSwagger.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
-        // Dependency Injection cho DbContext
-        public AuthController(ApplicationDbContext context, IConfiguration config)
+        private readonly IMemoryCache _cache;
+        public AuthController(ApplicationDbContext context,
+                            IConfiguration config,
+                            IMemoryCache cache) 
         {
             _context = context;
             _config = config;
+            _cache = cache; 
         }
 
 
-        // === Khu vực Models (Giữ nguyên) ===
         #region Models (Đăng nhập)
         public class ChangeMyPasswordRequest
         {
@@ -38,8 +41,6 @@ namespace MyWebApiWithSwagger.Controllers
             [MinLength(6, ErrorMessage = "Mật khẩu mới phải có ít nhất 6 ký tự.")]
             public string NewPassword { get; set; } = string.Empty;
         }
-
-        // Model bảo mật (dùng cho hàm [Authorize])
         public class DeleteMyAccountRequest
         {
             [Required(ErrorMessage = "Mật khẩu xác nhận là bắt buộc.")]
@@ -123,32 +124,45 @@ namespace MyWebApiWithSwagger.Controllers
             public string DisplayName { get; set; } = string.Empty;
             public DateTime CreatedDate { get; set; }
         }
+        private class LoginAttempt
+        {
+            public int FailedCount { get; set; } = 0;
+            public DateTime? LockoutExpiry { get; set; } = null;
+        }
         #endregion
-        // === Kết thúc khu vực Models ===
-
-
-        // ------------------------------------------------------------------
-        // ENDPOINT: ĐĂNG NHẬP (LOGIN)
-        // ------------------------------------------------------------------
         [HttpPost("login")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-
+            var cacheKey = $"login_fail_{request.Username.ToLower()}";
+            var attempt = await _cache.GetOrCreateAsync(cacheKey, entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+                return Task.FromResult(new LoginAttempt());
+            });
+            if (attempt.LockoutExpiry.HasValue && attempt.LockoutExpiry > DateTime.UtcNow)
+            {
+                var timeLeft = Math.Round((attempt.LockoutExpiry.Value - DateTime.UtcNow).TotalMinutes);
+                return Unauthorized(new LoginResponse
+                {
+                    IsSuccess = false,
+                    Message = $"Tài khoản đang bị khóa. Vui lòng thử lại sau {timeLeft} phút."
+                });
+            }
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username.ToLower() == request.Username.ToLower());
-
-            if (user == null)
+            bool isPasswordValid = false;
+            if (user != null)
             {
-                return Unauthorized(new LoginResponse { IsSuccess = false, Message = "Tên người dùng hoặc mật khẩu không đúng. ❌" });
+                isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
             }
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
-
-            if (isPasswordValid)
+            if (user != null && isPasswordValid)
             {
-                var expiryTime = DateTime.UtcNow.AddHours(2);
+                _cache.Remove(cacheKey);
+
+                var expiryTime = DateTime.UtcNow.AddMilliseconds(3);
                 var tokenString = GenerateJwtToken(user, expiryTime);
 
                 var successResponse = new LoginResponse
@@ -162,14 +176,26 @@ namespace MyWebApiWithSwagger.Controllers
             }
             else
             {
-                return Unauthorized(new LoginResponse { IsSuccess = false, Message = "Tên người dùng hoặc mật khẩu không đúng. ❌" });
+                attempt.FailedCount++;
+
+                string message;
+
+                if (attempt.FailedCount >= 3)
+                {
+
+                    attempt.LockoutExpiry = DateTime.UtcNow.AddMinutes(30);
+                    attempt.FailedCount = 0; 
+                    message = "Đăng nhập sai 3 lần. Tài khoản của bạn đã bị khóa trong 30 phút";
+                }
+                else
+                {
+                    message = $"Tên người dùng hoặc mật khẩu không đúng. (Lần {attempt.FailedCount}/3).";
+                }
+                _cache.Set(cacheKey, attempt, TimeSpan.FromMinutes(30));
+
+                return Unauthorized(new LoginResponse { IsSuccess = false, Message = message });
             }
         }
-
-
-        // ------------------------------------------------------------------
-        // ENDPOINT: ĐĂNG KÝ (REGISTER) - THÊM MỚI ĐỂ DỄ DÙNG
-        // ------------------------------------------------------------------
         [HttpPost("register")]
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -177,7 +203,6 @@ namespace MyWebApiWithSwagger.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // 1. Kiểm tra tồn tại
             if (await _context.Users.AnyAsync(u => u.Username.ToLower() == request.Username.ToLower()))
             {
                 return BadRequest(new { IsSuccess = false, Message = "Tên người dùng đã tồn tại." });
@@ -187,7 +212,6 @@ namespace MyWebApiWithSwagger.Controllers
                 return BadRequest(new { IsSuccess = false, Message = "Email đã tồn tại." });
             }
 
-            // 2. SỬA LỖI BẢO MẬT: Dùng BCrypt.HashPassword
             var newUser = new User
             {
                 Username = request.Username,
@@ -208,22 +232,16 @@ namespace MyWebApiWithSwagger.Controllers
                 DisplayName = newUser.DisplayName,
                 CreatedDate = newUser.CreatedDate
             };
-
-            // Trả về 201 Created với thông tin tài khoản mới (không trả về hàm GetMyAccount vì nó cần token)
             return StatusCode(201, response);
         }
 
-        // ------------------------------------------------------------------
-        // ENDPOINT: ĐĂNG KÝ NHÀ HÀNG (REGISTERRES)
-        // ------------------------------------------------------------------
-        [HttpPost("registerRes")]
+        [HttpPost("registerAdmin")]
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RegisterRes([FromBody] RegisterRQ request)
+        public async Task<IActionResult> Registerad([FromBody] RegisterRQ request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // 1. Kiểm tra tồn tại
             if (await _context.Users.AnyAsync(u => u.Username.ToLower() == request.Username.ToLower()))
             {
                 return BadRequest(new { IsSuccess = false, Message = "Tên người dùng đã tồn tại." });
@@ -233,7 +251,43 @@ namespace MyWebApiWithSwagger.Controllers
                 return BadRequest(new { IsSuccess = false, Message = "Email đã tồn tại." });
             }
 
-            // 2. SỬA LỖI BẢO MẬT: Dùng BCrypt.HashPassword
+            var newUser = new User
+            {
+                Username = request.Username,
+                Email = request.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password), // Băm mật khẩu
+                Address = request.Address,
+                DisplayName = "Admin",
+                CreatedDate = DateTime.UtcNow
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            var response = new UserAccountResponse
+            {
+                UserId = newUser.Id,
+                Email = newUser.Email,
+                DisplayName = newUser.DisplayName,
+                CreatedDate = newUser.CreatedDate
+            };
+            return StatusCode(201, response);
+        }
+        [HttpPost("registerRes")]
+        [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RegisterRes([FromBody] RegisterRQ request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == request.Username.ToLower()))
+            {
+                return BadRequest(new { IsSuccess = false, Message = "Tên người dùng đã tồn tại." });
+            }
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == request.Email.ToLower()))
+            {
+                return BadRequest(new { IsSuccess = false, Message = "Email đã tồn tại." });
+            }
             var newUser = new User
             {
                 Username = request.Username,
@@ -258,11 +312,7 @@ namespace MyWebApiWithSwagger.Controllers
             return StatusCode(201, response);
         }
 
-
-        // ------------------------------------------------------------------
-        // ENDPOINT: ĐỔI MẬT KHẨU
-        // ------------------------------------------------------------------
-        [HttpPost("change-password")] // Route: /api/Auth/change-password
+        [HttpPost("change-password")]
         [Authorize]
         [ProducesResponseType(typeof(ChangePasswordResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -277,14 +327,12 @@ namespace MyWebApiWithSwagger.Controllers
             var user = await _context.Users.FindAsync(int.Parse(userIdString));
             if (user == null) return NotFound(new ChangePasswordResponse { IsSuccess = false, Message = "Không tìm thấy tài khoản. ❌" });
 
-            // Xác thực mật khẩu cũ
             bool isOldPasswordValid = BCrypt.Net.BCrypt.Verify(request.OldPassword, user.PasswordHash);
             if (!isOldPasswordValid)
             {
                 return BadRequest(new ChangePasswordResponse { IsSuccess = false, Message = "Mật khẩu cũ không chính xác. ❌" });
             }
 
-            // Băm và cập nhật mật khẩu mới
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
@@ -292,17 +340,12 @@ namespace MyWebApiWithSwagger.Controllers
             return Ok(new ChangePasswordResponse { IsSuccess = true, Message = "Mật khẩu đã được đổi thành công. ✅" });
         }
 
-
-        // ------------------------------------------------------------------
-        // ENDPOINT: XEM TÀI KHOẢN
-        // ------------------------------------------------------------------
-        [HttpGet("account/{identifier}")] // Route: /api/Auth/account/{identifier}
+        [HttpGet("account/{identifier}")] 
         [Authorize]
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserAccount(string identifier)
         {
-            // 1. Tìm kiếm tài khoản theo Username hoặc Email
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username.ToLower() == identifier.ToLower() ||
                                           u.Email.ToLower() == identifier.ToLower());
@@ -312,7 +355,6 @@ namespace MyWebApiWithSwagger.Controllers
                 return NotFound($"Không tìm thấy tài khoản với Email/Username: {identifier}. ❌");
             }
 
-            // 2. Trả về thông tin hiển thị
             var accountInfo = new UserAccountResponse
             {
                 UserId = user.Id,
@@ -320,12 +362,9 @@ namespace MyWebApiWithSwagger.Controllers
                 DisplayName = user.DisplayName,
                 CreatedDate = user.CreatedDate
             };
-            return Ok(accountInfo); // HTTP 200 OK
+            return Ok(accountInfo); 
         }
 
-        // ------------------------------------------------------------------
-        // ENDPOINT: XÓA TÀI KHOẢN
-        // ------------------------------------------------------------------
         [HttpDelete("delete-my-account")]
         [Authorize]
         [ProducesResponseType(typeof(DeleteAccountResponse), StatusCodes.Status200OK)]
@@ -341,14 +380,12 @@ namespace MyWebApiWithSwagger.Controllers
             var user = await _context.Users.FindAsync(int.Parse(userIdString));
             if (user == null) return NotFound(new DeleteAccountResponse { IsSuccess = false, Message = "Không tìm thấy tài khoản. ❌" });
 
-            // Xác minh mật khẩu
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash);
             if (!isPasswordValid)
             {
                 return BadRequest(new DeleteAccountResponse { IsSuccess = false, Message = "Mật khẩu xác nhận không chính xác. 🔒" });
             }
 
-            // Xóa tài khoản
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
@@ -358,7 +395,7 @@ namespace MyWebApiWithSwagger.Controllers
         private string GenerateJwtToken(User user, DateTime expiryTime)
         {
             var securityKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["Jwt:Key"]) // Đọc từ config
+                Encoding.UTF8.GetBytes(_config["Jwt:Key"]) 
             );
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -367,7 +404,7 @@ namespace MyWebApiWithSwagger.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("userId", user.Id.ToString()), // Claim tùy chỉnh quan trọng
+                new Claim("userId", user.Id.ToString()), 
                 new Claim("displayName", user.DisplayName),
                 new Claim(ClaimTypes.Role, user.DisplayName)
             };

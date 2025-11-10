@@ -179,37 +179,6 @@ namespace WebApplication1.Data
                     };
                     context.Products.AddRange(products);
                 }
-
-                // 2. SEED DỮ LIỆU TÀI KHOẢN (USERS)
-                // (Giữ nguyên phần này)
-                if (!context.Users.Any())
-                {
-                    var users = new User[]
-                    {
-                        new User
-                        {
-                            Username = "admin@example.com",
-                            Email = "admin@example.com",
-                            // LƯU Ý: Trong ứng dụng thực tế, hãy HASH mật khẩu trước khi lưu.
-                            PasswordHash = "LamDinh1702",
-                            Address = "828 Sư Vạn Hạnh Quận 10 thành phố Hồ Chí Minh",
-                            DisplayName = "Quản Trị Viên",
-                            CreatedDate = DateTime.UtcNow
-                        },
-                        new User
-                        {
-                            Username = "user@example.com",
-                            Email = "user@example.com",
-                            PasswordHash = "LamDinh1702",
-                            Address = "828 Sư Vạn Hạnh Quận 10 thành phố Hồ Chí Minh",
-                            DisplayName = "Khách Hàng Thử Nghiệm",
-                            CreatedDate = DateTime.UtcNow
-                        }
-                    };
-                    context.Users.AddRange(users);
-                }
-
-                // Lưu tất cả thay đổi vào Database
                 context.SaveChanges();
             }
         }
