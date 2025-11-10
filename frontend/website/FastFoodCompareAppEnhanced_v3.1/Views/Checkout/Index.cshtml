@@ -3,66 +3,53 @@
 }
 <style>
 .footer-wrapper-white { 
-        background-color: #dbcb9c; 
-        border-radius: 12px; 
-        padding: 15px; 
-        /* ĐÃ LOẠI BỎ bottom: 0; */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
-        text-align: left;
-        width: 100%; 
-        bottom:0;
-        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
-        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
-        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
-        position: fixed; 
-        z-index: 0; 
-
-        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
-        margin-top: 30px; 
-    }
-    /* CSS cho Tiêu đề Thanh toán */
-    .checkout-header-wrapper {
-        background-color: rgb(245, 156, 156); /* Nền trắng */
-        padding: 15px 20px; /* Padding */
-        border-radius: 8px; /* Bo góc */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ */
-        margin-bottom: 20px; /* Khoảng cách với nội dung bên dưới */
-        display: flex; 
-        align-items: center;
-        justify-content: flex-start;
-    }
-    /* Đảm bảo h2 bên trong không có margin dưới */
-    .checkout-header-wrapper h2 {
-        margin-bottom: 0 !important; 
-    }
-    .checkout-content-wrapper {
-    /* 🎯 THAY ĐỔI TẠI ĐÂY: Dùng rgba() với kênh alpha 0.6 */
+    background-color: #dbcb9c; 
+    border-radius: 12px; 
+    padding: 15px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+    text-align: left;
+    width: 100%; 
+    bottom:0;
+    position: fixed; 
+    z-index: 0; 
+    margin-top: 30px; 
+}
+.checkout-header-wrapper {
+    background-color: rgb(245, 156, 156); 
+    padding: 15px 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    margin-bottom: 20px; 
+    display: flex; 
+    align-items: center;
+    justify-content: flex-start;
+}
+.checkout-header-wrapper h2 {
+    margin-bottom: 0 !important; 
+}
+.checkout-content-wrapper {
     background-color: rgba(212, 174, 174, 0.6); 
-
     padding: 20px; 
     border-radius: 8px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
     margin-top: 0px; 
     margin-bottom: 20px;
-    
-    /* ❌ LOẠI BỎ thuộc tính opacity: 0.6; */
 }
-    .btn-warning-custom {
-        /* Nút chính (Review) - Dùng màu vàng sáng và chữ đen */
-        color: #000 !important; /* Chữ đen */
-        background-color: #ffc107 !important; /* Màu vàng (Bootstrap Warning) */
-        border-color: #020202 !important; /* Viền màu đen */
-        opacity: 0.9;
-        font-weight: bold;
-        transition: opacity 0.2s, background-color 0.2s;
-    }
-    .btn-warning-custom:hover {
-        opacity: 1;
-        background-color: #ffcd39 !important; /* Vàng nhạt hơn khi hover */
-    }
-    #review-panel {
-        margin-bottom: 200px;
-    }
+.btn-warning-custom {
+    color: #000 !important; 
+    background-color: #ffc107 !important; 
+    border-color: #020202 !important; 
+    opacity: 0.9;
+    font-weight: bold;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+.btn-warning-custom:hover {
+    opacity: 1;
+    background-color: #ffcd39 !important; 
+}
+#review-panel {
+    margin-bottom: 200px;
+}
 </style>
 <div class="checkout-header-wrapper">
     <h2 class="mb-0">Thông tin thanh toán</h2> 
@@ -124,25 +111,39 @@
         const editButton = document.getElementById('edit-info-btn');
         
         const username = localStorage.getItem('username');
+        
+        // *** SỬA 1: LẤY TOKEN ***
+        const token = localStorage.getItem('jwtToken'); 
+        
         const LOGIN_URL = '@Url.Action("Login", "Account")';
 
-        // Định nghĩa các API URL
-        const USER_API_URL = `https://localhost:7132/api/Auth/account/${username}`;
-        const CART_API_URL = `https://localhost:7132/api/Cart/${username}`;
-        const CHECKOUT_API_URL = `https://localhost:7132/api/Cart/checkout?username=${username}`;
-        const VNPAY_API_BASE_URL = 'https://localhost:7132/api/VnPay/CreatePayment';
-
-
-        let currentCartData = null; // Lưu trữ dữ liệu giỏ hàng từ API
-
-        // =========================================================
-        // KIỂM TRA ĐĂNG NHẬP
-        // =========================================================
-        if (!username) {
+        // *** SỬA 2: KIỂM TRA CẢ USERNAME VÀ TOKEN ***
+        if (!username || !token) { 
             messagePanel.innerHTML = '<div class="alert alert-warning">Bạn cần <a href="' + LOGIN_URL + '">đăng nhập</a> để thanh toán.</div>';
             reviewButton.disabled = true;
             return;
         }
+        
+        // *** SỬA 3: MÃ HÓA USERNAME ĐỂ DÙNG TRONG URL ***
+        const encodedUsername = encodeURIComponent(username);
+
+        const USER_API_URL = `https://localhost:7132/api/Auth/account/${encodedUsername}`;
+        const CART_API_URL = `https://localhost:7132/api/Cart/${encodedUsername}`;
+        const CHECKOUT_API_URL = `https://localhost:7132/api/Cart/checkout?username=${encodedUsername}`;
+        const VNPAY_API_BASE_URL = 'https://localhost:7132/api/VnPay/CreatePayment';
+
+        // *** SỬA 4: TẠO HEADER CHUNG ĐỂ GỬI TOKEN ***
+        const authHeader = {
+            "accept": "application/json", // Hầu hết API trả về JSON
+            "Authorization": `Bearer ${token}`
+        };
+        const authHeaderPost = {
+            "accept": "*/*", // API POST (checkout, vnpay) có thể accept */*
+            "Authorization": `Bearer ${token}`
+        };
+
+
+        let currentCartData = null; 
 
         // =========================================================
         // TẢI THÔNG TIN NGƯỜI DÙNG (BÊN TRÁI)
@@ -151,21 +152,24 @@
             try {
                 const response = await fetch(USER_API_URL, {
                     method: "GET",
-                    headers: { "accept": "text/plain" }
+                    // *** SỬA 5: GỬI HEADER CÓ TOKEN ***
+                    headers: authHeader 
                 });
 
                 if (!response.ok) {
+                    if (response.status === 401) {
+                         throw new Error(`Lỗi 401: Không thể tải thông tin người dùng. (Token không hợp lệ)`);
+                    }
                     throw new Error(`Lỗi ${response.status}: Không thể tải thông tin người dùng.`);
                 }
                 
                 const data = await response.json();
                 
-                // Điền dữ liệu vào form (Chỉ điền Họ tên nếu có)
                 document.getElementById('fullName').value = data.displayName || username;
 
             } catch (error) {
                 console.error("Lỗi tải thông tin user:", error);
-                messagePanel.innerHTML = `<div class="alert alert-warning">Không thể tải thông tin cá nhân.</div>`;
+                messagePanel.innerHTML = `<div class="alert alert-warning">${error.message}</div>`;
             }
         }
         
@@ -179,10 +183,14 @@
             try {
                 const response = await fetch(CART_API_URL, {
                     method: 'GET',
-                    headers: { 'accept': 'text/plain' }
+                    // *** SỬA 6: GỬI HEADER CÓ TOKEN ***
+                    headers: authHeader 
                 });
 
                 if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error(`Lỗi 401: Không thể tải giỏ hàng. (Token không hợp lệ)`);
+                    }
                     throw new Error(`Lỗi ${response.status}: Không thể tải giỏ hàng.`);
                 }
 
@@ -217,11 +225,11 @@
                 </ul>`;
 
                 orderSummaryContainer.innerHTML = summaryHtml;
-                reviewButton.disabled = false; // Kích hoạt nút Review
+                reviewButton.disabled = false; 
                 
             } catch (error) {
                 console.error("Lỗi tải giỏ hàng:", error);
-                orderSummaryContainer.innerHTML = `<p class="text-danger">Lỗi: Không thể tải giỏ hàng (${error.message}).</p>`;
+                orderSummaryContainer.innerHTML = `<p class="text-danger">${error.message}</p>`;
             }
         }
         
@@ -229,6 +237,7 @@
         // HÀM XỬ LÝ CHUYỂN BƯỚC (REVIEW)
         // =========================================================
         function handleReview() {
+            // ... (Hàm này giữ nguyên, không thay đổi logic) ...
             messagePanel.innerHTML = '';
             
             if (!checkoutForm.checkValidity()) {
@@ -246,7 +255,6 @@
             const address = document.getElementById('address').value;
             const phone = document.getElementById('phone').value;
 
-            // Hiển thị thông tin review
             reviewShippingInfo.innerHTML = `
                 <p><strong>Họ và tên:</strong> ${fullName}</p>
                 <p><strong>Địa chỉ:</strong> ${address}</p>
@@ -254,7 +262,6 @@
                 <p class="small text-danger">Bấm "HOÀN TẤT ĐẶT HÀNG" để thanh toán.</p>
             `;
 
-            // Chuyển đổi panel
             shippingInputPanel.classList.add('d-none');
             reviewPanel.classList.remove('d-none');
         }
@@ -274,7 +281,8 @@
             try {
                 const response1 = await fetch(CHECKOUT_API_URL, {
                     method: 'POST',
-                    headers: { 'accept': '*/*' },
+                    // *** SỬA 7: GỬI HEADER CÓ TOKEN ***
+                    headers: authHeaderPost, 
                     body: ''
                 });
                 
@@ -297,7 +305,8 @@
                 
                 const response2 = await fetch(vnpayUrl, {
                     method: 'GET',
-                    headers: { 'accept': '*/*' }
+                    // *** SỬA 8: GỬI HEADER CÓ TOKEN *** (API VnPay của bạn cũng cần nó)
+                    headers: authHeaderPost 
                 });
 
                 if (!response2.ok) {
@@ -315,10 +324,8 @@
                 // --- BƯỚC 3: CHUYỂN HƯỚNG TỚI CỔNG THANH TOÁN ---
                 alert(`Đơn hàng #${orderId} đã được tạo. Chuyển hướng đến cổng thanh toán VnPay.`);
                 
-                // Xóa giỏ hàng client-side chỉ sau khi đã có URL thanh toán hợp lệ
                 localStorage.removeItem('frontend_cart');
                 
-                // 🎯 Tự động chuyển hướng đến cổng thanh toán
                 window.location.href = paymentUrl; 
 
             } catch (error) {
@@ -330,7 +337,6 @@
                 }
 
             } finally {
-                // Đảm bảo nút được kích hoạt lại nếu luồng không chuyển hướng
                 submitButton.disabled = false;
                 submitButton.textContent = 'HOÀN TẤT ĐẶT HÀNG';
             }
@@ -340,20 +346,15 @@
         // GẮN SỰ KIỆN & KHỞI TẠO
         // =========================================================
         
-        // 1. Nút Review
         reviewButton.addEventListener('click', handleReview);
-
-        // 2. Nút Hoàn tất đặt hàng (Gọi API)
         confirmButton.addEventListener('click', processCheckout);
         
-        // 3. Nút Chỉnh sửa thông tin
         editButton.addEventListener('click', () => {
             shippingInputPanel.classList.remove('d-none');
             reviewPanel.classList.add('d-none');
             window.scrollTo(0, 0); 
         });
 
-        // 4. Xử lý khi người dùng nhấn ENTER
         checkoutForm.addEventListener('submit', function(event) {
             event.preventDefault(); 
             handleReview(); 

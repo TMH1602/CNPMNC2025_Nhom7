@@ -31,65 +31,120 @@
 
 @section Scripts {
 <script>
-    // Bắt sự kiện khi form được submit
+    /**
+     * Hàm helper để "ĐỌC" token (Giải mã JWT Payload)
+     */
+    function parseJwt(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            console.error("Lỗi khi giải mã token:", e);
+            return null;
+        }
+    }
+
+
     document.getElementById("login-form").addEventListener("submit", async function (event) {
         
-        // 1. Ngăn form submit theo cách truyền thống (tải lại trang)
         event.preventDefault();
 
         const form = event.target;
         const messagePanel = document.getElementById("message-panel");
-        messagePanel.innerHTML = ""; // Xóa thông báo lỗi cũ
+        messagePanel.innerHTML = ""; 
 
-        // 2. Lấy dữ liệu từ các ô input
         const username = form.elements.username.value;
         const password = form.elements.password.value;
 
-        // 3. Tạo đối tượng JSON để gửi đi (khớp với cURL)
         const data = {
             username: username,
             password: password
         };
 
         try {
-            // 4. Gửi yêu cầu fetch đến API
             const response = await fetch("https://localhost:7132/api/Auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "accept": "text/plain"
+                    "accept": "application/json" // API login trả về JSON (LoginResponse)
                 },
                 body: JSON.stringify(data)
             });
 
-            // Lấy nội dung phản hồi (token hoặc thông báo lỗi)
-            const responseText = await response.text();
 
             if (response.ok) {
                 // 5. XỬ LÝ KHI THÀNH CÔNG
+                const responseData = await response.json(); 
                 
-                // Lưu token (từ responseText) vào localStorage
-                localStorage.setItem("jwtToken", responseText);
-
-                // Quan trọng: Lưu username vào localStorage
-                // file _Layout.cshtml của bạn sẽ đọc key này
+                // LƯU TOKEN VÀO LOCALSTORAGE
+                // Quan trọng: Chỉ lưu chuỗi token, không lưu cả đối tượng
+                localStorage.setItem("jwtToken", responseData.token);
                 localStorage.setItem("username", username);
 
-                // Hiển thị thông báo và chuyển hướng
+                // *** SỬA ĐỔI QUAN TRỌNG: LOGIC PHÂN QUYỀN ***
+                
+                let userRole = "";
+                let redirectUrl = "";
+                
+                try {
+                    // 1. Đọc token
+                    const decodedToken = parseJwt(responseData.token);
+                    
+                    // 2. Lấy Role từ token
+                    // Tên claim "role" phải khớp với tên bạn tạo trong AuthController.cs
+                    // (Ví dụ: new Claim(ClaimTypes.Role, user.DisplayName))
+                    userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+                    console.log("Đã giải mã vai trò:", userRole);
+
+                } catch (e) {
+                    console.error("Không thể giải mã token hoặc đọc vai trò:", e);
+                    messagePanel.innerHTML = `<div class="alert alert-danger">Lỗi đọc thông tin token.</div>`;
+                    return;
+                }
+
+                // 3. Quyết định chuyển hướng (Redirect)
+                switch (userRole) {
+                    case "Admin":
+                        redirectUrl = "@Url.Page("/Products/Index", new { area = "Admin" })";
+                        break;
+                    case "Nhà hàng":
+                        redirectUrl = "@Url.Page("/Restaurant/Kitchen", new { area = "Restaurant" })";
+                        break;
+                    case "Khách Hàng":
+                        redirectUrl = "@Url.Action("Index", "Menu")";
+                        break;
+                    default:
+                        // Mặc định về trang Menu nếu không nhận diện được Role
+                        console.warn(`Không nhận diện được vai trò: ${userRole}. Chuyển về Menu.`);
+                        redirectUrl = "@Url.Action("Index", "Menu")";
+                }
+
                 messagePanel.innerHTML = `<div class="alert alert-success">Đăng nhập thành công! Đang chuyển hướng...</div>`;
                 
                 setTimeout(() => {
-                    window.location.href = "@Url.Action("Index", "Menu")"; // Chuyển về trang Menu
+                    // 4. Chuyển hướng đến trang đã quyết định
+                    window.location.href = redirectUrl; 
                 }, 1500);
 
             } else {
                 // 6. XỬ LÝ KHI THẤT BẠI
-                // Hiển thị lỗi mà API trả về
-                messagePanel.innerHTML = `<div class="alert alert-danger">${responseText || 'Tên đăng nhập hoặc mật khẩu không đúng.'}</div>`;
+                try {
+                    const errorData = await response.json();
+                    messagePanel.innerHTML = `<div class="alert alert-danger">${errorData.message || 'Tên đăng nhập hoặc mật khẩu không đúng.'}</div>`;
+                
+                } catch (jsonError) {
+                    const errorText = await response.text();
+                    messagePanel.innerHTML = `<div class="alert alert-danger">${errorText || 'Có lỗi xảy ra. Vui lòng thử lại.'}</div>`;
+                }
             }
 
         } catch (error) {
-            // 7. XỬ LÝ LỖI MẠNG (API không chạy, CORS, v.v.)
             console.error("Lỗi fetch:", error);
             messagePanel.innerHTML = `<div class="alert alert-danger">Không thể kết nối đến máy chủ. Vui lòng thử lại sau.</div>`;
         }

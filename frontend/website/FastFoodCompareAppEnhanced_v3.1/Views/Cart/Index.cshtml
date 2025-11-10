@@ -2,66 +2,58 @@
     ViewData["Title"] = "Giỏ hàng của bạn";
 }
 <style>
+    /* ... (Toàn bộ CSS của bạn ở đây - không thay đổi) ... */
     .footer-wrapper-white { 
         background-color: #dbcb9c; 
         border-radius: 12px; 
         padding: 15px; 
-        /* ĐÃ LOẠI BỎ bottom: 0; */
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
         text-align: left;
         width: 100%; 
         bottom:0;
-        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
-        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
-        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
         position: static; 
         z-index: 0; 
-
-        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
         margin-top: 30px; 
     }
-    /* Thêm đoạn CSS này vào thẻ <style> của bạn */
     .cart-table-centered th, 
     .cart-table-centered td {
         text-align: center;
     }
-    /* Riêng cột sản phẩm (ảnh) thường không muốn căn giữa hoàn toàn */
     .cart-table-centered td:first-child { 
         text-align: center; 
     }
-    /* CSS TÙY CHỈNH CHO NÚT THANH TOÁN */
     .btn-checkout-custom {
-        color: #000 !important; /* Chữ đen */
-        background-color: #ffc107; /* Màu vàng (Bootstrap Warning) */
-        border-color: #020202; /* Viền cùng màu */
+        color: #000 !important; 
+        background-color: #ffc107; 
+        border-color: #020202; 
         opacity: 0.9;
-        font-weight: bold; /* Thêm độ đậm để dễ nhìn hơn */
-        transition: opacity 0.2s; /* Thêm hiệu ứng hover */
+        font-weight: bold; 
+        transition: opacity 0.2s; 
     }
     .btn-checkout-custom:hover {
         opacity: 1;
-        background-color: #ffcd39; /* Vàng nhạt hơn khi hover */
+        background-color: #ffcd39; 
     }
     #cart-container {
-        background-color: white; /* Đặt nền trắng */
-        padding: 20px; /* Thêm padding cho đẹp */
-        border-radius: 8px; /* Bo góc nhẹ */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Thêm bóng đổ nhẹ */
+        background-color: white; 
+        padding: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
         margin-bottom: 200px;
     }
     .cart-header-wrapper {
-        background-color: rgb(237, 235, 112); /* Nền trắng */
-        padding: 15px 20px; /* Padding trên dưới 15px, trái phải 20px */
-        border-radius: 8px; /* Bo góc nhẹ, cùng với cart-container */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ, cùng với cart-container */
-        margin-bottom: 20px; /* Khoảng cách với phần nội dung giỏ hàng bên dưới */
-        /* Đảm bảo tiêu đề nằm giữa div nếu cần */
+        background-color: rgb(237, 235, 112); 
+        padding: 15px 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+        margin-bottom: 20px; 
         display: flex; 
         align-items: center;
-        justify-content: center; /* Để tiêu đề ở bên trái */
+        justify-content: center; 
 
     }
 </style>
+
 <div class="cart-header-wrapper">
     <h2 class="mb-0">🛒 Giỏ hàng của <span id="cart-username-display">bạn</span></h2>
     </div>
@@ -83,26 +75,39 @@
         const cartCountSpan = document.getElementById('cartCount'); 
         const cartUsernameDisplay = document.getElementById('cart-username-display');
         const username = localStorage.getItem('username');
-        const token = localStorage.getItem('jwtToken');
+        const token = localStorage.getItem('jwtToken'); // 1. Lấy token
         const LOGIN_URL = '@Url.Action("Login", "Account")';
         const API_BASE_URL = 'https://localhost:7132/api/Cart';
         
-        const authHeader = {
-            "accept": "application/json", 
-            "Content-Type": "application/json"
-        };
-        if (username && cartUsernameDisplay) {
-            cartUsernameDisplay.textContent = username;
-        }
-        const apiUrl = `${API_BASE_URL}/${username}`; 
-
-        if (!username) {
+        // 2. KIỂM TRA ĐĂNG NHẬP TRƯỚC
+        if (!username || !token) {
             cartContainer.innerHTML = `<div class="alert alert-danger">Bạn cần <a href="${LOGIN_URL}">đăng nhập</a> để xem giỏ hàng.</div>`;
             return;
         }
 
+        // 3. TẠO HEADER VỚI TOKEN
+        const authHeader = {
+            "accept": "application/json", 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // <-- SỬA LỖI 401
+        };
+        // Header riêng cho hàm Remove (vì nó accept: */*)
+        const authHeaderRemove = {
+             "accept": "*/*",
+             "Authorization": `Bearer ${token}` // <-- SỬA LỖI 401
+        };
+
+        if (username && cartUsernameDisplay) {
+            cartUsernameDisplay.textContent = username;
+        }
+
+        // 4. MÃ HÓA USERNAME ĐỂ TRÁNH LỖI KÝ TỰ ĐẶC BIỆT
+        const encodedUsername = encodeURIComponent(username);
+        const apiUrl = `${API_BASE_URL}/${encodedUsername}`; 
+
         // === HÀM QUẢN LÝ CACHE LOCALSTORAGE ===
         function getCartFromCache() {
+            // ... (Giữ nguyên)
             const cartJson = localStorage.getItem('frontend_cart_items'); 
             try {
                 const items = cartJson ? JSON.parse(cartJson) : [];
@@ -113,6 +118,7 @@
         }
 
         function saveCartToCache(items) {
+            // ... (Giữ nguyên)
             if (Array.isArray(items)) {
                 localStorage.setItem('frontend_cart_items', JSON.stringify(items));
             } else {
@@ -123,24 +129,24 @@
         // Hàm cập nhật icon giỏ hàng trên Navbar (gọi hàm loadCartCount từ _Layout)
         function refreshGlobalCartCount() {
             if (typeof window.loadCartCount === 'function') {
+                // Đảm bảo hàm loadCartCount cũng được sửa để gửi token
                 window.loadCartCount(username); 
             }
         }
         
         // === HÀM RENDER GIỎ HÀNG ===
         function renderCart() {
-            const items = getCartFromCache(); // Lấy mảng items từ cache
-
+            // ... (Hàm này giữ nguyên, không thay đổi) ...
+            const items = getCartFromCache();
             if (!Array.isArray(items) || items.length === 0) {
                 cartContainer.innerHTML = '<div class="alert alert-info">Giỏ hàng trống.</div>';
                 refreshGlobalCartCount();
                 return;
             }
-
             let totalAmount = 0;
             let cartHtml = `
-                <table class="table table-bordered align-middle cart-table-centered">
-                    <thead class="table-light">
+                <table class="table table-bordered align-middle cart-table-centered">
+                    <thead class="table-light">
                         <tr>
                             <th>Sản phẩm</th>
                             <th>Tên</th>
@@ -152,7 +158,6 @@
                     </thead>
                     <tbody>
             `;
-
             items.forEach(item => {
                 const itemTotal = (item.price || 0) * (item.quantity || 0);
                 totalAmount += itemTotal;
@@ -178,7 +183,6 @@
                     </tr>
                 `;
             });
-
             cartHtml += `
                     </tbody>
                     <tfoot>
@@ -196,24 +200,28 @@
             refreshGlobalCartCount(); 
         }
 
-        // === HÀM GỌI API TẢI GIỎ HÀNG (GIỮ NGUYÊN) ===
+        // === HÀM GỌI API TẢI GIỎ HÀNG ===
         async function loadCartFromServer() {
              cartContainer.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Đang tải giỏ hàng...</span></div><p class="mt-2">Đang tải giỏ hàng của bạn...</p></div>';
 
             try {
                 const response = await fetch(apiUrl, {
                     method: 'GET',
-                    headers: authHeader
+                    headers: authHeader // <-- Sử dụng header đã có token
                 });
 
                 if (!response.ok) {
+                    // Thêm xử lý lỗi 401
+                    if (response.status === 401) {
+                        localStorage.clear();
+                        window.location.href = LOGIN_URL;
+                        return; // Dừng hàm
+                    }
                     throw new Error(`Lỗi ${response.status}: Không thể tải giỏ hàng.`);
                 }
                 
                 const cartData = await response.json(); 
-                
                 saveCartToCache(cartData.items || []); 
-                
                 renderCart(); 
 
             } catch (error) {
@@ -224,17 +232,15 @@
             }
         }
 
-        // 🎯 === HÀM XÓA 1 MÓN CÓ POP-UP NHẬP SỐ LƯỢNG ===
+        // === HÀM XÓA 1 MÓN CÓ POP-UP NHẬP SỐ LƯỢNG ===
         async function removeItemWithPrompt(productId, maxQuantity) {
             
-            // 1. Hiển thị pop-up cho người dùng nhập số lượng
             const inputQuantity = prompt(`Bạn muốn xóa bao nhiêu sản phẩm (tối đa ${maxQuantity})?`, maxQuantity.toString());
             
             if (inputQuantity === null) {
                 return; // Người dùng nhấn Cancel
             }
 
-            // 2. Kiểm tra và chuyển đổi giá trị nhập vào
             let quantityToRemove = parseInt(inputQuantity);
 
             if (isNaN(quantityToRemove) || quantityToRemove <= 0) {
@@ -244,27 +250,31 @@
 
             if (quantityToRemove > maxQuantity) {
                 alert(`Bạn chỉ có thể xóa tối đa ${maxQuantity} sản phẩm.`);
-                quantityToRemove = maxQuantity; // Đặt lại thành tối đa
+                quantityToRemove = maxQuantity; 
             }
             
-            // 3. Gọi API với số lượng đã nhập/xác nhận
-            // Xây dựng URL theo format: /api/Cart/remove?username=string&productId=1&quantity=N
-            const removeUrl = `${API_BASE_URL}/remove?username=${username}&productId=${productId}&quantity=${quantityToRemove}`;
+            // Sử dụng username đã mã hóa
+            const removeUrl = `${API_BASE_URL}/remove?username=${encodedUsername}&productId=${productId}&quantity=${quantityToRemove}`;
 
             try {
                 const response = await fetch(removeUrl, {
                     method: 'POST', 
-                    headers: { "accept": "*/*" }, 
+                    headers: authHeaderRemove, // <-- Sử dụng header đã có token
                     body: '' 
                 });
 
                 if (!response.ok) { 
+                    // Thêm xử lý lỗi 401
+                    if (response.status === 401) {
+                        localStorage.clear();
+                        window.location.href = LOGIN_URL;
+                        return;
+                    }
                     const errorText = await response.text();
                     throw new Error(`Xóa thất bại: ${errorText}`); 
                 }
                 
                 alert(`Đã xóa ${quantityToRemove} sản phẩm khỏi giỏ hàng.`);
-                // Tải lại toàn bộ giỏ hàng sau khi xóa thành công
                 await loadCartFromServer(); 
                 
             } catch (error) {
@@ -273,16 +283,22 @@
             }
         }
 
-        // === HÀM XÓA TOÀN BỘ GIỎ HÀNG (GIỮ NGUYÊN LOGIC DELETE) ===
+        // === HÀM XÓA TOÀN BỘ GIỎ HÀNG ===
         async function clearCartFromServer() {
             if(confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')) {
                 try {
                     const response = await fetch(apiUrl, { // DELETE /api/Cart/{username}
                         method: 'DELETE',
-                        headers: authHeader
+                        headers: authHeader // <-- Sử dụng header đã có token
                     });
                     
                     if (!response.ok) { 
+                        // Thêm xử lý lỗi 401
+                        if (response.status === 401) {
+                            localStorage.clear();
+                            window.location.href = LOGIN_URL;
+                            return;
+                        }
                          const errorText = await response.text();
                         throw new Error(`Xóa thất bại: ${errorText}`); 
                     }
@@ -303,14 +319,14 @@
             if (event.target && event.target.classList.contains('remove-item-btn')) {
                 const button = event.target;
                 const productId = parseInt(button.dataset.productId); 
-                const maxQuantity = parseInt(button.dataset.quantity); // Lấy số lượng hiện tại
+                const maxQuantity = parseInt(button.dataset.quantity); 
                 
                 if (!isNaN(productId) && !isNaN(maxQuantity)) {
                     await removeItemWithPrompt(productId, maxQuantity); 
                 }
             }
             
-            // Xóa hết
+            // Xóa hết (Kiểm tra xem bạn có nút 'clear-cart-btn' không, nếu không có thì thôi)
             if(event.target && event.target.id === 'clear-cart-btn') {
                 await clearCartFromServer(); 
             }

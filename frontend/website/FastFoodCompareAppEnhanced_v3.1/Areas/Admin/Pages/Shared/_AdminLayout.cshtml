@@ -27,54 +27,64 @@
             font-size: 1rem;
         }
         
-        /* CSS CHỈ DÀNH CHO ADMIN */
+        /* SỬA ĐỔI 1: THÊM ẢNH NỀN CHO BODY */
         body {
-            background-image: none !important; 
-            background-color: #f8f9fa; /* Nền xám nhạt */
-            /* 🔥 THÊM PADDING TOP CHO BODY ĐỂ TRÁNH NAVBAR */
-            padding-top: 56px; /* Giả sử navbar cao 56px */
+            background-image: url('/images/restaurant_bg.jpg?v=2'); /* Tăng version để tránh cache */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            padding-top: 56px; 
         }
         .navbar-admin {
             background-color: #495057 !important; 
             color: white !important;
-            /* Đảm bảo navbar cố định */
              position: fixed;
              top: 0;
              left: 0;
              width: 100%;
-             z-index: 1030; /* Đặt z-index cao hơn sidebar */
+             z-index: 1030; 
         }
         .sidebar {
             width: 250px;
-            min-height: 100vh; /* Chiếm hết chiều cao */
-            position: fixed; /* Cố định sidebar */
+            min-height: 100vh; 
+            position: fixed; 
             z-index: 1000;
-            top: 0; /* Đặt lại top = 0 vì body đã có padding-top */
+            top: 0; 
             left: 0;
             background-color: #343a40; 
-            padding-top: 76px; /* Đẩy nội dung sidebar xuống dưới navbar (56px + 20px) */
-            overflow-y: auto; /* Cho phép cuộn nếu menu dài */
+            padding-top: 76px; 
+            overflow-y: auto; 
         }
+        
+        /* SỬA ĐỔI QUAN TRỌNG: Đặt nền trong suốt cho content-wrapper */
         .content-wrapper {
-            /* 🔥 ĐẨY NỘI DUNG CHÍNH SANG PHẢI */
             margin-left: 250px; 
             padding: 20px;
             width: calc(100% - 250px);
-            /* Không cần padding-top ở đây vì body đã có */
+            background-color: transparent; /* <--- ĐÂY LÀ SỬA ĐỔI QUAN TRỌNG NHẤT */
+            min-height: calc(100vh - 56px);
         }
+
+        /* THÊM MỚI: Đặt nền trắng mờ cho các card (bảng) để dễ đọc chữ */
+        .content-wrapper .card {
+            background-color: rgba(255, 255, 255, 0.9); /* Màu trắng 90% độ mờ */
+            border: none; /* Bỏ border nếu muốn */
+        }
+
         .nav-link.active-admin {
             background-color: #007bff !important; 
             color: white !important;
         }
         /* CSS cho link sidebar */
          .sidebar .nav-link {
-            color: #adb5bd; /* Màu chữ nhạt hơn */
+            color: #adb5bd; 
          }
          .sidebar .nav-link:hover {
-            color: #fff; /* Sáng lên khi hover */
+            color: #fff; 
             background-color: #495057;
          }
-         .sidebar .nav-link.active-admin { /* Link đang active */
+         .sidebar .nav-link.active-admin { 
              font-weight: bold;
              color: #fff !important;
          }
@@ -101,31 +111,36 @@
                     </button>
                 </div>
             </div>
+            
         </div>
     </nav>
     
     <div class="sidebar d-flex flex-column text-white">
-         <ul class="nav nav-pills flex-column mb-auto">
-             <li class="nav-item">
-                 <a href="/Admin/Products" class="nav-link active-admin"> 
-                     <i class="bi bi-basket-fill me-2"></i> Quản lý Sản phẩm
-                 </a>
-             </li>
-             
-             @* --- ĐÃ XÓA 2 MỤC BÊN DƯỚI THEO YÊU CẦU --- *@
-             @*
-             <li>
-                 <a href="/Admin/Orders" class="nav-link"> 
-                     <i class="bi bi-receipt me-2"></i> Quản lý Đơn hàng
-                 </a>
-             </li>
-             <li>
-                 <a href="/Admin/Users" class="nav-link">
-                     <i class="bi bi-people-fill me-2"></i> Quản lý Người dùng
-                 </a>
-             </li>
-             *@
-         </ul>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/Admin/Products" class="nav-link"> > 
+                    <i class="bi bi-basket-fill me-2"></i> Quản lý Sản phẩm
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Revenue" class="nav-link"> > 
+                    <i class="bi bi-graph-up me-2"></i> Báo cáo Doanh thu
+                </a>
+            </li>
+            @* --- ĐÃ XÓA 2 MỤC BÊN DƯỚI THEO YÊU CẦU --- *@
+            @*
+            <li>     
+                <a href="/Admin/Orders" class="nav-link"> 
+                    <i class="bi bi-receipt me-2"></i> Quản lý Đơn hàng
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Users" class="nav-link">
+                    <i class="bi bi-people-fill me-2"></i> Quản lý Người dùng
+                </a>
+            </li>
+            *@
+        </ul>
     </div>
 
     <div class="content-wrapper">
@@ -168,12 +183,13 @@
                 });
             }
 
-            // Logic làm nổi bật link sidebar đang active (Tùy chọn)
+            // Logic làm nổi bật link sidebar đang active (Giữ nguyên)
             const currentPath = window.location.pathname;
             const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            
             sidebarLinks.forEach(link => {
-                // Xóa active cũ trước khi thêm mới
                 link.classList.remove('active-admin'); 
+                
                 if (link.getAttribute('href') === currentPath) {
                     link.classList.add('active-admin');
                 }

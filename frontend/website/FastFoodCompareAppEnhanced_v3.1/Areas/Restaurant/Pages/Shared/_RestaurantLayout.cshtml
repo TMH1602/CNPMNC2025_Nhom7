@@ -25,9 +25,15 @@
             font-weight: 600;
             font-size: 1rem;
         }
+
         body {
-            background-image: none !important; 
-            background-color: #f8f9fa;
+            /* Ảnh nền (đã sửa cache-busting) */
+            background-image: url('/images/restaurant_bg.jpg?v=1');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            
             padding-top: 56px; 
         }
         .navbar-admin {
@@ -50,11 +56,21 @@
             padding-top: 76px; 
             overflow-y: auto; 
         }
+
+        /* SỬA LỖI: Đổi màu nền của khu vực nội dung thành TRONG SUỐT */
         .content-wrapper {
             margin-left: 250px; 
             padding: 20px;
             width: calc(100% - 250px);
+            background-color: transparent; /* <--- SỬA Ở ĐÂY */
+            min-height: calc(100vh - 56px); 
         }
+
+        /* THÊM MỚI: Thêm nền mờ cho các card (bảng) để dễ đọc */
+        .content-wrapper .card {
+            background-color: rgba(255, 255, 255, 0.9); /* 90% mờ */
+        }
+        
         .nav-link.active-admin {
             background-color: #007bff !important; 
             color: white !important;
