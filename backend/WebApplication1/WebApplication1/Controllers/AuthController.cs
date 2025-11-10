@@ -162,7 +162,7 @@ namespace MyWebApiWithSwagger.Controllers
             {
                 _cache.Remove(cacheKey);
 
-                var expiryTime = DateTime.UtcNow.AddMinutes(30);
+                var expiryTime = DateTime.UtcNow.AddMilliseconds(3);
                 var tokenString = GenerateJwtToken(user, expiryTime);
 
                 var successResponse = new LoginResponse
@@ -235,6 +235,44 @@ namespace MyWebApiWithSwagger.Controllers
             return StatusCode(201, response);
         }
 
+        [HttpPost("registerAdmin")]
+        [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Registerad([FromBody] RegisterRQ request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == request.Username.ToLower()))
+            {
+                return BadRequest(new { IsSuccess = false, Message = "Tên người dùng đã tồn tại." });
+            }
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == request.Email.ToLower()))
+            {
+                return BadRequest(new { IsSuccess = false, Message = "Email đã tồn tại." });
+            }
+
+            var newUser = new User
+            {
+                Username = request.Username,
+                Email = request.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password), // Băm mật khẩu
+                Address = request.Address,
+                DisplayName = "Admin",
+                CreatedDate = DateTime.UtcNow
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            var response = new UserAccountResponse
+            {
+                UserId = newUser.Id,
+                Email = newUser.Email,
+                DisplayName = newUser.DisplayName,
+                CreatedDate = newUser.CreatedDate
+            };
+            return StatusCode(201, response);
+        }
         [HttpPost("registerRes")]
         [ProducesResponseType(typeof(UserAccountResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
