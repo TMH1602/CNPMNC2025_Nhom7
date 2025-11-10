@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.ViewModels;
@@ -15,6 +16,7 @@ namespace WebApplication1.Controllers
         {
             _context = context;
         }
+        [Authorize]
         [HttpGet("Restaurant/Processing")]
         public async Task<ActionResult<IEnumerable<OrderHistoryDto>>> GetProcessingOrders()
         {

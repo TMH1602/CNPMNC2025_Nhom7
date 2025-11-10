@@ -116,7 +116,10 @@
             tableBody.html('<tr><td colspan="5" class="text-center">Đang tải...</td></tr>');
             const authHeaders = { 'accept': 'text/plain', 'Authorization': `Bearer ${jwtToken}` };
 
-            fetch(GET_PROCESSING_URL, { method: 'GET', headers: authHeaders })
+            fetch(GET_PROCESSING_URL, { method: 'GET', 
+            headers: authHeaders ,
+            headers: accept: text/plain
+            })
                 .then(response => {
                     if (response.status === 401) { throw new Error('Unauthorized'); }
                     if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
