@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\backend\\webapplication1\\webapplication1\\models\\vnpaycardtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\vnpaycardtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\backend\\webapplication1\\webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -115,10 +119,6 @@
       "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\backend\\webapplication1\\webapplication1\\models\\vnpaycardtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\vnpaycardtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025\\backend\\webapplication1\\webapplication1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -197,7 +197,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "UserInputDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\UserInputDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\UserInputDto.cs",
@@ -209,7 +209,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "OpenAIChatDTOs.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OpenAIChatDTOs.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\OpenAIChatDTOs.cs",
@@ -221,7 +221,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ChatController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\ChatController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\ChatController.cs",
@@ -293,7 +293,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "ProductDeletedByAdmin.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Models\\ProductDeletedByAdmin.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\ProductDeletedByAdmin.cs",
@@ -305,19 +305,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 1,
               "Title": "VnPayCardToken.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Models\\VnPayCardToken.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\VnPayCardToken.cs",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Models\\VnPayCardToken.cs",
               "RelativeToolTip": "WebApplication1\\Models\\VnPayCardToken.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAAwAcAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T14:20:48.187Z"
+              "WhenOpened": "2025-10-25T14:20:48.187Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "VnPayController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\VnPayController.cs",
@@ -353,7 +354,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "AllCartsDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\AllCartsDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\AllCartsDto.cs",
@@ -365,7 +366,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "RestaurantController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\RestaurantController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\RestaurantController.cs",
@@ -383,14 +384,14 @@
               "RelativeDocumentMoniker": "WebApplication1\\Program.cs",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Program.cs",
               "RelativeToolTip": "WebApplication1\\Program.cs",
-              "ViewState": "AgIAAEYAAAAAAAAAAAAAAFcAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAYwGQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-14T13:05:46.584Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\appsettings.Development.json",
               "RelativeDocumentMoniker": "WebApplication1\\appsettings.Development.json",
@@ -402,7 +403,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "DbInitializer.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Data\\DbInitializer.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Data\\DbInitializer.cs",
@@ -414,7 +415,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "DbContext.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Data\\DbContext.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Data\\DbContext.cs",
@@ -426,7 +427,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Account.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Models\\Account.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\Account.cs",
@@ -438,7 +439,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "ProductsController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\ProductsController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\ProductsController.cs",
@@ -450,7 +451,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\appsettings.json",
               "RelativeDocumentMoniker": "WebApplication1\\appsettings.json",
@@ -458,12 +459,11 @@
               "RelativeToolTip": "WebApplication1\\appsettings.json",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-14T13:20:56.305Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T13:20:56.305Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "OrderItemDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OrderItemDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\OrderItemDto.cs",
@@ -475,7 +475,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "OrderHistoryDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OrderHistoryDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\OrderHistoryDto.cs",
@@ -487,7 +487,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "CartAdditionItemDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartAdditionItemDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\CartAdditionItemDto.cs",
@@ -499,7 +499,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "ProductCreationDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductCreationDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\ProductCreationDto.cs",
@@ -535,7 +535,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "ICloudinaryService.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Services\\ICloudinaryService.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Services\\ICloudinaryService.cs",
@@ -547,7 +547,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "CartDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\CartDto.cs",
@@ -555,12 +555,11 @@
               "RelativeToolTip": "WebApplication1\\ViewModels\\CartDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwA0AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-16T13:52:25.666Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-16T13:52:25.666Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "CartItemDto.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartItemDto.cs",
               "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\CartItemDto.cs",
@@ -572,7 +571,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "OrderDetail.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Models\\OrderDetail.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\OrderDetail.cs",
@@ -584,7 +583,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "Order.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Models\\Order.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\Order.cs",
@@ -596,7 +595,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "CartController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\CartController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\CartController.cs",
@@ -620,7 +619,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Cart.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Models\\Cart.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\Cart.cs",
@@ -628,12 +627,11 @@
               "RelativeToolTip": "WebApplication1\\Models\\Cart.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-16T13:08:45.983Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-16T13:08:45.983Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "WebApplication1.csproj",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
               "RelativeDocumentMoniker": "WebApplication1\\WebApplication1.csproj",
@@ -728,7 +726,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\AuthController.cs",
@@ -740,7 +738,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "WebApplication1\\Properties\\launchSettings.json",
