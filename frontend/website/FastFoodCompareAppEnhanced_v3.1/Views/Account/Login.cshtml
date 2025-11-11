@@ -31,27 +31,17 @@
 
 @section Scripts {
 <script>
-    // *** SỬA LỖI NÚT "BACK" (BFCACHE) ***
-    // Sự kiện này chạy mỗi khi trang được hiển thị, bao gồm cả khi nhấn nút "Back"
+    // Sửa lỗi cache khi nhấn nút "Back"
     window.addEventListener('pageshow', function(event) {
-        // 'event.persisted' = true có nghĩa là trang được tải từ cache (do nhấn "Back")
         if (event.persisted) {
-            // Xóa thông báo cũ ngay lập tức
             document.getElementById("message-panel").innerHTML = "";
-            
-            // Xóa luôn token cũ nếu người dùng bị "kẹt" ở trang login
             localStorage.clear(); 
+            // Xóa cookie cũ nếu có
+            document.cookie = "jwtToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         }
     });
-
-    // Dọn dẹp thông báo khi trang tải lần đầu (vẫn giữ lại)
     document.getElementById("message-panel").innerHTML = "";
-    // *** KẾT THÚC SỬA LỖI ***
 
-
-    /**
-     * Hàm helper để "ĐỌC" token (Giải mã JWT Payload)
-     */
     function parseJwt(token) {
         try {
             const base64Url = token.split('.')[1];
@@ -59,7 +49,6 @@
             const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
-
             return JSON.parse(jsonPayload);
         } catch (e) {
             console.error("Lỗi khi giải mã token:", e);
@@ -67,25 +56,18 @@
         }
     }
 
-
     document.getElementById("login-form").addEventListener("submit", async function (event) {
         
         event.preventDefault();
-
         const form = event.target;
         const messagePanel = document.getElementById("message-panel");
         messagePanel.innerHTML = ""; 
-
-        // Xóa token cũ trước khi đăng nhập mới
         localStorage.clear(); 
+        document.cookie = "jwtToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"; // Xóa cookie cũ
 
         const username = form.elements.username.value;
         const password = form.elements.password.value;
-
-        const data = {
-            username: username,
-            password: password
-        };
+        const data = { username: username, password: password };
 
         try {
             const response = await fetch("https://localhost:7132/api/Auth/login", {
@@ -97,43 +79,33 @@
                 body: JSON.stringify(data)
             });
 
-
             if (response.ok) {
-                // 5. XỬ LÝ KHI THÀNH CÔNG
                 const responseData = await response.json(); 
                 
+                // 1. LƯU VÀO LOCALSTORAGE (CHO JAVASCRIPT)
                 localStorage.setItem("jwtToken", responseData.token);
                 localStorage.setItem("username", username);
 
-                // LOGIC PHÂN QUYỀN
+                // *** 2. SỬA LỖI 401: LƯU VÀO COOKIE (CHO SERVER) ***
+                // (max-age=3600 giây = 1 giờ)
+                document.cookie = `jwtToken=${responseData.token}; path=/; secure; samesite=strict; max-age=3600`; 
+
                 let userRole = "";
                 let redirectUrl = "";
                 
                 try {
                     const decodedToken = parseJwt(responseData.token);
                     userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-                    console.log("Đã giải mã vai trò:", userRole);
+                } catch (e) { /*...*/ }
 
-                } catch (e) {
-                    console.error("Không thể giải mã token hoặc đọc vai trò:", e);
-                    messagePanel.innerHTML = `<div class="alert alert-danger">Lỗi đọc thông tin token.</div>`;
-                    return;
-                }
-
-                // Quyết định chuyển hướng
                 switch (userRole) {
-                    case "Quản Trị Viên":
+                    case "Admin": 
                         redirectUrl = "@Url.Page("/Products/Index", new { area = "Admin" })";
                         break;
                     case "Nhà hàng":
                         redirectUrl = "@Url.Page("/Restaurant/Kitchen", new { area = "Restaurant" })";
                         break;
-                    case "Khách Hàng":
-                    case "Khách Hàng Thử Nghiệm":
-                        redirectUrl = "@Url.Action("Index", "Menu")";
-                        break;
                     default:
-                        console.warn(`Không nhận diện được vai trò: ${userRole}. Chuyển về Menu.`);
                         redirectUrl = "@Url.Action("Index", "Menu")";
                 }
 
@@ -144,7 +116,6 @@
                 }, 1500);
 
             } else {
-                // 6. XỬ LÝ KHI THẤT BẠI
                 const errorText = await response.text();
                 try {
                     const errorData = JSON.parse(errorText);

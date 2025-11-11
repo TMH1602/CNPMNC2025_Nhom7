@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Bị từ chối";
+    // Lấy vai trò của người dùng (nếu có) để hiển thị
+    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+}
+
+<div class="auth-card" style="border: 2px solid #dc3545;">
+    
+    <div class="auth-hero" style="background-color: #dc3545;">
+        <h2 style="color: white;">TRUY CẬP BỊ TỪ CHỐI (LỖI 403)</h2>
+    </div>
+
+    <div class="p-4 text-center">
+        <h5 class="text-danger">Bạn không có quyền truy cập trang này!</h5>
+        
+        @if (userRole != null)
+        {
+            <p class="text-muted mt-3">
+                Tài khoản của bạn có vai trò là <strong>@userRole</strong>,
+                không đủ quyền để xem tài nguyên này.
+            </p>
+        }
+        else
+        {
+            <p class="text-muted mt-3">
+                Bạn cần đăng nhập với tài khoản có quyền Quản trị viên (Admin).
+            </p>
+        }
+        
+        <hr>
+        
+        <div class="d-grid gap-2">
+            <a href="@Url.Action("Index", "Menu")" class="btn btn-primary">Quay về Trang chủ</a>
+            <a href="@Url.Action("Logout", "Account")" class="btn btn-link text-secondary mt-2">Đăng xuất và thử tài khoản khác</a>
+        </div>
+    </div>
+</div>

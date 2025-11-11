@@ -2,17 +2,22 @@ using Microsoft.EntityFrameworkCore;
 using FastFoodCompareAppEnhanced_v3_1.Data;
 using FastFoodCompareAppEnhanced_v3_1.Models;
 
+// 💡 1. THÊM CÁC THƯ VIỆN SAU (Quan trọng)
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-// BƯỚC 1: Thêm dịch vụ CORS (Cho phép gọi API Backend)
+// Thêm dịch vụ CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            // Giữ nguyên HTTPS
             policy.WithOrigins("https://localhost:5000") 
                   .AllowAnyHeader()
                   .AllowAnyMethod();
@@ -22,10 +27,10 @@ builder.Services.AddCors(options =>
 
 // Add services
 builder.Services.AddHttpClient();
-builder.Services.AddControllersWithViews(); // Hỗ trợ Controller/View
-builder.Services.AddRazorPages();          // 🔥 Hỗ trợ Razor Pages (Cho Admin Area)
+builder.Services.AddControllersWithViews(); 
+builder.Services.AddRazorPages();       
 
-// Cấu hình In-Memory DB (Chỉ dùng cho các trang User View)
+// Cấu hình In-Memory DB
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("FastFoodDb"));
 
@@ -36,6 +41,69 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// 💡 2. LẤY CẤU HÌNH JWT TỪ APPSETTINGS.JSON
+// (Đảm bảo bạn đã copy "Jwt" section từ appsettings.json của Backend sang đây)
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+if (string.IsNullOrEmpty(jwtKey) || string.IsNullOrEmpty(jwtIssuer) || string.IsNullOrEmpty(jwtAudience))
+{
+    throw new InvalidOperationException("Cấu hình JWT (Key, Issuer, Audience) bị thiếu trong appsettings.json của Frontend.");
+}
+
+// 💡 3. DẠY FRONTEND CÁCH ĐỌC TOKEN (GIỐNG HỆT BACKEND)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    // Cấu hình xác thực
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtIssuer,
+        ValidateAudience = true,
+        ValidAudience = jwtAudience,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        ValidateLifetime = true,
+        RoleClaimType = ClaimTypes.Role // Chỉ định claim chứa vai trò
+    };
+
+    // *** SỬA LỖI 401: DẠY MIDDLEWARE ĐỌC COOKIE ***
+    // (Xóa OnForbidden và OnChallenge, chỉ giữ OnMessageReceived)
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // Thử đọc token từ cookie có tên 'jwtToken'
+            context.Token = context.Request.Cookies["jwtToken"];
+            return Task.CompletedTask;
+        }
+    };
+});
+
+// 💡 4. DẠY FRONTEND CÁC POLICY (GIỐNG HỆT BACKEND)
+// (Sử dụng tên vai trò chính xác từ database của bạn: "Admin", "Khách Hàng", "Nhà hàng")
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => 
+        policy.RequireRole("Admin")); 
+
+    options.AddPolicy("RestaurantOnly", policy => 
+        policy.RequireRole("Nhà hàng"));
+        
+    options.AddPolicy("CustomerOnly", policy => 
+        policy.RequireRole("Khách Hàng"));
+
+    options.AddPolicy("AdminOrRestaurant", policy =>
+        policy.RequireRole("Admin", "Nhà hàng"));
+});
+
+
 var app = builder.Build();
 
 // Seed data 
@@ -43,7 +111,6 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     
-    // Giữ lại Seed Data cho Món ăn (Dishes)
     if (!db.Dishes.Any())
     {
         db.Dishes.AddRange(new List<Dish>
@@ -55,8 +122,6 @@ using (var scope = app.Services.CreateScope())
             new Dish { Id = 5, Name = "Pizza Mini", Price = 7.99m, Calories = 850, Rating = 4.6m, Category = "Pizza", ImageUrl = "/images/pizza.jpg" },
         });
     }
-
-    // 🔥🔥 ĐÃ BỎ Seed Data cho UserAccount vì bạn lấy từ SQL Server thật
     
     db.SaveChanges();
 }
@@ -70,30 +135,33 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
-// BƯỚC 2: Kích hoạt CORS middleware
-app.UseCors(MyAllowSpecificOrigins);
+// 💡 BƯỚC 5: THÊM MIDDLEWARE XỬ LÝ LỖI (Cách mới)
+// Middleware này phải nằm sau UseRouting và trước UseEndpoints
+app.UseStatusCodePagesWithReExecute("/Account/HandleError", "?code={0}");
 
+app.UseCors(MyAllowSpecificOrigins);
 app.UseSession();
-app.UseAuthorization(); 
+
+// 💡 BƯỚC 6: KÍCH HOẠT MIDDLEWARE (ĐÚNG THỨ TỰ)
+app.UseAuthentication(); // 1. Xác thực (Đọc token)
+app.UseAuthorization();  // 2. Phân quyền (Kiểm tra vai trò)
 
 // =======================================================================
 // ROUTING CUỐI CÙNG CHO RAZOR PAGES VÀ MVC
 // =======================================================================
 app.UseEndpoints(endpoints =>
 {
-    // 🔥 1. ĐỊNH TUYẾN RAZOR PAGES (Ưu tiên cao nhất)
-    // Dòng này giúp hệ thống tìm thấy các trang trong thư mục Pages (bao gồm cả Areas/Admin/Pages)
     endpoints.MapRazorPages(); 
 
-    // 2. ROUTING CHO MVC AREAS (Dành cho các Controller MVC khác có thể tồn tại trong Areas)
     endpoints.MapControllerRoute(
         name: "areas",
         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
 
-    // 3. ROUTING MẶC ĐỊNH CHO MVC (Dành cho Menu/Cart)
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Menu}/{action=Index}/{id?}");
 });
+
+
 app.Run();

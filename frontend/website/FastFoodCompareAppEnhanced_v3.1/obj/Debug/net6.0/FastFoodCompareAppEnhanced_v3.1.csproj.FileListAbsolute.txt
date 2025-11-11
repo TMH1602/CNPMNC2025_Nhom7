@@ -71,3 +71,10 @@ C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\frontend\website\FastFoodCompareAppE
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\frontend\website\FastFoodCompareAppEnhanced_v3.1\obj\Debug\net6.0\FastFoodCompareAppEnhanced_v3.1.pdb
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\frontend\website\FastFoodCompareAppEnhanced_v3.1\obj\Debug\net6.0\FastFoodCompareAppEnhanced_v3.1.genruntimeconfig.cache
 C:\Users\LENOVO\Documents\GitHub\CNPMNC2025\frontend\website\FastFoodCompareAppEnhanced_v3.1\obj\Debug\net6.0\ref\FastFoodCompareAppEnhanced_v3.1.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\ADMIN\Documents\GitHub\CNPMNC2025_Nhom7\frontend\website\FastFoodCompareAppEnhanced_v3.1\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
