@@ -22,12 +22,16 @@
     </form>
 
     <div class="mt-3 text-center">
-        <span>Bạn chưa có tài khoản? <a href="@Url.Action("Register","Account")" class="signup-link">Đăng ký</a></span>
+        <span>Bạn chưa có tài khoản khách hàng? 
+            <a href="@Url.Action("Register","Account")" class="signup-link">Đăng ký</a>
+        </span>
     </div>
     <div class="mt-3 text-center">
-        <span>Bạn cần đăng nhập Với tư cách nhà hàng? <a href="@Url.Action("Restaurant","Account")" class="signup-link">Đăng nhập với tư cách nhà hàng</a></span>
+        <span>Bạn muốn đăng ký tài khoản nhà hàng? 
+            <a href="@Url.Action("RegisterRestaurant","Account")" class="signup-link">Đăng ký tại đây</a>
+        </span>
     </div>
-</div>
+    </div>
 
 @section Scripts {
 <script>
@@ -36,7 +40,6 @@
         if (event.persisted) {
             document.getElementById("message-panel").innerHTML = "";
             localStorage.clear(); 
-            // Xóa cookie cũ nếu có
             document.cookie = "jwtToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         }
     });
@@ -63,7 +66,7 @@
         const messagePanel = document.getElementById("message-panel");
         messagePanel.innerHTML = ""; 
         localStorage.clear(); 
-        document.cookie = "jwtToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"; // Xóa cookie cũ
+        document.cookie = "jwtToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"; 
 
         const username = form.elements.username.value;
         const password = form.elements.password.value;
@@ -82,12 +85,8 @@
             if (response.ok) {
                 const responseData = await response.json(); 
                 
-                // 1. LƯU VÀO LOCALSTORAGE (CHO JAVASCRIPT)
                 localStorage.setItem("jwtToken", responseData.token);
                 localStorage.setItem("username", username);
-
-                // *** 2. SỬA LỖI 401: LƯU VÀO COOKIE (CHO SERVER) ***
-                // (max-age=3600 giây = 1 giờ)
                 document.cookie = `jwtToken=${responseData.token}; path=/; secure; samesite=strict; max-age=3600`; 
 
                 let userRole = "";
@@ -95,16 +94,25 @@
                 
                 try {
                     const decodedToken = parseJwt(responseData.token);
-                    userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-                } catch (e) { /*...*/ }
+                    let rawRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+                    userRole = rawRole.trim(); 
+
+                } catch (e) { 
+                     console.error("Không thể giải mã token hoặc đọc vai trò:", e);
+                     messagePanel.innerHTML = `<div class="alert alert-danger">Lỗi đọc thông tin token.</div>`;
+                     return;
+                }
 
                 switch (userRole) {
                     case "Admin": 
                         redirectUrl = "@Url.Page("/Products/Index", new { area = "Admin" })";
                         break;
-                    case "Nhà hàng":
-                        redirectUrl = "@Url.Page("/Restaurant/Kitchen", new { area = "Restaurant" })";
+                    
+                    case "Nhà hàng": 
+                        redirectUrl = "/Restaurant"; // URL của trang Kitchen
                         break;
+                    
+                    case "Khách Hàng":
                     default:
                         redirectUrl = "@Url.Action("Index", "Menu")";
                 }

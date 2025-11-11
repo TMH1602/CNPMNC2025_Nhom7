@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// 💡 Controller này CHỈ DÙNG ĐỂ TRẢ VỀ CÁC TRANG HTML
 // (Tên namespace của bạn có thể khác)
 namespace FastFoodCompareAppEnhanced_v3_1.Controllers 
 {
     public class AccountController : Controller
     {
         // === HÀM XỬ LÝ LỖI (401/403/404) ===
-        // (Được gọi bởi UseStatusCodePagesWithReExecute trong Program.cs)
-
         [AllowAnonymous]
         [Route("/Account/HandleError")] // Khớp với tên trong Program.cs
         public IActionResult HandleError(int code)
@@ -25,10 +22,9 @@ namespace FastFoodCompareAppEnhanced_v3_1.Controllers
                 return RedirectToAction("AccessDenied", "Account");
             }
 
-            // Xử lý các lỗi khác (ví dụ 404)
-            ViewData["StatusCode"] = code;
-            // (Giả sử bạn có một trang Views/Shared/Error.cshtml mặc định)
-            return View("~/Views/Shared/Error.cshtml"); 
+            // *** SỬA LỖI Ở ĐÂY ***
+            // Đối với các lỗi khác (như 404), chuyển hướng về Trang chủ
+            return RedirectToAction("Index", "Menu");
         }
 
 

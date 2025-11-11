@@ -163,5 +163,4 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Menu}/{action=Index}/{id?}");
 });
 
-
 app.Run();

@@ -44,7 +44,6 @@
     <script>
         document.getElementById('registerForm').addEventListener('submit', async function(event) {
             
-            // 1. Ngăn form submit theo cách truyền thống
             event.preventDefault();
 
             const username = document.getElementById('username').value;
@@ -55,11 +54,9 @@
             const errorMessageDiv = document.getElementById('error-message');
             const successMessageDiv = document.getElementById('success-message');
 
-            // Ẩn thông báo cũ
             errorMessageDiv.style.display = 'none';
             successMessageDiv.style.display = 'none';
 
-            // 2. Tạo đối tượng JSON theo yêu cầu của API (từ cURL)
             const data = {
                 username: username,
                 password: password,
@@ -68,25 +65,24 @@
             };
 
             try {
-                // 3. Gửi request đến API bằng 'fetch'
                 const response = await fetch('https://localhost:7132/api/Auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'accept': 'text/plain'
+                        // 1. SỬA LẠI: Yêu cầu JSON
+                        'accept': 'application/json' 
                     },
                     body: JSON.stringify(data)
                 });
 
-                // 4. Xử lý kết quả
                 if (response.ok) {
-                    // Đăng ký thành công
-                    const resultText = await response.text(); // Lấy text (vì API trả về 'text/plain')
+                    // 2. SỬA LẠI: Đọc JSON
+                    const resultData = await response.json(); 
                     
-                    successMessageDiv.textContent = resultText + " Bạn sẽ được chuyển đến trang đăng nhập sau 3 giây.";
+                    // 3. SỬA LẠI: Hiển thị thông báo tùy chỉnh
+                    successMessageDiv.textContent = "Đăng ký thành công! Bạn sẽ được chuyển đến trang đăng nhập sau 3 giây.";
                     successMessageDiv.style.display = 'block';
 
-                    // Chờ 3 giây rồi chuyển đến trang đăng nhập
                     setTimeout(() => {
                         window.location.href = '@Url.Action("Login", "Account")';
                     }, 3000);
@@ -95,9 +91,15 @@
                     // Đăng ký thất bại
                     let errorText = 'Đăng ký thất bại. Vui lòng thử lại.';
                     try {
-                        errorText = await response.text(); // Lấy lỗi chi tiết từ API
+                        // Lỗi (như 400) thường trả về JSON
+                        const errorData = await response.json();
+                        if (errorData && errorData.message) {
+                             errorText = errorData.message; 
+                        } else {
+                             errorText = await response.text();
+                        }
                     } catch(e) {
-                        // Bỏ qua nếu không đọc được
+                         errorText = await response.text();
                     }
                     errorMessageDiv.textContent = errorText;
                     errorMessageDiv.style.display = 'block';
