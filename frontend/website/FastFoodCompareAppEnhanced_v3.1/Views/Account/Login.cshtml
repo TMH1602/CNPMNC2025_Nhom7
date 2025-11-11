@@ -31,6 +31,24 @@
 
 @section Scripts {
 <script>
+    // *** SỬA LỖI NÚT "BACK" (BFCACHE) ***
+    // Sự kiện này chạy mỗi khi trang được hiển thị, bao gồm cả khi nhấn nút "Back"
+    window.addEventListener('pageshow', function(event) {
+        // 'event.persisted' = true có nghĩa là trang được tải từ cache (do nhấn "Back")
+        if (event.persisted) {
+            // Xóa thông báo cũ ngay lập tức
+            document.getElementById("message-panel").innerHTML = "";
+            
+            // Xóa luôn token cũ nếu người dùng bị "kẹt" ở trang login
+            localStorage.clear(); 
+        }
+    });
+
+    // Dọn dẹp thông báo khi trang tải lần đầu (vẫn giữ lại)
+    document.getElementById("message-panel").innerHTML = "";
+    // *** KẾT THÚC SỬA LỖI ***
+
+
     /**
      * Hàm helper để "ĐỌC" token (Giải mã JWT Payload)
      */
@@ -58,6 +76,9 @@
         const messagePanel = document.getElementById("message-panel");
         messagePanel.innerHTML = ""; 
 
+        // Xóa token cũ trước khi đăng nhập mới
+        localStorage.clear(); 
+
         const username = form.elements.username.value;
         const password = form.elements.password.value;
 
@@ -71,7 +92,7 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "accept": "application/json" // API login trả về JSON (LoginResponse)
+                    "accept": "application/json" 
                 },
                 body: JSON.stringify(data)
             });
@@ -81,25 +102,16 @@
                 // 5. XỬ LÝ KHI THÀNH CÔNG
                 const responseData = await response.json(); 
                 
-                // LƯU TOKEN VÀO LOCALSTORAGE
-                // Quan trọng: Chỉ lưu chuỗi token, không lưu cả đối tượng
                 localStorage.setItem("jwtToken", responseData.token);
                 localStorage.setItem("username", username);
 
-                // *** SỬA ĐỔI QUAN TRỌNG: LOGIC PHÂN QUYỀN ***
-                
+                // LOGIC PHÂN QUYỀN
                 let userRole = "";
                 let redirectUrl = "";
                 
                 try {
-                    // 1. Đọc token
                     const decodedToken = parseJwt(responseData.token);
-                    
-                    // 2. Lấy Role từ token
-                    // Tên claim "role" phải khớp với tên bạn tạo trong AuthController.cs
-                    // (Ví dụ: new Claim(ClaimTypes.Role, user.DisplayName))
                     userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-
                     console.log("Đã giải mã vai trò:", userRole);
 
                 } catch (e) {
@@ -108,19 +120,19 @@
                     return;
                 }
 
-                // 3. Quyết định chuyển hướng (Redirect)
+                // Quyết định chuyển hướng
                 switch (userRole) {
-                    case "Admin":
+                    case "Quản Trị Viên":
                         redirectUrl = "@Url.Page("/Products/Index", new { area = "Admin" })";
                         break;
                     case "Nhà hàng":
                         redirectUrl = "@Url.Page("/Restaurant/Kitchen", new { area = "Restaurant" })";
                         break;
                     case "Khách Hàng":
+                    case "Khách Hàng Thử Nghiệm":
                         redirectUrl = "@Url.Action("Index", "Menu")";
                         break;
                     default:
-                        // Mặc định về trang Menu nếu không nhận diện được Role
                         console.warn(`Không nhận diện được vai trò: ${userRole}. Chuyển về Menu.`);
                         redirectUrl = "@Url.Action("Index", "Menu")";
                 }
@@ -128,19 +140,17 @@
                 messagePanel.innerHTML = `<div class="alert alert-success">Đăng nhập thành công! Đang chuyển hướng...</div>`;
                 
                 setTimeout(() => {
-                    // 4. Chuyển hướng đến trang đã quyết định
                     window.location.href = redirectUrl; 
                 }, 1500);
 
             } else {
                 // 6. XỬ LÝ KHI THẤT BẠI
+                const errorText = await response.text();
                 try {
-                    const errorData = await response.json();
+                    const errorData = JSON.parse(errorText);
                     messagePanel.innerHTML = `<div class="alert alert-danger">${errorData.message || 'Tên đăng nhập hoặc mật khẩu không đúng.'}</div>`;
-                
                 } catch (jsonError) {
-                    const errorText = await response.text();
-                    messagePanel.innerHTML = `<div class="alert alert-danger">${errorText || 'Có lỗi xảy ra. Vui lòng thử lại.'}</div>`;
+                    messagePanel.innerHTML = `<div class="alert alert-danger">${errorText || 'Lỗi không xác định từ máy chủ.'}</div>`;
                 }
             }
 
