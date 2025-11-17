@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FastFoodCompareAppEnhanced_v3_1.Data;
 using FastFoodCompareAppEnhanced_v3_1.Models;
-
+using FastFoodCompareAppEnhanced_v3_1.Handlers;
 // 💡 1. THÊM CÁC THƯ VIỆN SAU (Quan trọng)
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,17 +19,31 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("https://localhost:5000") 
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
+                .AllowAnyHeader()
+                .AllowAnyMethod();
         });
 });
 
 
 // Add services
 builder.Services.AddHttpClient();
-builder.Services.AddControllersWithViews(); 
-builder.Services.AddRazorPages();       
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); 
+builder.Services.AddHttpContextAccessor();     
+builder.Services.AddTransient<TokenAuthHandler>();
 
+// 💡 ĐÃ SỬA: THÊM DỊCH VỤ BLAZOR
+builder.Services.AddServerSideBlazor();
+
+// 2. Cấu hình HttpClient
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    // Đặt địa chỉ API Backend của bạn ở đây
+    // (Đây là địa chỉ từ code JavaScript của bạn)
+    client.BaseAddress = new Uri("https://localhost:7132"); 
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+})
+.AddHttpMessageHandler<TokenAuthHandler>(); // <-- Tự động gắn token
 // Cấu hình In-Memory DB
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("FastFoodDb"));
@@ -151,8 +165,9 @@ app.UseAuthorization();  // 2. Phân quyền (Kiểm tra vai trò)
 // =======================================================================
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapRazorPages(); 
-
+    endpoints.MapRazorPages();
+    endpoints.MapBlazorHub(); // Dòng này giờ sẽ hoạt động
+    
     endpoints.MapControllerRoute(
         name: "areas",
         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"

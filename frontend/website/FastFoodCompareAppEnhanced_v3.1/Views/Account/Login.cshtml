@@ -11,30 +11,32 @@
 
     <form id="login-form">
         <div class="mb-3">
-            <label class="form-label">Tên đăng nhập</label>
-            <input type="text" class="form-control" name="username" required />
+            <label class="form-label" for="username">Tên đăng nhập</label>
+            <input type="text" class="form-control" id="username" name="username" required />
         </div>
         <div class="mb-3">
-            <label class="form-label">Mật khẩu</label>
-            <input type="password" class="form-control" name="password" required />
+            <label class="form-label" for="password">Mật khẩu</label>
+            <input type="password" class="form-control" id="password" name="password" required />
         </div>
         <button type="submit" class="btn btn-gradient w-100">Đăng nhập</button>
     </form>
 
     <div class="mt-3 text-center">
         <span>Bạn chưa có tài khoản khách hàng? 
-            <a href="@Url.Action("Register","Account")" class="signup-link">Đăng ký</a>
+            <a href="@Url.Action("Register","Account")" class="signup-link"><span highlight="true">Đăng ký</span></a>
         </span>
     </div>
     <div class="mt-3 text-center">
         <span>Bạn muốn đăng ký tài khoản nhà hàng? 
-            <a href="@Url.Action("RegisterRestaurant","Account")" class="signup-link">Đăng ký tại đây</a>
+            <a href="@Url.Action("RegisterRestaurant","Account")" class="signup-link"><span highlight="true">Đăng ký tại đây</span></a>
         </span>
     </div>
-    </div>
+</div>
+
 
 @section Scripts {
 <script>
+    // ... (Toàn bộ code script đăng nhập của bạn giữ nguyên) ...
     // Sửa lỗi cache khi nhấn nút "Back"
     window.addEventListener('pageshow', function(event) {
         if (event.persisted) {
@@ -103,6 +105,7 @@
                      return;
                 }
 
+                // Logic phân quyền (đã sửa)
                 switch (userRole) {
                     case "Admin": 
                         redirectUrl = "@Url.Page("/Products/Index", new { area = "Admin" })";
