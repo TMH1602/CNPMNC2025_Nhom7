@@ -1,0 +1,12 @@
+@page
+@model FastFoodCompareAppEnhanced_v3_1.Areas.Admin.Pages.Products.IndexBlazorModel
+
+@using FastFoodCompareAppEnhanced_v3_1.Areas.Admin.Pages.Products 
+
+@{
+    ViewData["Title"] = "Quản lý Sản phẩm (Blazor)";
+}
+
+<h2>Quản lý Sản phẩm (Blazor)</h2>
+
+<component type="typeof(ProductHighlight)" render-mode="ServerPrerendered" />

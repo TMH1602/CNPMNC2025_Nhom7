@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Bị từ chối";
+    // Lấy vai trò của người dùng (nếu có) để hiển thị
+    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+}
+
+<div class="auth-card" style="border: 2px solid #dc3545;">
+    
+    <div class="auth-hero" style="background-color: #dc3545;">
+        <h2 style="color: white;">TRUY CẬP BỊ TỪ CHỐI (LỖI 403)</h2>
+    </div>
+
+    <div class="p-4 text-center">
+        <h5 class="text-danger"><span highlight="true">Bạn không có quyền truy cập trang này!</span></h5>
+        
+        @if (userRole != null)
+        {
+            <p class="text-muted mt-3">
+                Tài khoản của bạn có vai trò là <span highlight="true"><strong>@userRole</strong></span>,
+                không đủ quyền để xem tài nguyên này.
+            </p>
+        }
+        else
+        {
+            <p class="text-muted mt-3">
+                Bạn cần đăng nhập với tài khoản có quyền <span highlight="true">Quản trị viên (Admin)</span>.
+            </p>
+        }
+        
+        <hr>
+        
+        <!-- Bảng thông tin sử dụng TrTagHelper -->
+        <div class="mt-4">
+            <table class="table table-bordered">
+                <thead>
+                    <tr bg-color="danger" text-color="white">
+                        <th highlight="true">Thông báo</th>
+                        <th highlight="true">Mô tả</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span highlight="true">Lỗi 403</span></td>
+                        <td>Bạn không có quyền truy cập trang này</td>
+                    </tr>
+                    <tr bg-color="warning" text-color="dark">
+                        <td><span highlight="true">Giải pháp</span></td>
+                        <td>Vui lòng đăng nhập với tài khoản có quyền phù hợp</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="d-grid gap-2 mt-4">
+            <a href="@Url.Action("Index", "Menu")" class="btn btn-primary"><span highlight="true">Quay về Trang chủ</span></a>
+            <a href="@Url.Action("Logout", "Account")" class="btn btn-link text-secondary mt-2">Đăng xuất và thử tài khoản khác</a>
+        </div>
+    </div>
+</div>
