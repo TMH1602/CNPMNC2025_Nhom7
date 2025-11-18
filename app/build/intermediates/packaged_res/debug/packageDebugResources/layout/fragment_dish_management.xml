@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- HÀNG NÚT TRÊN CÙNG -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_weight="0"
+            >
+
+            <Button
+                android:id="@+id/btnHome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="Trở về trang chủ"
+                app:icon="@drawable/baseline_home_24" />
+
+            <Button
+                android:id="@+id/btnChangePassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:text="Đổi mật khẩu" />
+        </LinearLayout>
+
+        <!-- KHU VỰC NỘI DUNG CHÍNH (SỬ DỤNG SCROLLVIEW) -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- HỒ SƠ NGƯỜI DÙNG -->
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F8AAAA"
+                    android:text="HỒ SƠ NGƯỜI DÙNG"
+                    android:textAlignment="center"
+                    android:textColor="#140808"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"/>
+
+                <ListView
+                    android:id="@+id/lvUserProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="#BAF2EBEB"
+                    android:backgroundTint="#F4EBEB"
+                    android:divider="@android:color/darker_gray"
+                    android:dividerHeight="1dp"
+                    android:nestedScrollingEnabled="true"
+                    android:minHeight="150dp"/>
+
+                <!-- LỊCH SỬ MUA HÀNG -->
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#F8AAAA"
+                    android:text="LỊCH SỬ MUA HÀNG"
+                    android:textAlignment="center"
+                    android:textColor="#160C0C"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"/>
+
+                <ListView
+                    android:id="@+id/lvOrderHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="#FFD3D3"
+                    android:divider="@android:color/darker_gray"
+                    android:dividerHeight="1dp"
+                    android:nestedScrollingEnabled="true"
+                    android:minHeight="300dp"/>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- NÚT ĐĂNG XUẤT -->
+        <Button
+            android:id="@+id/button"
+            android:layout_width="265dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#E05757"
+            android:text="ĐĂNG XUẤT"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:icon="@drawable/pizza_hai_san"
+            app:iconGravity="textStart"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

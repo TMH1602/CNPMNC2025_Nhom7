@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">App Food</string>
+    <string name="title_cart">Giỏ hàng</string>
+    <string name="title_home">Trang chủ</string>
+    <string name="title_settings">Cài đặt</string>
+    <style name="Base.Theme.CNPMNC_AppFood" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+    </style>
+    <style name="Theme.CNPMNC_AppFood" parent="Base.Theme.CNPMNC_AppFood"/>
+</resources>
