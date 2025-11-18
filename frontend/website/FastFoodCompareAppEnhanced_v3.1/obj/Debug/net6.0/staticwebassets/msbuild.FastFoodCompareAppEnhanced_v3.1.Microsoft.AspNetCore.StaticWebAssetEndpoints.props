@@ -96,17 +96,17 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-S7/aiquDT/EQps/0\u002BOGbodTrV0fjZX5idJvHCBULQPw="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"207366"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022S7/aiquDT/EQps/0\u002BOGbodTrV0fjZX5idJvHCBULQPw=\u0022"},{"Name":"Last-Modified","Value":"Tue, 11 Nov 2025 06:05:10 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.016112gq9t.png">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\Logo.png'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"016112gq9t"},{"Name":"integrity","Value":"sha256-xD1AYAQaOM1dZU0AYLi7iNdXwm6BTQkY4akcOXumcrA="},{"Name":"label","Value":"_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.png"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"184044"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022xD1AYAQaOM1dZU0AYLi7iNdXwm6BTQkY4akcOXumcrA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 11 Nov 2025 06:05:10 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.3roumigk33.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\Logo.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"3roumigk33"},{"Name":"integrity","Value":"sha256-zzZ2qsboOdNVGusxO312B3mLAoEa2DXUUlIt7isQeTI="},{"Name":"label","Value":"_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.jpg"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"65912"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022zzZ2qsboOdNVGusxO312B3mLAoEa2DXUUlIt7isQeTI=\u0022"},{"Name":"Last-Modified","Value":"Tue, 11 Nov 2025 06:05:10 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.f69gfwkrdt.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\Logo.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"f69gfwkrdt"},{"Name":"integrity","Value":"sha256-d4HvnNWbecY\u002BzphRKgsAaAlFd2d919Q3RfHz1AIsFHA="},{"Name":"label","Value":"_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"169488"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022d4HvnNWbecY\u002BzphRKgsAaAlFd2d919Q3RfHz1AIsFHA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 18 Nov 2025 06:20:41 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\Logo.jpg'))</AssetFile>
@@ -117,8 +117,8 @@
     <StaticWebAssetEndpoint Include="_content/FastFoodCompareAppEnhanced_v3.1/images/Logo.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\Logo.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-xD1AYAQaOM1dZU0AYLi7iNdXwm6BTQkY4akcOXumcrA="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"184044"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022xD1AYAQaOM1dZU0AYLi7iNdXwm6BTQkY4akcOXumcrA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 11 Nov 2025 06:05:10 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-d4HvnNWbecY\u002BzphRKgsAaAlFd2d919Q3RfHz1AIsFHA="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"169488"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022d4HvnNWbecY\u002BzphRKgsAaAlFd2d919Q3RfHz1AIsFHA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 18 Nov 2025 06:20:41 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FastFoodCompareAppEnhanced_v3.1/images/pizza.2vhx7f4sw2.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\pizza.jpg'))</AssetFile>
