@@ -424,6 +424,18 @@
         }
       }
     },
+    "/api/Auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Auth/delete-my-account": {
       "delete": {
         "tags": [
@@ -1534,6 +1546,10 @@
           "expiresIn": {
             "type": "string",
             "format": "date-time"
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -79,75 +79,30 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
     <script>
-        // --- KHAI BÁO BIẾN ---
+        // --- 1. KHAI BÁO BIẾN ---
+        // Lưu ý: Nếu Frontend và API cùng chạy trên localhost:7132, bạn có thể dùng đường dẫn tương đối "/api/Menu"
         const apiUrl = "https://localhost:7132/api/Menu"; 
-        let jwtToken = ''; 
-        const ADMIN_LOGIN_URL = window.ADMIN_LOGIN_URL || '/Account/Login'; 
+        const ADMIN_LOGIN_URL = '/Account/Login'; // Đường dẫn trang đăng nhập Admin
 
         let originalProductData = null; 
         let btnSaveProduct; 
 
-        // --- HÀM LẤY TOKEN (*** ĐÃ SỬA LỖI ***) ---
-        function getToken() {
-            let token = '';
-            try {
-                // 1. Lấy chuỗi token từ localStorage
-                const rawTokenString = localStorage.getItem("jwtToken");
-
-                if (rawTokenString && typeof rawTokenString === 'string') {
-                    token = rawTokenString.trim(); // Cắt khoảng trắng
-                    
-                    // 2. Xóa các dấu ngoặc kép hoặc ngoặc đơn thừa
-                    if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
-                        token = token.substring(1, token.length - 1);
-                    }
-
-                    // 3. KIỂM TRA LẠI: Nếu token vẫn chứa { (dấu hiệu của JSON),
-                    // thì mới parse. Nếu không, chỉ trả về chuỗi.
-                    if (token.includes("{")) {
-                        console.warn("Phát hiện token dạng JSON, đang thử parse...");
-                        const tokenData = JSON.parse(token); 
-                        if (tokenData && tokenData.token) {
-                            token = tokenData.token.trim(); 
-                        } else {
-                            console.error("Lỗi: JSON không có thuộc tính 'token'.");
-                        }
-                    }
-                    // Nếu token là 'ey...' (không chứa {), nó sẽ được trả về trực tiếp.
-
-                } else { 
-                    console.warn("Không tìm thấy jwtToken trong localStorage."); 
-                }
-            } catch (e) {
-                // BẮT LỖI GỐC CỦA BẠN (SyntaxError: Unexpected token 'e')
-                console.error("Lỗi khi xử lý jwtToken:", e);
-                console.log("Đang thử lấy token trực tiếp (fallback)...");
-                
-                // Fallback: Lấy chuỗi thô (raw string)
-                const directToken = localStorage.getItem("jwtToken");
-                if(directToken && typeof directToken === 'string'){
-                    token = directToken.trim();
-                    if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
-                        token = token.substring(1, token.length - 1);
-                    }
-                }
-            }
-            return token;
-        }
-
-        // --- HÀM KIỂM TRA THAY ĐỔI FORM ---
+        // --- 2. CÁC HÀM HỖ TRỢ UI (GIỮ NGUYÊN) ---
+        
+        // Hàm kiểm tra thay đổi form để bật/tắt nút Lưu
         function checkFormChanges() {
             if (!btnSaveProduct) return; 
             const productId = $('#productId').val();
             const isUpdating = productId !== '';
+            
             const currentName = $('#productName').val();
             const currentPriceStr = $('#productPrice').val();
             const currentPrice = parseFloat(currentPriceStr);
             const currentDescription = $('#productDescription').val();
             const currentCategory = $('#productCategory').val();
+            
             let hasChanges = false;
             
             if (isUpdating && originalProductData) {
@@ -156,6 +111,7 @@
                 if (currentDescription !== originalProductData.description) hasChanges = true;
                 if (currentCategory !== originalProductData.category) hasChanges = true;
             } else {
+                // Logic cho thêm mới
                 if (currentName.trim() !== '' && currentPriceStr.trim() !== '' && !isNaN(currentPrice) && currentPrice > 0) {
                     hasChanges = true;
                 }
@@ -163,19 +119,10 @@
             btnSaveProduct.prop('disabled', !hasChanges);
         }
 
-        // --- HÀM CHẠY KHI TẢI XONG ---
+        // --- 3. KHỞI TẠO (DOCUMENT READY) ---
         $(document).ready(function() {
-            jwtToken = getToken(); 
             btnSaveProduct = $('#btn-save-product'); 
-            if (!jwtToken) {
-                console.error("Lỗi: Token không hợp lệ.");
-                alert("Token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.");
-                window.location.href = ADMIN_LOGIN_URL;
-                return; 
-            }
-            
             loadProducts(); 
-
             $('#productModal').on('hidden.bs.modal', function () { 
                  $('#product-form')[0].reset();
                  $('#productId').val('');
@@ -197,15 +144,24 @@
             $('#btn-save-product').on('click', saveProduct);
         });
 
-        // --- READ: Tải danh sách sản phẩm ---
+        // --- 4. READ: Tải danh sách sản phẩm ---
         function loadProducts() {
             const tableBody = $('#product-table-body');
             tableBody.html('<tr><td colspan="5" class="text-center">Đang tải...</td></tr>');
-            const authHeaders = { 'accept': 'application/json', 'Authorization': `Bearer ${jwtToken}` };
-
-            fetch(apiUrl, { method: 'GET', headers: authHeaders })
+            
+            // KHÔNG CẦN HEADER AUTHORIZATION
+            // Trình duyệt tự gửi Cookie
+            fetch(apiUrl, { 
+                method: 'GET', 
+                headers: { 'accept': 'application/json' } 
+            })
                 .then(response => { 
-                    if (response.status === 401) { alert("Phiên hết hạn..."); window.location.href = ADMIN_LOGIN_URL; throw new Error('Unauthorized');}
+                    // Nếu Cookie hết hạn hoặc không hợp lệ, API trả về 401
+                    if (response.status === 401) { 
+                        alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại."); 
+                        window.location.href = ADMIN_LOGIN_URL; 
+                        throw new Error('Unauthorized');
+                    }
                     if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
                     return response.json();
                 })
@@ -215,25 +171,26 @@
                         tableBody.html('<tr><td colspan="5" class="text-center">Không có sản phẩm nào.</td></tr>'); 
                         return; 
                     }
-                    products.forEach((product, index) => { 
+                    // Render Table (Giữ nguyên logic cũ)
+                    products.forEach((product) => { 
                          try {
                              const priceFormatted = (product.price || 0).toLocaleString('vi-VN');
                              const imageUrl = product.imageUrl || '/images/default-food.png'; 
                              const productName = product.name || 'N/A';
                              const productId = product.id;
-                             if (productId === undefined || productId === null) return; 
+                             
                              const rowHtml = `
-                                <tr>
-                                    <td>${productId}</td>
-                                    <td>${productName}</td>
-                                    <td>${priceFormatted}</td>
-                                    <td><img src="${imageUrl}" alt="${productName}" width="60" /></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-warning" onclick="handleEdit(${productId})">Sửa</button>
-                                        <button class="btn btn-sm btn-danger" onclick="handleDelete(${productId})">Xóa</button>
-                                    </td>
-                                </tr>
-                            `;
+                                 <tr>
+                                     <td>${productId}</td>
+                                     <td>${productName}</td>
+                                     <td>${priceFormatted}</td>
+                                     <td><img src="${imageUrl}" alt="${productName}" width="60" /></td>
+                                     <td>
+                                         <button class="btn btn-sm btn-warning" onclick="handleEdit(${productId})">Sửa</button>
+                                         <button class="btn btn-sm btn-danger" onclick="handleDelete(${productId})">Xóa</button>
+                                     </td>
+                                 </tr>
+                             `;
                              tableBody.append(rowHtml); 
                          } catch (e) {
                              console.error(`Lỗi render sản phẩm:`, product, e);
@@ -248,11 +205,10 @@
                 });
         }
 
-        // --- CREATE/UPDATE: Lưu sản phẩm ---
+        // --- 5. CREATE/UPDATE: Lưu sản phẩm ---
         function saveProduct() { 
              btnSaveProduct.prop('disabled', true);
-             if (!jwtToken) { alert("Token không hợp lệ..."); window.location.href = ADMIN_LOGIN_URL; return; }
-
+             
              const productId = $('#productId').val();
              const isUpdating = productId !== '';
              const name = $('#productName').val();
@@ -269,14 +225,14 @@
              const method = isUpdating ? 'PUT' : 'POST';
              const url = isUpdating ? `${apiUrl}/${productId}` : apiUrl; 
 
+             // Cấu hình Header cơ bản (Bỏ Authorization)
              let headers = {
-                 'accept': 'application/json',
-                 'Authorization': `Bearer ${jwtToken}`
+                 'accept': 'application/json'
              };
              let body;
 
              if (isUpdating) {
-                 // LOGIC CHO PUT (GỬI JSON)
+                 // PUT: Gửi JSON
                  headers['Content-Type'] = 'application/json';
                  const originalImageUrl = (originalProductData && originalProductData.imageUrl) ? originalProductData.imageUrl : '';
                  const payload = {
@@ -286,7 +242,8 @@
                  };
                  body = JSON.stringify(payload);
              } else {
-                 // LOGIC CHO POST (GỬI FORMDATA)
+                 // POST: Gửi FormData (Upload ảnh)
+                 // Không cần set Content-Type, trình duyệt tự làm khi dùng FormData
                  const formData = new FormData();
                  formData.append('Name', name);
                  formData.append('Price', price);
@@ -305,56 +262,57 @@
                      loadProducts();
                      $('#productModal').modal('hide'); 
                  } else if (response.status === 401) {
-                     alert("Bạn không có quyền..."); 
+                     alert("Phiên làm việc hết hạn."); 
                      window.location.href = ADMIN_LOGIN_URL;
                  } else {
-                     response.text().then(text => alert(`Lỗi ${isUpdating ? 'cập nhật' : 'thêm'}. Lỗi: ${text || 'Không có thông tin'}`));
+                     response.text().then(text => alert(`Lỗi: ${text || 'Không xác định'}`));
                      checkFormChanges(); 
                  }
              })
              .catch(error => {
-                 console.error(`LỖI KHI ${isUpdating ? 'CẬP NHẬT' : 'THÊM'}:`, error);
+                 console.error(`LỖI KHI LƯU:`, error);
                  checkFormChanges(); 
              });
         }
 
-        // --- DELETE: Xóa sản phẩm ---
+        // --- 6. DELETE: Xóa sản phẩm ---
         window.handleDelete = function(id) { 
              if (!confirm(`Bạn có chắc muốn xóa sản phẩm ID: ${id} không?`)) { return; }
-             if (!jwtToken) { alert("Token không hợp lệ..."); window.location.href = ADMIN_LOGIN_URL; return; }
 
              fetch(`${apiUrl}/${id}`, {
                  method: 'DELETE',
                  headers: {
-                     'accept': '*/*', 
-                     'Authorization': `Bearer ${jwtToken}` 
+                     'accept': '*/*'
+                     // Đã bỏ Authorization
                  }
              })
              .then(response => {
                  if (response.ok) {
                      loadProducts();
                  } else if (response.status === 401) {
-                     alert("Bạn không có quyền..."); window.location.href = ADMIN_LOGIN_URL;
+                     alert("Phiên làm việc hết hạn."); 
+                     window.location.href = ADMIN_LOGIN_URL;
                  } else {
-                     response.text().then(text => alert(`Lỗi khi xóa. Lỗi: ${text || 'Không có thông tin'}`));
+                     response.text().then(text => alert(`Lỗi khi xóa: ${text}`));
                  }
              })
              .catch(error => console.error('LỖI KHI XÓA:', error));
         }
 
-        // --- EDIT: Tải thông tin vào Modal ---
+        // --- 7. EDIT: Lấy thông tin chi tiết ---
         window.handleEdit = function(id) { 
-             if (!jwtToken) { alert("Token không hợp lệ..."); window.location.href = ADMIN_LOGIN_URL; return; }
-
              fetch(`${apiUrl}/${id}`, {
                  method: 'GET',
                  headers: {
-                     'accept': 'application/json', 
-                     'Authorization': `Bearer ${jwtToken}` 
+                     'accept': 'application/json'
+                     // Đã bỏ Authorization
                  }
              })
              .then(response => {
-                 if (response.status === 401) { throw new Error('Unauthorized'); }
+                 if (response.status === 401) { 
+                     window.location.href = ADMIN_LOGIN_URL; 
+                     throw new Error('Unauthorized'); 
+                 }
                  if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
                  return response.json();
              })
@@ -369,12 +327,15 @@
                  $('#productPrice').val(product.price);
                  $('#productDescription').val(product.description || '');
                  $('#productCategory').val(product.category || '');
+                 
+                 // Hiển thị ảnh cũ
                  if (product.imageUrl) {
                      $('#currentProductImage').attr('src', product.imageUrl);
                      $('#current-image-container').show();
                  } else {
                      $('#current-image-container').hide();
                  }
+                 
                  $('#productImageFile').val(null); 
                  $('#file-upload-warning').show();
                  $('#productModalLabel').text('Cập nhật Sản phẩm ID: ' + product.id);
@@ -382,9 +343,7 @@
                  $('#productModal').modal('show');
              })
              .catch(error => {
-                 if (error.message === 'Unauthorized') {
-                     alert("Bạn không có quyền..."); window.location.href = ADMIN_LOGIN_URL;
-                 } else {
+                 if (error.message !== 'Unauthorized') {
                      console.error('Lỗi khi tải chi tiết:', error);
                  }
              });

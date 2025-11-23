@@ -1,6 +1,6 @@
 ﻿// File: WebApplication1.Controllers/VnPayController.cs
-using System.Linq; // BẮT BUỘC cho FirstOrDefault, Where, Select, Any, v.v.
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using Microsoft.EntityFrameworkCore; // Quan trọng để dùng .Include()
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -8,8 +8,7 @@ using WebApplication1.Services;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
-using System.Security.Claims; // Cần thiết để lấy User ID
+using System.Security.Claims;
 
 namespace WebApplication1.Controllers
 {
@@ -30,7 +29,6 @@ namespace WebApplication1.Controllers
             _emailService = emailService;
         }
 
-        // 💡 Giả định hàm lấy ID người dùng hiện tại
         [HttpGet("CreatePayment")]
         public async Task<IActionResult> CreatePayment([FromQuery] int orderId)
         {
@@ -49,6 +47,7 @@ namespace WebApplication1.Controllers
 
             return Ok(new { PaymentUrl = paymentUrl });
         }
+
         [HttpGet("CreatePayment2")]
         public async Task<IActionResult> CreatePayment2([FromQuery] int orderId)
         {
@@ -67,6 +66,7 @@ namespace WebApplication1.Controllers
 
             return Ok(new { PaymentUrl = paymentUrl });
         }
+
         [HttpGet("VnpayReturn")]
         public async Task<IActionResult> VnpayReturn()
         {
@@ -83,7 +83,13 @@ namespace WebApplication1.Controllers
             string responseCode = collections["vnp_ResponseCode"]!;
             string transactionStatus = collections["vnp_TransactionStatus"]!;
 
-            var order = await _context.Orders.FindAsync(orderId);
+            // --- SỬA ĐỔI: Dùng Include để lấy chi tiết sản phẩm cho Email ---
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)       // Lấy chi tiết đơn
+                .ThenInclude(od => od.Product)      // Lấy thông tin sản phẩm (Tên, Mã)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+            // ---------------------------------------------------------------
+
             if (order == null) return NotFound("Order not found.");
 
             // 3. Xử lý trạng thái
@@ -93,9 +99,10 @@ namespace WebApplication1.Controllers
                 if (order.Status != "Paid")
                 {
                     order.Status = "Paid";
-                    
+
                     await _context.SaveChangesAsync();
 
+                    // Gửi email xác nhận (lúc này order đã có đủ thông tin Product)
                     await SendConfirmationEmail(order);
                 }
                 return Redirect("https://localhost:5000/Checkout/Success");
@@ -103,11 +110,12 @@ namespace WebApplication1.Controllers
             else
             {
                 // Thanh toán thất bại hoặc bị hủy
-                order.Status = "Processed";
+                order.Status = "Processed"; // Hoặc trạng thái "Failed" tùy logic của bạn
                 await _context.SaveChangesAsync();
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
             }
         }
+
         [HttpGet("VnpayReturn2")]
         public async Task<IActionResult> VnpayReturn2()
         {
@@ -124,7 +132,13 @@ namespace WebApplication1.Controllers
             string responseCode = collections["vnp_ResponseCode"]!;
             string transactionStatus = collections["vnp_TransactionStatus"]!;
 
-            var order = await _context.Orders.FindAsync(orderId);
+            // --- SỬA ĐỔI: Dùng Include tương tự như trên ---
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+            // ----------------------------------------------
+
             if (order == null) return NotFound("Order not found.");
 
             // 3. Xử lý trạng thái
@@ -147,6 +161,7 @@ namespace WebApplication1.Controllers
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
             }
         }
+
         private async Task SendConfirmationEmail(Order order)
         {
             // 1. Tìm thông tin người dùng để lấy Email
@@ -163,33 +178,61 @@ namespace WebApplication1.Controllers
 
         private string CreateOrderConfirmationEmailBody(Order order)
         {
+            // Tạo các dòng trong bảng (Thêm cột Mã SP)
             var itemDetails = string.Join("", order.OrderDetails.Select(od =>
                 $@"<tr>
-                    <td style='border: 1px solid #ddd; padding: 8px;'>{od.Product?.Name ?? "Sản phẩm đã xóa"}</td>
-                    <td style='border: 1px solid #ddd; padding: 8px;'>{od.Quantity}</td>
-                    <td style='border: 1px solid #ddd; padding: 8px;'>{od.PriceAtTime:N0} VND</td>
-                    <td style='border: 1px solid #ddd; padding: 8px;'>{(od.Quantity * od.PriceAtTime):N0} VND</td>
-                  </tr>"
+                    <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>
+                        {od.Product?.Id ?? 0}
+                    </td>
+                    <td style='border: 1px solid #ddd; padding: 8px;'>
+                        {od.Product?.Name ?? "Sản phẩm không tồn tại"}
+                    </td>
+                    <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>
+                        {od.Quantity}
+                    </td>
+                    <td style='border: 1px solid #ddd; padding: 8px; text-align: right;'>
+                        {od.PriceAtTime:N0} VND
+                    </td>
+                    <td style='border: 1px solid #ddd; padding: 8px; text-align: right;'>
+                        {(od.Quantity * od.PriceAtTime):N0} VND
+                    </td>
+                </tr>"
             ));
 
             return $@"
                 <html>
-                <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
-                    <div style='max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px;'>
-                        <h1 style='color: #4CAF50;'>Cảm ơn bạn đã mua hàng!</h1>
+                <body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
+                    <div style='max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 8px;'>
+                        <h1 style='color: #4CAF50; text-align: center;'>Thanh Toán Thành Công!</h1>
+                        
+                        <p>Xin chào <strong>{order.Username}</strong>,</p>
                         <p>Đơn hàng <strong>#{order.Id}</strong> của bạn đã được thanh toán thành công vào lúc {order.OrderDate.ToLocalTime():HH:mm:ss dd/MM/yyyy}.</p>
                         
-                        <h2>Cảm ơn Người dùng có tài khoản#{order.Username}đã thanh toán và tin tưởng chúng tôi</h2>
-                        <p>Chúng tôi rất cảm kích #{order.Username} đã sử dụng sản phẩm của chúng tôi chúc bạn 1 ngày tốt lành</p>
-                        <p>Vui lòng kiểm tra điện thoại và đơn hàng của bạn đã được cập nhật trên web <3 </p>
-                        
-                        <h3 style='color: #333;'>Tổng cộng: <strong>{order.TotalAmount:N0} VND</strong></h3>
-                        <p>Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất.</p>
-                        <p>Trân trọng,<br>Đội ngũ CÔNG NGHỆ PHẦN MỀM HUFLIT</p>
+                        <h3>Chi tiết đơn hàng:</h3>
+                        <table style='width: 100%; border-collapse: collapse; margin-top: 10px;'>
+                            <thead>
+                                <tr style='background-color: #f2f2f2;'>
+                                    <th style='border: 1px solid #ddd; padding: 8px;'>Mã SP</th>
+                                    <th style='border: 1px solid #ddd; padding: 8px;'>Tên Sản phẩm</th>
+                                    <th style='border: 1px solid #ddd; padding: 8px;'>SL</th>
+                                    <th style='border: 1px solid #ddd; padding: 8px;'>Đơn giá</th>
+                                    <th style='border: 1px solid #ddd; padding: 8px;'>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {itemDetails}
+                            </tbody>
+                        </table>
+
+                        <h3 style='text-align: right; color: #d32f2f; margin-top: 15px;'>
+                            Tổng thanh toán: {order.TotalAmount:N0} VND
+                        </h3>
+
+                        <p>Cảm ơn bạn đã tin tưởng và mua sắm tại CÔNG NGHỆ PHẦN MỀM HUFLIT.</p>
+                        <p>Trân trọng,<br>Đội ngũ hỗ trợ.</p>
                     </div>
                 </body>
                 </html>";
         }
     }
-
 }

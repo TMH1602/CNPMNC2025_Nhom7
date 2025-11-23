@@ -78,6 +78,8 @@ namespace MyWebApiWithSwagger.Controllers
             public string Message { get; set; } = string.Empty;
             public string Token { get; set; } = string.Empty;
             public DateTime ExpiresIn { get; set; }
+
+            public string Role { get; set; } = string.Empty;
         }
 
         #endregion
@@ -164,7 +166,14 @@ namespace MyWebApiWithSwagger.Controllers
 
                 var expiryTime = DateTime.UtcNow.AddMinutes(30);
                 var tokenString = GenerateJwtToken(user, expiryTime);
-
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,  
+                    Secure = true,    
+                    SameSite = SameSiteMode.Strict, 
+                    Expires = expiryTime 
+                };
+                Response.Cookies.Append("jwtToken", tokenString, cookieOptions);
                 var successResponse = new LoginResponse
                 {
                     IsSuccess = true,
@@ -364,7 +373,12 @@ namespace MyWebApiWithSwagger.Controllers
             };
             return Ok(accountInfo); 
         }
-
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwtToken");
+            return Ok(new { message = "Đăng xuất thành công" });
+        }
         [HttpDelete("delete-my-account")]
         [Authorize]
         [ProducesResponseType(typeof(DeleteAccountResponse), StatusCodes.Status200OK)]
