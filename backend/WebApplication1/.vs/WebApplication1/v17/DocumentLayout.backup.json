@@ -241,8 +241,7 @@
               "RelativeToolTip": "WebApplication1\\Services\\EmailService.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAmwDoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T15:26:34.412Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T15:26:34.412Z"
             },
             {
               "$type": "Document",
@@ -302,8 +301,7 @@
               "RelativeToolTip": "WebApplication1\\Models\\ProductDeletedByAdmin.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T19:09:17.822Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-25T19:09:17.822Z"
             },
             {
               "$type": "Document",
@@ -323,9 +321,9 @@
               "Title": "VnPayController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\VnPayController.cs",
-              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs*",
-              "RelativeToolTip": "WebApplication1\\Controllers\\VnPayController.cs*",
-              "ViewState": "AgIAAOEAAAAAAAAAAAAAAN8AAAAkAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\VnPayController.cs",
+              "ViewState": "AgIAAOEAAAAAAAAAAAAAAO0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-25T14:17:54.156Z",
               "EditorCaption": ""
@@ -340,8 +338,7 @@
               "RelativeToolTip": "WebApplication1\\Services\\VnPayService.cs",
               "ViewState": "AgIAAJYAAAAAAAAAAAAswK0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T14:17:26.718Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-25T14:17:26.718Z"
             },
             {
               "$type": "Document",
@@ -389,8 +386,7 @@
               "RelativeToolTip": "WebApplication1\\Program.cs",
               "ViewState": "AgIAAC8AAAAAAAAAAAAIwDoAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T13:05:46.584Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T13:05:46.584Z"
             },
             {
               "$type": "Document",
@@ -618,8 +614,7 @@
               "RelativeToolTip": "WebApplication1\\Models\\CartItem.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAQwBsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-16T13:23:02.176Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-16T13:23:02.176Z"
             },
             {
               "$type": "Document",
@@ -726,8 +721,7 @@
               "RelativeToolTip": "WebApplication1\\Models\\Product.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T13:17:22.012Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T13:17:22.012Z"
             },
             {
               "$type": "Document",
@@ -739,8 +733,7 @@
               "RelativeToolTip": "WebApplication1\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAG8BAAAAAAAAAAAqwHoBAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T13:04:21.438Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T13:04:21.438Z"
             },
             {
               "$type": "Document",
