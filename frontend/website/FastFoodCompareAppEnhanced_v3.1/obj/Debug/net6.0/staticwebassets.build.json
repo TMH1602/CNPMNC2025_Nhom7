@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "azYwQGclGOfJB4L/P0r7BLE/GTO2Wo7KBWagZNwkBs8=",
+  "Hash": "R3+45++AonBZp42OJLu0Z3q9UeGexJgKb+2DmgsIkkc=",
   "Source": "FastFoodCompareAppEnhanced_v3.1",
   "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
   "Mode": "Default",
@@ -141,6 +141,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\banner.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
+      "SourceId": "FastFoodCompareAppEnhanced_v3.1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
+      "RelativePath": "images/bg3#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "capdk7bpdy",
+      "Integrity": "vD5syLcT0Tyvywpov8xrynCM4mQexfZTD2jCZmMHVcU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\bg3.jpg"
     },
     {
       "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
@@ -780,6 +801,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-Z8qOUhXQstG2hh95t6TAeqle47fSLAAQzRoo5MRAmh8="
+        }
+      ]
+    },
+    {
+      "Route": "images/bg3.capdk7bpdy.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "836261"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vD5syLcT0Tyvywpov8xrynCM4mQexfZTD2jCZmMHVcU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 25 Nov 2025 06:16:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "capdk7bpdy"
+        },
+        {
+          "Name": "label",
+          "Value": "images/bg3.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-vD5syLcT0Tyvywpov8xrynCM4mQexfZTD2jCZmMHVcU="
+        }
+      ]
+    },
+    {
+      "Route": "images/bg3.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "836261"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vD5syLcT0Tyvywpov8xrynCM4mQexfZTD2jCZmMHVcU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 25 Nov 2025 06:16:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-vD5syLcT0Tyvywpov8xrynCM4mQexfZTD2jCZmMHVcU="
         }
       ]
     },

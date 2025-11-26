@@ -33,6 +33,10 @@
       "PackagePath": "staticwebassets\\images\\banner.jpg"
     },
     {
+      "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
+      "PackagePath": "staticwebassets\\images\\bg3.jpg"
+    },
+    {
       "Id": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
       "PackagePath": "staticwebassets\\images\\burger.jpg"
     },
