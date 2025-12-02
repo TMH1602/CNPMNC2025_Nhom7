@@ -1,0 +1,4 @@
+tạo 1 file appsettings.Development.json
+add key theo file app.settings.json
+lưu 
+chạy đượcbackend 
