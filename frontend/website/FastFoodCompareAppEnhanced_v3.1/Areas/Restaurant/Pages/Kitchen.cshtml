@@ -1,0 +1,255 @@
+@page "/Restaurant"
+@model FastFoodCompareAppEnhanced_v3_1.Areas.Restaurant.Pages.KitchenModel
+@{
+    // Dòng @page "/Restaurant" ở trên sẽ đặt trang này làm trang mặc định
+}
+
+<div class="container-fluid">
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-3 text-center">Đơn hàng đang xử lý</h2>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID Đơn hàng</th>
+                                <th>Bàn số</th>
+                                <th>Tổng tiền (VNĐ)</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="processing-orders-body">
+                            <tr><td colspan="5" class="text-center">Đang tải...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-3 text-center">Lịch sử đơn hàng (Đã hoàn thành)</h2>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID Đơn hàng</th>
+                                <th>Bàn số</th>
+                                <th>Tổng tiền (VNĐ)</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="done-history-body">
+                            <tr><td colspan="4" class="text-center">Đang tải...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        // --- KHAI BÁO BIẾN API ---
+        const API_BASE_URL = "https://localhost:7132/api/Restaurant/Restaurant";
+        
+        const GET_PROCESSING_URL = `${API_BASE_URL}/Processing`;
+        const GET_DONE_HISTORY_URL = `${API_BASE_URL}/DoneHistory`;
+        const POST_CHECK_DONE_URL = `${API_BASE_URL}/CheckDone`; 
+
+        let jwtToken = ''; 
+        const RESTAURANT_LOGIN_URL = window.RESTAURANT_LOGIN_URL || '/Account/Login';
+
+        // --- HÀM LẤY TOKEN (Đã sửa) ---
+        function getToken() {
+            let token = '';
+            try {
+                const rawTokenString = localStorage.getItem("jwtToken");
+                if (rawTokenString && typeof rawTokenString === 'string') {
+                    token = rawTokenString.trim(); 
+                    if ((token.startsWith("'") && token.endsWith("'")) || (token.startsWith('"') && token.endsWith('"'))) {
+                        token = token.substring(1, token.length - 1);
+                    }
+                } else { 
+                    console.warn("Không tìm thấy jwtToken trong localStorage."); 
+                }
+            } catch (e) {
+                console.error("Lỗi khi đọc jwtToken từ localStorage:", e);
+            }
+            return token;
+        }
+
+        // --- HÀM CHẠY KHI TẢI TRANG ---
+        $(document).ready(function() {
+            jwtToken = getToken(); 
+            if (!jwtToken) {
+                console.error("Lỗi: Token không hợp lệ.");
+                alert("Token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.");
+                window.location.href = RESTAURANT_LOGIN_URL;
+                return; 
+            }
+            loadProcessingOrders();
+            loadDoneHistory();
+        });
+
+        // --- TẢI DANH SÁCH "ĐANG XỬ LÝ" (GET Processing) ---
+        function loadProcessingOrders() {
+            const tableBody = $('#processing-orders-body');
+            tableBody.html('<tr><td colspan="5" class="text-center">Đang tải...</td></tr>');
+            const authHeaders = { 'accept': 'text/plain', 'Authorization': `Bearer ${jwtToken}` };
+
+            // *** SỬA LỖI Ở ĐÂY: Xóa dòng "headers: accept: text/plain" bị dư ***
+            fetch(GET_PROCESSING_URL, { 
+                method: 'GET', 
+                headers: authHeaders 
+            })
+            // *** KẾT THÚC SỬA LỖI ***
+                .then(response => {
+                    if (response.status === 401) { throw new Error('Unauthorized'); }
+                    if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
+                    return response.text(); 
+                })
+                .then(text => { 
+                    tableBody.empty();
+                    let orders;
+                    try {
+                        orders = JSON.parse(text); 
+                    } catch (e) {
+                        orders = []; 
+                    }
+                    
+                    let ordersArray = [];
+                    if (Array.isArray(orders)) {
+                        ordersArray = orders;
+                    } else if (orders && typeof orders === 'object' && orders !== null) {
+                        ordersArray = [orders]; 
+                    }
+
+                    if (ordersArray.length === 0) {
+                        tableBody.html('<tr><td colspan="5" class="text-center">Không có đơn hàng nào đang xử lý.</td></tr>');
+                        return;
+                    }
+
+                    ordersArray.forEach(order => {
+                        const priceFormatted = (order.totalAmount || 0).toLocaleString('vi-VN');
+                        const tableNumber = order.tableNumber || 'Mang về'; 
+                        const orderId = order.orderId || 0; 
+                        
+                        const rowHtml = `
+                            <tr>
+                                <td><strong>#${orderId}</strong></td>
+                                <td>${tableNumber}</td>
+                                <td>${priceFormatted} VNĐ</td>
+                                <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" onclick="markAsDone(${orderId})">
+                                        <i class="bi bi-check-lg"></i> Hoàn thành
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.append(rowHtml);
+                    });
+                })
+                .catch(error => {
+                    console.error("Lỗi tải đơn hàng đang xử lý:", error);
+                    if (error.message === 'Unauthorized') {
+                        alert("Phiên hết hạn..."); 
+                        window.location.href = RESTAURANT_LOGIN_URL;
+                    } else {
+                        tableBody.html('<tr><td colspan="5" class="text-center text-danger">Lỗi khi tải dữ liệu. (Kiểm tra Console F12)</td></tr>');
+                    }
+                });
+        }
+
+        // --- TẢI DANH SÁCH "LỊCH SỬ" (GET DoneHistory) ---
+        function loadDoneHistory() {
+            const tableBody = $('#done-history-body');
+            tableBody.html('<tr><td colspan="4" class="text-center">Đang tải...</td></tr>');
+            const authHeaders = { 'accept': 'text/plain', 'Authorization': `Bearer ${jwtToken}` };
+
+            fetch(GET_DONE_HISTORY_URL, { method: 'GET', headers: authHeaders })
+                .then(response => {
+                    if (response.status === 401) { throw new Error('Unauthorized'); }
+                    if (!response.ok) { throw new Error(`Lỗi API: ${response.status}`); }
+                    return response.text();
+                })
+                .then(text => { 
+                    tableBody.empty();
+                    let orders;
+                    try {
+                        orders = JSON.parse(text);
+                    } catch (e) {
+                        orders = [];
+                    }
+                    
+                    console.log("Dữ liệu trả về từ API DoneHistory (đã parse):", orders);
+
+                    let ordersArray = [];
+                    if (Array.isArray(orders)) {
+                        ordersArray = orders;
+                    } else if (orders && typeof orders === 'object' && orders !== null) {
+                        ordersArray = [orders];
+                    }
+
+                    if (ordersArray.length === 0) {
+                        tableBody.html('<tr><td colspan="4" class="text-center">Chưa có đơn hàng nào hoàn thành.</td></tr>');
+                        return;
+                    }
+                    ordersArray.forEach(order => {
+                        const priceFormatted = (order.totalAmount || 0).toLocaleString('vi-VN');
+                        const tableNumber = order.tableNumber || 'Mang về'; 
+                        const orderId = order.orderId || 'N/A'; 
+
+                        const rowHtml = `
+                            <tr>
+                                <td><strong>#${orderId}</strong></td>
+                                <td>${tableNumber}</td>
+                                <td>${priceFormatted} VNĐ</td>
+                                <td><span class="badge bg-success">Đã hoàn thành</span></td>
+                            </tr>
+                        `;
+                        tableBody.append(rowHtml);
+                    });
+                })
+                .catch(error => {
+                    console.error("Lỗi tải lịch sử đơn hàng:", error);
+                    tableBody.html('<tr><td colspan="4" class="text-center text-danger">Lỗi khi tải dữ liệu. (Kiểm tra Console F12)</td></tr>');
+                });
+        }
+
+        // --- ĐÁNH DẤU "HOÀN THÀNH" (POST CheckDone) ---
+        window.markAsDone = function(orderId) {
+            if (!orderId || orderId === 0) {
+                alert("Lỗi: Không thể hoàn thành đơn hàng không có ID.");
+                return;
+            }
+            if (!confirm(`Bạn có chắc muốn hoàn thành đơn hàng #${orderId}?`)) { return; }
+
+            const url = `${POST_CHECK_DONE_URL}/${orderId}`;
+            const authHeaders = { 'accept': '*/*', 'Authorization': `Bearer ${jwtToken}` };
+
+            fetch(url, { method: 'POST', headers: authHeaders })
+                .then(response => {
+                    if (response.ok) {
+                        alert(`Đã hoàn thành đơn hàng #${orderId}.`);
+                        loadProcessingOrders();
+                        loadDoneHistory();
+                    } else if (response.status === 401) {
+                         alert("Phiên hết hạn..."); 
+                         window.location.href = RESTAURANT_LOGIN_URL;
+                    } else {
+                        response.text().then(text => alert(`Lỗi khi hoàn thành đơn: ${text || 'Không có thông tin'}`));
+                    }
+                })
+                .catch(error => console.error("Lỗi API CheckDone:", error));
+        }
+    </script>
+}

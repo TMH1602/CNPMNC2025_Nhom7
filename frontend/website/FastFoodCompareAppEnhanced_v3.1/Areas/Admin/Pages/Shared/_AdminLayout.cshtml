@@ -1,0 +1,208 @@
+@using FastFoodCompareAppEnhanced_v3_1
+@using FastFoodCompareAppEnhanced_v3_1.Models
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Portal</title>
+    <link rel="icon" type="image/png" href="/images/Logo.png">
+    <base href="~/" /> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/auth.css" rel="stylesheet" />
+
+    <style>
+        /* CSS CỦA BẠN - DÙNG CHO AVATAR */
+        .user-avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #ff6a00;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        /* SỬA ĐỔI 1: THÊM ẢNH NỀN CHO BODY */
+        body {
+            background-image: url('/images/restaurant_bg.jpg?v=2'); /* Tăng version để tránh cache */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            padding-top: 56px; 
+        }
+        .navbar-admin {
+            background-color: #495057 !important; 
+            color: white !important;
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             z-index: 1030; 
+        }
+        .sidebar {
+            width: 250px;
+            min-height: 100vh; 
+            position: fixed; 
+            z-index: 1000;
+            top: 0; 
+            left: 0;
+            background-color: #343a40; 
+            padding-top: 76px; 
+            overflow-y: auto; 
+        }
+        
+        /* SỬA ĐỔI QUAN TRỌNG: Đặt nền trong suốt cho content-wrapper */
+        .content-wrapper {
+            margin-left: 250px; 
+            padding: 20px;
+            width: calc(100% - 250px);
+            background-color: transparent; /* <--- ĐÂY LÀ SỬA ĐỔI QUAN TRỌNG NHẤT */
+            min-height: calc(100vh - 56px);
+        }
+
+        /* THÊM MỚI: Đặt nền trắng mờ cho các card (bảng) để dễ đọc chữ */
+        .content-wrapper .card {
+            background-color: rgba(255, 255, 255, 0.9); /* Màu trắng 90% độ mờ */
+            border: none; /* Bỏ border nếu muốn */
+        }
+
+        .nav-link.active-admin {
+            background-color: #007bff !important; 
+            color: white !important;
+        }
+        /* CSS cho link sidebar */
+         .sidebar .nav-link {
+            color: #adb5bd; 
+         }
+         .sidebar .nav-link:hover {
+            color: #fff; 
+            background-color: #495057;
+         }
+         .sidebar .nav-link.active-admin { 
+            font-weight: bold;
+            color: #fff !important;
+         }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-admin navbar-expand-lg shadow-sm fixed-top">
+        <div class="container-fluid"> 
+            <a class="navbar-brand text-white" href="/Admin/Products">
+                <i></i> FastFoodCompany
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <div class="d-flex align-items-center" id="admin-logged-in-state">
+                    <span class="d-flex align-items-center me-3 text-white">
+                        <span class="user-avatar me-2" id="user-avatar-initial"></span>
+                        <strong id="user-display-name"></strong>
+                    </span>
+                    <button class="btn btn-sm btn-danger rounded-pill" id="logout-button">
+                        Đăng xuất
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </nav>
+    
+    <div class="sidebar d-flex flex-column text-white">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/Admin/Products" class="nav-link"> > 
+                    <i class="bi bi-basket-fill me-2"></i> Quản lý Sản phẩm
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/Products/IndexBlazor" class="nav-link"> > 
+                    <i class="bi bi-lightning-charge-fill me-2"></i> Quản lý Sản phẩm (Blazor)
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Revenue" class="nav-link"> > 
+                    <i class="bi bi-graph-up me-2"></i> Báo cáo Doanh thu
+                </a>
+            </li>
+            @* --- ĐÃ XÓA 2 MỤC BÊN DƯỚI THEO YÊU CẦU --- *@
+            @*
+            <li>    
+                <a href="/Admin/Orders" class="nav-link"> 
+                    <i class="bi bi-receipt me-2"></i> Quản lý Đơn hàng
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Users" class="nav-link">
+                    <i class="bi bi-people-fill me-2"></i> Quản lý Người dùng
+                </a>
+            </li>
+            *@
+        </ul>
+    </div>
+
+    <div class="content-wrapper">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Khai báo biến toàn cục DUY NHẤT ở đây
+        window.ADMIN_LOGIN_URL = '/Account/Login'; 
+
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            const displayNameSpan = document.getElementById("user-display-name");
+            const avatarSpan = document.getElementById("user-avatar-initial"); 
+            const logoutButton = document.getElementById("logout-button");
+            
+            const username = localStorage.getItem("username"); 
+
+            // Logic hiển thị Navbar Admin (Giữ nguyên)
+            if (username) {
+                if(displayNameSpan) displayNameSpan.textContent = username; 
+                if(avatarSpan && username.length > 0) avatarSpan.textContent = username.charAt(0).toUpperCase();
+            } else {
+                window.location.href = window.ADMIN_LOGIN_URL; 
+                return;
+            }
+
+            // Logic nút Đăng xuất (Giữ nguyên)
+            if(logoutButton) {
+                logoutButton.addEventListener("click", function (e) {
+                    e.preventDefault(); 
+                    localStorage.clear(); // Xóa sạch local storage khi đăng xuất
+                    window.location.href = window.ADMIN_LOGIN_URL; 
+                });
+            }
+
+            // Logic làm nổi bật link sidebar đang active (Giữ nguyên)
+            const currentPath = window.location.pathname;
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active-admin'); 
+                
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active-admin');
+                }
+            });
+
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false) 
+    
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

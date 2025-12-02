@@ -1,0 +1,572 @@
+@{
+    ViewData["Title"] = "Thông tin người dùng";
+}
+
+<style>
+    /* ... (Toàn bộ CSS của bạn ở đây - không thay đổi) ... */
+    .sidebar-avatar {
+        width: 48px; height: 48px; border-radius: 50%;
+        background-color: #ff6a00; color: #ffffff; font-weight: 600;
+        font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+    }
+    .profile-avatar {
+        
+        width: 100px;height :100px; border-radius: 50%;
+        background-color: #ff6a00; color: #ffffff; font-weight: 600;
+        font-size: 3rem; display: flex; align-items: center; justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .profile-sidebar .nav-link {
+        color: #555; padding-top: 12px; padding-bottom: 12px;
+    }
+    .profile-sidebar .nav-link.active {
+        color: #ff6a00; background-color: transparent;
+        border-right: 3px solid #ff6a00; font-weight: 600;
+    }
+    .info-display-row {
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed #eee;
+    }
+    .order-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+    }
+    .order-card:hover {
+        transform: translateY(-2px);
+    }
+    .order-header {
+        background-color: #f8f8f8;
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    .order-status-paid {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    .item-detail {
+        padding: 10px 15px;
+        border-top: 1px dashed #eee;
+    }
+    .card-footer {
+        padding: 15px;
+    }
+    .footer-wrapper-white { 
+        background-color: #dbcb9c; /* Nền trắng */
+        border-radius: 12px; /* Bo góc */
+        padding: 15px; /* Padding bên trong */
+        bottom: 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bóng đổ nhẹ */
+        text-align: left;
+        width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+        margin-top: 2rem;
+    }
+    #history-content {
+    /* Kích thước cố định */
+    width: 1200px;  /* Chiều rộng 100px */
+    height: 1000px; /* Chiều cao 100px */
+    
+    /* Cho phép cuộn */
+    overflow: auto; /* Kích hoạt thanh cuộn (cả ngang và dọc) khi nội dung tràn */
+    margin-bottom: 100px;
+    }
+
+    /* CSS BỔ SUNG CHO LỊCH SỬ ĐƠN HÀNG */
+    /* Trạng thái PAID (Giữ nguyên) */
+    .order-status-paid {
+        background-color: #d4edda; /* Xanh lá nhạt */
+        color: #155724; /* Xanh lá đậm */
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    /* 🎯 MÀU XANH CHO TRẠNG THÁI 'DONE' */
+    .order-status-done {
+        background-color: #cce5ff; /* Xanh dương nhạt */
+        color: #004085; /* Xanh dương đậm */
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    /* 🎯 MÀU ĐỎ CHO CÁC TRẠNG THÁI KHÁC (PENDING, CANCEL, v.v.) */
+    .order-status-other {
+        background-color: #f8d7da; /* Đỏ nhạt */
+        color: #721c24; /* Đỏ đậm */
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    #content-panel {
+        max-height: 75vh; /* Giới hạn chiều cao (ví dụ: 75% chiều cao màn hình) */
+        overflow-y: auto; /* Thêm thanh cuộn DỌC khi nội dung dài */
+    }                       
+</style>
+
+<div id="message-panel" class="mb-3"></div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body p-4 profile-sidebar">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="sidebar-avatar me-3" id="sidebar-avatar-initial">...</div>
+                    <div>
+                        <strong id="sidebar-username" class="d-block">Đang tải...</strong>
+                    </div>
+                </div>
+                <hr>
+                <nav class="nav nav-pills flex-column">
+                    <a class="nav-link active" href="#" data-panel="profile" id="link-profile">Cập nhật tài khoản</a>
+                    <a class="nav-link" href="#" data-panel="history" id="link-history">Lịch sử đơn hàng</a>
+                </nav>
+                <hr class="mt-3">
+                    <div id="total-spent-summary" class="p-2 border rounded bg-light small">
+                        <strong>Tổng chi tiêu:</strong> <span id="total-spent-amount">...</span>
+                    </div>
+            </div>
+        </div>
+        </div>
+
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body p-4" id="content-panel">
+                <div id="default-loading-content" class="text-center p-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Đang tải hồ sơ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        
+        const username = localStorage.getItem("username"); 
+        const token = localStorage.getItem("jwtToken"); 
+        
+        const LOGIN_URL = "@Url.Action("Login", "Account")";
+        const API_BASE_URL = "https://localhost:7132/api/Auth";
+
+        const encodedUsername = encodeURIComponent(username);
+        
+        const HISTORY_API_URL = `https://localhost:7132/api/Cart/history/${encodedUsername}`;
+        const PROFILE_API_URL = `${API_BASE_URL}/account/${encodedUsername}`;
+
+        const contentPanel = document.getElementById('content-panel');
+        const messagePanel = document.getElementById("message-panel");
+
+        if (!username || !token) {
+            window.location.href = LOGIN_URL;
+            return;
+        }
+        
+        let profileData = null; 
+        
+        async function loadUserProfileData() {
+            try {
+                const response = await fetch(PROFILE_API_URL, {
+                    method: "GET",
+                    headers: { 
+                        "accept": "application/json", 
+                        "Authorization": `Bearer ${token}` 
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    if (response.status === 401) {
+                        localStorage.clear();
+                        window.location.href = LOGIN_URL;
+                        return;
+                    }
+                    throw new Error(`Lỗi ${response.status}: ${errorText || 'Không thể tải thông tin người dùng.'}`);
+                }
+                
+                profileData = await response.json();
+                
+            } catch (error) {
+                console.error("Lỗi khi tải thông tin người dùng:", error);
+                messagePanel.innerHTML = `<div class="alert alert-danger">Không thể tải hồ sơ người dùng: ${error.message}</div>`;
+                profileData = { displayName: username, email: "Lỗi tải dữ liệu", createdDate: "" };
+            }
+            
+            const displayName = profileData.displayName || username;
+            const firstLetter = displayName.charAt(0).toUpperCase();
+            document.getElementById("sidebar-avatar-initial").textContent = firstLetter;
+            document.getElementById("sidebar-username").textContent = displayName;
+        }
+
+        function renderProfilePanel() {
+            messagePanel.innerHTML = "";
+            const data = profileData || { displayName: username, email: "...", createdDate: "" };
+
+            const displayName = data.displayName || username;
+            const firstLetter = displayName.charAt(0).toUpperCase();
+            const createdDate = data.createdDate ? new Date(data.createdDate).toLocaleDateString('vi-VN') : 'N/A';
+            
+            contentPanel.innerHTML = `
+                <h4 class="mb-4">Thông tin cá nhân</h4>
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="profile-avatar mx-auto">${firstLetter}</div>
+                        <p class="small text-muted">ID: ${data.userId || 'N/A'}</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row info-display-row">
+                            <label class="col-sm-4 col-form-label text-muted">Tên hiển thị:</label>
+                            <div class="col-sm-8 pt-2">
+                                <strong id="display-name-info">${localStorage.getItem("username")}</strong>
+                            </div>
+                        </div>
+                        <div class="row info-display-row">
+                            <label class="col-sm-4 col-form-label text-muted">Email:</label>
+                            <div class="col-sm-8 pt-2">
+                                <strong id="email-info">${data.email || "Không có Email"}</strong>
+                            </div>
+                        </div>
+                        <div class="row info-display-row">
+                            <label class="col-sm-4 col-form-label text-muted">Ngày tạo:</label>
+                            <div class="col-sm-8 pt-2">
+                                <span id="created-date-info">${createdDate}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <h5>Thay đổi mật khẩu</h5>
+                <form id="change-password-form" class="mt-3">
+                    <div class="mb-3 row">
+                        <label for="old-password" class="col-sm-3 col-form-label">Mật khẩu cũ</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="old-password" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="new-password" class="col-sm-3 col-form-label">Mật khẩu mới</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="new-password" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <button type="submit" class="btn btn-gradient">Lưu mật khẩu mới</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                <h5 class="text-danger">Xóa tài khoản</h5>
+                <p class="small text-muted">Hành động này không thể hoàn tác. Vui lòng nhập mật khẩu để xác nhận.</p>
+                <form id="delete-account-form" class="mt-3">
+                    <div class="mb-3 row">
+                        <label for="delete-password" class="col-sm-3 col-form-label">Mật khẩu của bạn</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="delete-password" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <button type="submit" class="btn btn-danger">Xóa vĩnh viễn tài khoản</button>
+                        </div>
+                    </div>
+                </form>
+                `;
+            
+            attachPasswordChangeListener();
+            
+            // *** 3. GỌI HÀM JAVASCRIPT MỚI ***
+            attachDeleteAccountListener();
+        }
+
+        async function renderOrderHistoryPanel() {
+            // ... (Hàm này giữ nguyên, không thay đổi) ...
+            messagePanel.innerHTML = "";
+            contentPanel.innerHTML = `
+                <h4 class="mb-4">📜 Lịch sử đơn hàng</h4>
+                <div id="history-content" class="text-center p-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Đang tải lịch sử đơn hàng...</p>
+                </div>
+            `;
+            
+            updateSidebarTotalSpent(null); 
+
+            try {
+                const response = await fetch(HISTORY_API_URL, {
+                    method: 'GET',
+                    headers: { 
+                        "accept": "application/json", 
+                        "Authorization": `Bearer ${token}` 
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    if (response.status === 401) {
+                        localStorage.clear();
+                        window.location.href = LOGIN_URL;
+                        return;
+                    }
+                    throw new Error(`Lỗi ${response.status}: ${errorText || 'Không thể tải lịch sử đơn hàng.'}`);
+                }
+                
+                const orders = await response.json(); 
+                
+                let historyHtml = '';
+                let totalSpent = 0; 
+
+                if (!orders || orders.length === 0) {
+                    historyHtml = '<div class="alert alert-info">Bạn chưa có đơn hàng nào.</div>';
+                } else {
+                    orders.forEach(order => {
+                        const statusLower = order.status ? order.status.toLowerCase() : '';
+
+                        if (statusLower === 'paid' || statusLower === 'done') {
+                            totalSpent += order.totalAmount;
+                        }
+                        
+                        const orderDate = new Date(order.orderDate).toLocaleString('vi-VN');
+                        const totalAmount = order.totalAmount.toLocaleString('vi-VN');
+                        
+                        let statusClass;
+                        if (statusLower === 'done') {
+                            statusClass = 'order-status-done'; 
+                        } else if (statusLower === 'paid') {
+                            statusClass = 'order-status-paid'; 
+                        } else {
+                            statusClass = 'order-status-other'; 
+                        }
+
+                        let itemsHtml = order.items.map(item => `
+                            <div class="item-detail row">
+                                <div class="col-8 text-muted">${item.productName}</div>
+                                <div class="col-4 text-end">
+                                    ${item.quantity} x ${(item.priceAtTime || 0).toLocaleString('vi-VN')} VNĐ
+                                </div>
+                            </div>
+                        `).join('');
+
+                        historyHtml += `
+                            <div class="card order-card">
+                                <div class="order-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Đơn hàng #${order.orderId}</strong>
+                                        <div class="small text-muted">${orderDate}</div>
+                                    </div>
+                                    <span class="${statusClass}">${order.status || 'N/A'}</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    ${itemsHtml}
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <strong>Tổng tiền:</strong>
+                                    <strong class="text-primary">${totalAmount} VNĐ</strong>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                document.getElementById('history-content').innerHTML = historyHtml;
+                updateSidebarTotalSpent(totalSpent); 
+
+            } catch (error) {
+                console.error("Lỗi fetch lịch sử đơn hàng:", error);
+                document.getElementById('history-content').innerHTML = `<div class="alert alert-danger">Lỗi khi tải lịch sử đơn hàng: ${error.message}</div>`;
+                updateSidebarTotalSpent(0); 
+            }
+        }
+
+        function updateSidebarTotalSpent(totalAmount) {
+            // ... (Hàm này giữ nguyên, không thay đổi) ...
+            const totalSpentEl = document.getElementById("total-spent-summary");
+            const totalSpentAmountEl = document.getElementById("total-spent-amount");
+
+            if (totalSpentEl && totalSpentAmountEl) {
+                if (totalAmount !== null) {
+                    totalSpentAmountEl.textContent = totalAmount.toLocaleString('vi-VN') + ' VNĐ';
+                    totalSpentEl.style.display = 'block'; 
+                } else {
+                    totalSpentAmountEl.textContent = 'Đang tải...';
+                    totalSpentEl.style.display = 'block'; 
+                }
+            }
+        }
+
+        function attachPasswordChangeListener() {
+            // ... (Hàm này giữ nguyên, không thay đổi) ...
+            const form = document.getElementById("change-password-form");
+            if (!form) return;
+
+            form.addEventListener("submit", async function(e) {
+                e.preventDefault(); 
+                
+                const oldPasswordEl = document.getElementById("old-password");
+                const newPasswordEl = document.getElementById("new-password");
+
+                const oldPassword = oldPasswordEl.value;
+                const newPassword = newPasswordEl.value;
+                
+                if (!newPassword || newPassword.length < 6) {
+                    messagePanel.innerHTML = `<div class="alert alert-warning">Mật khẩu mới phải có ít nhất 6 ký tự!</div>`;
+                    return;
+                }
+
+                const data = {
+                    oldPassword: oldPassword,
+                    newPassword: newPassword
+                };
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/change-password`, {
+                        method: "POST",
+                        headers: { 
+                            "Content-Type": "application/json",
+                            "accept": "application/json", 
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const responseData = await response.json(); 
+
+                    if (response.ok && responseData.isSuccess) {
+                        messagePanel.innerHTML = `<div class="alert alert-success">${responseData.message || 'Đã thay đổi mật khẩu thành công!'}</div>`;
+                        oldPasswordEl.value = "";
+                        newPasswordEl.value = "";
+                    } else {
+                        if (response.status === 401) {
+                            messagePanel.innerHTML = `<div class="alert alert-danger">Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.</div>`;
+                            localStorage.clear();
+                            setTimeout(() => window.location.href = LOGIN_URL, 2000);
+                            return;
+                        }
+                        const errorMessage = responseData.message || 'Lỗi không xác định khi đổi mật khẩu.';
+                        messagePanel.innerHTML = `<div class="alert alert-danger">${errorMessage}</div>`;
+                    }
+
+                } catch (error) {
+                    console.error("Lỗi fetch hoặc JSON:", error);
+                    messagePanel.innerHTML = `<div class="alert alert-danger">Lỗi kết nối hoặc API phản hồi không hợp lệ.</div>`;
+                }
+            });
+        }
+        
+        // *** 2. HÀM JAVASCRIPT MỚI ĐƯỢC THÊM VÀO ĐÂY ***
+        function attachDeleteAccountListener() {
+            const form = document.getElementById("delete-account-form");
+            if (!form) return;
+
+            form.addEventListener("submit", async function(e) {
+                e.preventDefault();
+                
+                // Thêm xác nhận
+                if (!confirm("Bạn có chắc chắn muốn xóa vĩnh viễn tài khoản này không? Hành động này không thể hoàn tác.")) {
+                    return; 
+                }
+
+                const passwordEl = document.getElementById("delete-password");
+                const currentPassword = passwordEl.value;
+
+                if (!currentPassword) {
+                    messagePanel.innerHTML = `<div class="alert alert-warning">Vui lòng nhập mật khẩu để xác nhận.</div>`;
+                    return;
+                }
+
+                const data = {
+                    currentPassword: currentPassword
+                };
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/delete-my-account`, {
+                        method: "DELETE", // Method là DELETE
+                        headers: { 
+                            "Content-Type": "application/json",
+                            "accept": "application/json", // API trả về DeleteAccountResponse (JSON)
+                            "Authorization": `Bearer ${token}` // Bắt buộc phải có token
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const responseData = await response.json(); 
+
+                    if (response.ok && responseData.isSuccess) {
+                        messagePanel.innerHTML = `<div class="alert alert-success">${responseData.message || 'Đã xóa tài khoản thành công. Đang đăng xuất...'}</div>`;
+                        localStorage.clear();
+                        setTimeout(() => {
+                            window.location.href = LOGIN_URL;
+                        }, 2500);
+
+                    } else {
+                        if (response.status === 401) {
+                            messagePanel.innerHTML = `<div class="alert alert-danger">Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.</div>`;
+                            localStorage.clear();
+                            setTimeout(() => window.location.href = LOGIN_URL, 2000);
+                            return;
+                        }
+                        // Hiển thị lỗi (ví dụ: "Mật khẩu xác nhận không chính xác.")
+                        const errorMessage = responseData.message || 'Lỗi không xác định khi xóa tài khoản.';
+                        messagePanel.innerHTML = `<div class="alert alert-danger">${errorMessage}</div>`;
+                    }
+
+                } catch (error) {
+                    console.error("Lỗi fetch hoặc JSON:", error);
+                    messagePanel.innerHTML = `<div class="alert alert-danger">Lỗi kết nối hoặc API phản hồi không hợp lệ.</div>`;
+                }
+            });
+        }
+        // *** KẾT THÚC HÀM MỚI ***
+
+
+        // ===========================================
+        // === LOGIC CHUYỂN ĐỔI PANEL (Navigation) ===
+        // ===========================================
+        const linkProfile = document.getElementById('link-profile');
+        const linkHistory = document.getElementById('link-history');
+        const navLinks = [linkProfile, linkHistory];
+
+        function setActiveLink(activeId) {
+            // ... (Hàm này giữ nguyên, không thay đổi) ...
+            navLinks.forEach(link => {
+                if (link.id === activeId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        linkProfile.addEventListener('click', (e) => {
+            // ... (Hàm này giữ nguyên, không thay đổi) ...
+            e.preventDefault();
+            setActiveLink('link-profile');
+            renderProfilePanel();
+        });
+
+        linkHistory.addEventListener('click', (e) => {
+            // ... (Hàm này giữ nguyên, không thay đổi) ...
+            e.preventDefault();
+            setActiveLink('link-history');
+            renderOrderHistoryPanel();
+        });
+
+
+        // --- CHẠY LẦN ĐẦU ---
+        loadUserProfileData().then(() => {
+            renderProfilePanel();
+        });
+
+    });
+</script>
+}

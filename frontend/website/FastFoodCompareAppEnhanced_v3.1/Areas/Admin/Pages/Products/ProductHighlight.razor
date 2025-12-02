@@ -1,0 +1,160 @@
+@namespace FastFoodCompareAppEnhanced_v3_1.Areas.Admin.Pages.Products
+@using System.Net.Http.Json
+@inject IHttpClientFactory HttpClientFactory
+
+<h3>Quản lý Sản phẩm (Blazor)</h3>
+
+@if (isLoading)
+{
+    <div class="text-center">
+        <p>Đang tải dữ liệu...</p>
+    </div>
+}
+else if (errorMessage != null)
+{
+    <div class="alert alert-danger">
+        <strong>Lỗi:</strong> @errorMessage
+    </div>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="categorySelect" class="form-label">Lọc theo loại:</label>
+            
+            <select id="categorySelect" class="form-select" @bind="selectedCategory" @bind:event="onchange">
+                <option value="">-- Hiển thị tất cả --</option>
+                
+                @foreach (var category in AllCategories)
+                {
+                    <option value="@category">@category</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (!allProducts.Any())
+            {
+                <p class="text-center">Không có sản phẩm nào.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá (VNĐ)</th>
+                            <th>Loại</th>
+                            <th>Hình ảnh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in FilteredProducts)
+                        {
+                            <tr class="@GetRowClass(product.Category)">
+                                <td>@product.Id</td>
+                                <td>@product.Name</td>
+                                <td>@product.Price.ToString("N0") VNĐ</td>
+                                <td>@product.Category</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                    {
+                                        <img src="@product.ImageUrl" alt="@product.Name" width="60" height="60" class="img-thumbnail" onerror="this.src='/images/default-food.png'" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/default-food.png" alt="@product.Name" width="60" height="60" class="img-thumbnail" />
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private string selectedCategory = ""; 
+    private List<Product> allProducts = new List<Product>();
+    private bool isLoading = true;
+    private string? errorMessage = null;
+    
+    private HttpClient? _client; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _client = HttpClientFactory.CreateClient("ApiClient");
+            
+            var products = await _client.GetFromJsonAsync<List<Product>>("api/Menu");
+            
+            if (products != null)
+            {
+                allProducts = products;
+            }
+            else
+            {
+                allProducts = new List<Product>();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Lỗi khi tải sản phẩm: {ex.Message}";
+            Console.WriteLine($"Lỗi khi tải sản phẩm: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private IEnumerable<Product> FilteredProducts
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(selectedCategory))
+            {
+                return allProducts;
+            }
+            return allProducts.Where(p => p.Category == selectedCategory);
+        }
+    }
+
+    private IEnumerable<string> AllCategories
+    {
+        get
+        {
+            return allProducts
+                .Select(p => p.Category) 
+                .Where(c => !string.IsNullOrEmpty(c)) 
+                .Distinct() 
+                .OrderBy(c => c); 
+        }
+    }
+
+    private string GetRowClass(string productCategory)
+    {
+        if (string.IsNullOrEmpty(selectedCategory) || productCategory != selectedCategory)
+        {
+            return ""; 
+        }
+        
+        return "table-primary"; 
+    }
+
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public decimal Price { get; set; }
+        public string Description { get; set; } = "";
+        public string ImageUrl { get; set; } = "";
+        public string Category { get; set; } = ""; 
+    }
+}

@@ -1,0 +1,258 @@
+[
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/xml_backup_rules.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_circle_button.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/circle_button.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_logo.jpg.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/logo.jpg"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_home_black_24dp.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_home_black_24dp.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_menu_settings.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_menu_settings.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_rounded_edittext.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/rounded_edittext.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_account_circle_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_account_circle_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_vpn_key_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_vpn_key_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_login.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_login.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_activity_auth.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/activity_auth.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_add_circle_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_add_circle_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_food_details.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_food_details.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_burger_bo.png.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/burger_bo.png"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_shopping_cart_black_24dp.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_shopping_cart_black_24dp.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_account_box_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_account_box_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_dish_management.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_dish_management.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_settings.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_settings.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_home_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_home_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_background.jpg.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/background.jpg"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_sharp_ad_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/sharp_ad_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_register.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_register.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_baseline_add_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_baseline_add_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/menu_bottom_nav_menu.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/menu/bottom_nav_menu.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_dangki.png.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/dangki.png"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_baseline_add_shopping_cart_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_baseline_add_shopping_cart_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ga_ran.png.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ga_ran.png"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/menu_menu_cart.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/menu/menu_cart.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_menu_cart.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_menu_cart.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_remove_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_remove_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_comparison.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_comparison.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_change_password_page.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/change_password_page.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/xml_network_security_config.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/xml/network_security_config.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_pizza_hai_san.png.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/pizza_hai_san.png"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_activity_restaurant.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/activity_restaurant.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_compare.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_compare.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_activity_main.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_dangnhap.png.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/dangnhap.png"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_setting_profile.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/setting_profile.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_baseline_shopping_cart_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_baseline_shopping_cart_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_cart.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_cart.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_banner.jpg.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/banner.jpg"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_activity_checkout.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/activity_checkout.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_item_cart.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/item_cart.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_shopping_cart_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_shopping_cart_24.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_menu_home.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_menu_home.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_item_dish.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/item_dish.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/layout_fragment_home.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/mipmap-xxhdpi_logo.jpg.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/mipmap-xxhdpi/logo.jpg"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.example.cnpmnc_appfood.app-debug-4:/drawable_baseline_email_24.xml.flat",
+        "source": "com.example.cnpmnc_appfood.app-main-6:/drawable/baseline_email_24.xml"
+    }
+]

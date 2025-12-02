@@ -1,0 +1,373 @@
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+<style>
+.navbnar{
+    visibility: gone;
+}
+.footer-wrapper-white { 
+        background-color: #dbcb9c; 
+        border-radius: 12px; 
+        padding: 15px; 
+        /* ĐÃ LOẠI BỎ bottom: 0; */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+        text-align: left;
+        width: 100%; 
+        bottom:0;
+        /* 🎯 THAY ĐỔI TẠI ĐÂY: Loại bỏ position: absolute/fixed. 
+        Footer sẽ nằm trong luồng tài liệu (position: static/mặc định) */
+        /* Đảm bảo nó không bị ảnh hưởng bởi các thuộc tính vị trí cũ */
+        position: fixed; 
+        z-index: 0; 
+
+        /* Thêm margin-top hoặc padding-top nếu bạn muốn footer cách xa nội dung chính một chút */
+        margin-top: 30px; 
+    }
+    /* CSS cho Tiêu đề Thanh toán */
+    .checkout-header-wrapper {
+        background-color: rgb(245, 156, 156); /* Nền trắng */
+        padding: 15px 20px; /* Padding */
+        border-radius: 8px; /* Bo góc */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ */
+        margin-bottom: 20px; /* Khoảng cách với nội dung bên dưới */
+        display: flex; 
+        align-items: center;
+        justify-content: flex-start;
+    }
+    /* Đảm bảo h2 bên trong không có margin dưới */
+    .checkout-header-wrapper h2 {
+        margin-bottom: 0 !important; 
+    }
+    .checkout-content-wrapper {
+    /* 🎯 THAY ĐỔI TẠI ĐÂY: Dùng rgba() với kênh alpha 0.6 */
+    background-color: rgba(212, 174, 174, 0.6); 
+
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    margin-top: 0px; 
+    margin-bottom: 20px;
+    
+    /* ❌ LOẠI BỎ thuộc tính opacity: 0.6; */
+}
+    .btn-warning-custom {
+        /* Nút chính (Review) - Dùng màu vàng sáng và chữ đen */
+        color: #000 !important; /* Chữ đen */
+        background-color: #ffc107 !important; /* Màu vàng (Bootstrap Warning) */
+        border-color: #020202 !important; /* Viền màu đen */
+        opacity: 0.9;
+        font-weight: bold;
+        transition: opacity 0.2s, background-color 0.2s;
+    }
+    .btn-warning-custom:hover {
+        opacity: 1;
+        background-color: #ffcd39 !important; /* Vàng nhạt hơn khi hover */
+    }
+    #review-panel {
+        margin-bottom: 200px;
+    }
+</style>
+<div class="checkout-header-wrapper">
+    <h2 class="mb-0">Thông tin thanh toán</h2> 
+</div>
+
+<div id="message-panel" class="mb-3"></div>
+<div class="checkout-content-wrapper">
+    <div class="row g-5">
+        <div class="col-md-7" id="shipping-input-panel">
+            <h4>Nhập thông tin giao hàng</h4>
+            <form id="checkout-form" novalidate>
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Họ và tên</label>
+                    <input type="text" class="form-control" id="fullName" required placeholder="Đang tải...">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Số điện thoại</label>
+                    <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <div class="mb-3">
+                    <label for="notes" class="form-label">Ghi chú (tùy chọn)</label>
+                    <textarea class="form-control" id="notes" rows="3"></textarea>
+                </div>
+                <button type="button" id="review-btn" class="btn btn-warning-custom w-100 btn-lg" disabled>Kiểm tra thông tin lần nữa</button>
+            </form>
+        </div>
+
+        <div class="col-12 col-md-5 mx-auto">
+            <h4 class="text-center">Đơn hàng của bạn</h4> <div id="order-summary" class="border p-3 rounded bg-light">
+                <p>Đang tải tóm tắt đơn hàng...</p>
+            </div>
+
+            <div id="review-panel" class="border p-3 rounded mt-3 d-none bg-warning-subtle">
+                <h5 class="text-danger text-center">Xác nhận thanh toán</h5> <div id="review-shipping-info"></div>
+                <hr>
+                <button type="button" id="confirm-checkout-btn" class="btn btn-warning-custom w-100 btn-lg">HOÀN TẤT ĐẶT HÀNG</button>
+                <button type="button" id="edit-info-btn" class="btn btn-link w-100 mt-2">Chỉnh sửa thông tin</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderSummaryContainer = document.getElementById('order-summary');
+        const checkoutForm = document.getElementById('checkout-form');
+        const messagePanel = document.getElementById('message-panel');
+        const reviewPanel = document.getElementById('review-panel');
+        const reviewShippingInfo = document.getElementById('review-shipping-info');
+        const shippingInputPanel = document.getElementById('shipping-input-panel');
+        
+        const reviewButton = document.getElementById('review-btn');
+        const confirmButton = document.getElementById('confirm-checkout-btn');
+        const editButton = document.getElementById('edit-info-btn');
+        
+        const username = localStorage.getItem('username');
+        const LOGIN_URL = '@Url.Action("Login", "Account")';
+
+        // Định nghĩa các API URL
+        const API_BASE_URL = "https://10.0.2.2:7132"; 
+
+// Định nghĩa các API URL
+        const USER_API_URL = `${API_BASE_URL}/api/Auth/account/${username}`;
+        const CART_API_URL = `${API_BASE_URL}/api/Cart/${username}`;
+        const CHECKOUT_API_URL = `${API_BASE_URL}/api/Cart/checkout?username=${username}`;
+        const VNPAY_API_BASE_URL = `${API_BASE_URL}/api/VnPay/CreatePayment`;
+
+
+        let currentCartData = null; // Lưu trữ dữ liệu giỏ hàng từ API
+
+        // =========================================================
+        // KIỂM TRA ĐĂNG NHẬP
+        // =========================================================
+        if (!username) {
+            messagePanel.innerHTML = '<div class="alert alert-warning">Bạn cần <a href="' + LOGIN_URL + '">đăng nhập</a> để thanh toán.</div>';
+            reviewButton.disabled = true;
+            return;
+        }
+
+        // =========================================================
+        // TẢI THÔNG TIN NGƯỜI DÙNG (BÊN TRÁI)
+        // =========================================================
+        async function loadUserInfo() {
+            try {
+                const response = await fetch(USER_API_URL, {
+                    method: "GET",
+                    headers: { "accept": "text/plain" }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Lỗi ${response.status}: Không thể tải thông tin người dùng.`);
+                }
+                
+                const data = await response.json();
+                
+                // Điền dữ liệu vào form (Chỉ điền Họ tên nếu có)
+                document.getElementById('fullName').value = data.displayName || username;
+
+            } catch (error) {
+                console.error("Lỗi tải thông tin user:", error);
+                messagePanel.innerHTML = `<div class="alert alert-warning">Không thể tải thông tin cá nhân.</div>`;
+            }
+        }
+        
+        // =========================================================
+        // TẢI VÀ RENDER GIỎ HÀNG (BÊN PHẢI)
+        // =========================================================
+        async function loadAndRenderCart() {
+            orderSummaryContainer.innerHTML = '<p>Đang tải tóm tắt đơn hàng...</p>';
+            reviewButton.disabled = true;
+
+            try {
+                const response = await fetch(CART_API_URL, {
+                    method: 'GET',
+                    headers: { 'accept': 'text/plain' }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Lỗi ${response.status}: Không thể tải giỏ hàng.`);
+                }
+
+                const data = await response.json();
+                currentCartData = data; 
+                const cartItems = data.items || [];
+
+                if (cartItems.length === 0) {
+                    orderSummaryContainer.innerHTML = '<p>Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi thanh toán.</p>';
+                    return;
+                }
+
+                let summaryHtml = '<ul class="list-group list-group-flush">';
+                let totalAmount = 0;
+
+                cartItems.forEach(item => {
+                    const itemTotal = (item.price || 0) * (item.quantity || 0);
+                    totalAmount += itemTotal;
+                    summaryHtml += `
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-light px-0">
+                            <span>${item.productName} (x${item.quantity})</span>
+                            <span>${itemTotal.toLocaleString('vi-VN')} VNĐ</span>
+                        </li>
+                    `;
+                });
+
+                summaryHtml += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold mt-2 px-0">
+                        Tổng cộng
+                        <span>${totalAmount.toLocaleString('vi-VN')} VNĐ</span>
+                    </li>
+                </ul>`;
+
+                orderSummaryContainer.innerHTML = summaryHtml;
+                reviewButton.disabled = false; // Kích hoạt nút Review
+                
+            } catch (error) {
+                console.error("Lỗi tải giỏ hàng:", error);
+                orderSummaryContainer.innerHTML = `<p class="text-danger">Lỗi: Không thể tải giỏ hàng (${error.message}).</p>`;
+            }
+        }
+        
+        // =========================================================
+        // HÀM XỬ LÝ CHUYỂN BƯỚC (REVIEW)
+        // =========================================================
+        function handleReview() {
+            messagePanel.innerHTML = '';
+            
+            if (!checkoutForm.checkValidity()) {
+                checkoutForm.classList.add('was-validated'); 
+                alert('Vui lòng điền đầy đủ thông tin giao hàng bắt buộc.');
+                return;
+            }
+
+            if (!currentCartData || (currentCartData.items && currentCartData.items.length === 0)) {
+                alert('Giỏ hàng trống! Vui lòng thêm sản phẩm.');
+                return;
+            }
+
+            const fullName = document.getElementById('fullName').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+
+            // Hiển thị thông tin review
+            reviewShippingInfo.innerHTML = `
+                <p><strong>Họ và tên:</strong> ${fullName}</p>
+                <p><strong>Địa chỉ:</strong> ${address}</p>
+                <p><strong>Điện thoại:</strong> ${phone}</p>
+                <p class="small text-danger">Bấm "HOÀN TẤT ĐẶT HÀNG" để thanh toán.</p>
+            `;
+
+            // Chuyển đổi panel
+            shippingInputPanel.classList.add('d-none');
+            reviewPanel.classList.remove('d-none');
+        }
+
+        // =========================================================
+        // HÀM GỌI API THANH TOÁN (FINALIZE - 2 BƯỚC)
+        // =========================================================
+        async function processCheckout() {
+            messagePanel.innerHTML = '';
+            const submitButton = document.getElementById('confirm-checkout-btn');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Đang tạo đơn hàng...';
+            
+            let orderId = null;
+
+            // --- BƯỚC 1: TẠO ĐƠN HÀNG (API Cart/checkout) ---
+            try {
+                const response1 = await fetch(CHECKOUT_API_URL, {
+                    method: 'POST',
+                    headers: { 'accept': '*/*' },
+                    body: ''
+                });
+                
+                if (!response1.ok) {
+                    const errorText = await response1.text();
+                    throw new Error(`Checkout thất bại: ${response1.status} - ${errorText}`);
+                }
+
+                const result1 = await response1.json();
+                orderId = result1.orderId;
+
+                if (!orderId) {
+                    throw new Error("Tạo đơn hàng thành công, nhưng không nhận được Order ID.");
+                }
+                
+                // --- BƯỚC 2: TẠO LIÊN KẾT THANH TOÁN VNPAY ---
+                submitButton.textContent = 'Đang kết nối VnPay...';
+                
+                const vnpayUrl = `${VNPAY_API_BASE_URL}?orderId=${orderId}`;
+                
+                const response2 = await fetch(vnpayUrl, {
+                    method: 'GET',
+                    headers: { 'accept': '*/*' }
+                });
+
+                if (!response2.ok) {
+                    const errorText = await response2.text();
+                    throw new Error(`Tạo liên kết VnPay thất bại: ${response2.status} - ${errorText}`);
+                }
+
+                const result2 = await response2.json();
+                const paymentUrl = result2.paymentUrl;
+
+                if (!paymentUrl) {
+                    throw new Error("VnPay phản hồi thành công nhưng không có paymentUrl.");
+                }
+                
+                // --- BƯỚC 3: CHUYỂN HƯỚNG TỚI CỔNG THANH TOÁN ---
+                alert(`Đơn hàng #${orderId} đã được tạo. Chuyển hướng đến cổng thanh toán VnPay.`);
+                
+                // Xóa giỏ hàng client-side chỉ sau khi đã có URL thanh toán hợp lệ
+                localStorage.removeItem('frontend_cart');
+                
+                // 🎯 Tự động chuyển hướng đến cổng thanh toán
+                window.location.href = paymentUrl; 
+
+            } catch (error) {
+                console.error('Lỗi quy trình thanh toán:', error);
+                messagePanel.innerHTML = `<div class="alert alert-danger">❌ Lỗi Đặt hàng: ${error.message}</div>`;
+                
+                if(orderId) {
+                    messagePanel.innerHTML += `<div class="alert alert-warning mt-2">Đơn hàng #${orderId} đã được ghi nhận nhưng chưa thanh toán.</div>`;
+                }
+
+            } finally {
+                // Đảm bảo nút được kích hoạt lại nếu luồng không chuyển hướng
+                submitButton.disabled = false;
+                submitButton.textContent = 'HOÀN TẤT ĐẶT HÀNG';
+            }
+        }
+
+        // =========================================================
+        // GẮN SỰ KIỆN & KHỞI TẠO
+        // =========================================================
+        
+        // 1. Nút Review
+        reviewButton.addEventListener('click', handleReview);
+
+        // 2. Nút Hoàn tất đặt hàng (Gọi API)
+        confirmButton.addEventListener('click', processCheckout);
+        
+        // 3. Nút Chỉnh sửa thông tin
+        editButton.addEventListener('click', () => {
+            shippingInputPanel.classList.remove('d-none');
+            reviewPanel.classList.add('d-none');
+            window.scrollTo(0, 0); 
+        });
+
+        // 4. Xử lý khi người dùng nhấn ENTER
+        checkoutForm.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            handleReview(); 
+        });
+
+        // Khởi tạo trang: Tải dữ liệu
+        loadUserInfo();
+        loadAndRenderCart();
+    });
+</script>
+}

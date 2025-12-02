@@ -1,0 +1,601 @@
+@using FastFoodCompareAppEnhanced_v3_1
+@using FastFoodCompareAppEnhanced_v3_1.Models
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>FastFoodCompany</title>
+    <link rel="icon" type="image/png" href="/images/Logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/auth.css" rel="stylesheet" />
+
+    <style>
+        /* ... (Toàn bộ CSS của bạn ở đây - không thay đổi) ... */
+        .chat-message-user {
+            background-color: #ff6a00; /* Màu cam chủ đạo */
+            color: white;
+            padding: 10px 14px;
+            border-radius: 18px 18px 0 18px; /* Bo góc ngược lại */
+            max-width: 80%;
+            font-size: 0.95rem;
+            align-self: flex-end; /* Căn lề phải */
+            word-wrap: break-word; /* Tự xuống hàng */
+        }
+        .chat-toggle-button {
+            position: fixed; /* Nổi trên mọi thứ */
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%; /* Bo tròn */
+            background-color: #ff6a00; /* Màu cam chủ đạo */
+            color: white;
+            border: none;
+            font-size: 28px; /* Kích thước emoji */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1050; /* Đảm bảo nó nổi trên cùng */
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .chat-toggle-button:hover {
+            background-color: #e55c00; /* Màu đậm hơn khi hover */
+            transform: scale(1.1); /* Phóng to nhẹ */
+        }
+
+        /* --- Cửa sổ Chat (Container) --- */
+        .chat-window-container {
+            position: fixed;
+            bottom: 100px; /* Cách nút bấm 10px (60px + 30px margin-bottom + 10px) */
+            right: 30px;
+            width: 350px;
+            max-width: 90vw;
+            height: 450px;
+            max-height: 70vh;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+            z-index: 1049; /* Nằm dưới nút bấm 1 chút */
+            
+            /* ẨN BAN ĐẦU */
+            display: none; 
+            
+            /* Dùng flex để chia cột header, body, footer */
+            flex-direction: column; 
+            overflow: hidden; /* Để bo góc hoạt động */
+            
+            /* Hiệu ứng xuất hiện (mờ dần và trượt lên) */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Lớp .show để hiện cửa sổ chat (sẽ được JS thêm/xóa) */
+        .chat-window-container.show {
+            display: flex; /* HIỆN LÊN */
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 1051; /* Nổi lên trên nút bấm khi mở */
+        }
+
+        /* --- Các thành phần bên trong cửa sổ chat --- */
+        .chat-header {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+        .chat-close-btn {
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            font-weight: 300;
+            color: #888;
+            cursor: pointer;
+            padding: 0 5px;
+            line-height: 1;
+        }
+        .chat-close-btn:hover {
+            color: #000;
+        }
+
+        .chat-body {
+            flex-grow: 1; /* Tự động co giãn chiếm phần còn lại */
+            padding: 15px;
+            overflow-y: auto; /* Cho phép cuộn nếu tin nhắn dài */
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        /* Ví dụ 1 tin nhắn của bot */
+        .chat-message-bot {
+            background-color: #e9ecef;
+            padding: 10px 14px;
+            border-radius: 18px 18px 18px 0; /* Bo góc tin nhắn */
+            max-width: 70%;
+            font-size: 0.95rem;
+            color: #212529;
+            align-self: flex-start; /* Căn lề trái */
+            word-wrap: break-word; /* Tự xuống hàng */
+            white-space: pre-wrap; /* Quan trọng: Để giữ lại ký tự \n */
+        }
+
+        .chat-footer {
+            padding: 10px 15px;
+            border-top: 1px solid #e0e0e0;
+            background-color: #fdfdfd;
+            display: flex;
+        }
+        .chat-footer input {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 8px 12px;
+            margin-right: 10px;
+            outline: none;
+        }
+        .chat-footer input:focus {
+            border-color: #ff6a00;
+        }
+        .chat-footer button {
+            border: none;
+            background-color: #ff6a00;
+            color: white;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            font-size: 14px; /* Có thể thay bằng icon Gửi */
+        }
+        .chat-footer button:hover {
+            background-color: #e55c00;
+        }
+        /* CSS CỦA BẠN (Giữ nguyên) */
+        body::-webkit-scrollbar {
+            width: 8px; /* Chiều rộng của thanh cuộn dọc */
+            height: 8px; /* Chiều cao của thanh cuộn ngang */
+        }
+
+        /* Background của khu vực thanh cuộn */
+        body::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Màu nền của rãnh cuộn (track) */
+            border-radius: 10px; /* Bo góc cho rãnh */
+        }
+
+        /* Thanh trượt (thumb) */
+        body::-webkit-scrollbar-thumb {
+            background: #ff6a00; /* Màu của thanh trượt (Màu cam của bạn) */
+            border-radius: 10px; /* Bo góc cho thanh trượt */
+        }
+
+        /* Khi hover lên thanh trượt */
+        body::-webkit-scrollbar-thumb:hover {
+            background: #e55c00; /* Màu đậm hơn khi hover */
+        }
+        .user-avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #ff6a00;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* CSS CHO BACKGROUND VÀ CẤU TRÚC CHÍNH */
+        body {
+            font-family: 'Arial', cursive, sans-serif;
+            background-image: url('/images/BackGround.jpg'); 
+            background-size: cover;      
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            background-position: center center;
+        }
+        .navbar {
+            background-color: #ffffff !important; 
+        }
+        
+        /* BỔ SUNG CSS MỚI ĐỂ CĂN SÁT LỀ TRÁI VÀ CÁCH 10PX */
+        .navbar .container-fluid {
+            /* Đảm bảo nội dung navbar được căn sát lề trái */
+            padding-left: 10px !important; 
+            padding-right: 15px !important; /* Giữ padding phải mặc định */
+        }
+        .navbar-brand {
+            /* Bỏ margin-left mặc định (nếu có) và căn chỉnh */
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+        }
+
+        /* HIỆU ỨNG HOVER MÀU VÀNG CHO CÁC NÚT NAV BAR */
+        .navbar .btn-outline-primary:hover,
+        .navbar .btn-outline-secondary:hover {
+            color: #000 !important; /* Chữ đen */
+            background-color: #ffc107; /* Màu vàng (Bootstrap Warning) */
+            border-color: #020202; /* Viền cùng màu */
+            opacity: 0.9;
+        }
+        /* Đảm bảo nút Đăng xuất vẫn có hover màu đỏ */
+        .navbar .btn-danger:hover {
+            background-color: #c82333 !important; 
+            border-color: #bd2130 !important;
+            color: #fff !important;
+            opacity: 1;
+        }
+        
+        /* KHUNG NỘI DUNG CHÍNH Ở GIỮA MÀN HÌNH */
+        .main-content-container {
+            margin:20px;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); 
+            padding: 30px; 
+            margin-top: 30px; 
+            margin-bottom: 30px;
+            margin-right: 30px;
+        }
+        
+        /* Điều chỉnh cho layout 2 cột trên trang Menu nếu cần */
+        .page-content-wrapper {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .col-right-panel {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px; 
+            padding: 20px;
+            position: fixed; 
+            top: 80px; 
+            right: 20px;
+            width: 350px; 
+            height: 350px;
+            max-height: calc(100vh - 100px);
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; 
+            z-index: 1000; 
+        }
+        .col-left-panel-wrapper {
+            margin-right: 10px; 
+            min-height: 100vh; 
+        }
+        .col-left-panel {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px; 
+            padding: 30px;
+            left: 0;
+            right: 10px; 
+            position: flex; 
+        }
+        .navbar-logo {
+        height: 45px; /* Chiều cao cố định 10px */
+        width: 45px;  /* Chiều rộng cố định 10px */
+        margin-right: 8px; 
+        vertical-align: middle; 
+        }
+        .footer-wrapper-white { 
+            background-color: #dbcb9c; /* Nền trắng */
+            border-radius: 12px; /* Bo góc */
+            padding: 15px; /* Padding bên trong */
+            bottom: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bóng đổ nhẹ */
+            text-align: left;
+            width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+            position: absolute; /* Hoặc 'absolute' */
+            z-index: 0;
+        }
+        .btn-sweep {
+            position: relative; /* Quan trọng: Để pseudo-element định vị tương đối */
+            overflow: hidden; /* Cắt bớt phần màu dư ra ngoài nút */
+            z-index: 1; /* Đảm bảo chữ nằm trên màu nền mới */
+            transition: color 0.3s ease-in-out; /* Chuyển màu chữ mượt mà */
+        }
+
+        .btn-sweep::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0; /* Bắt đầu từ mép phải */
+            height: 100%;
+            width: 0; /* Chiều rộng ban đầu là 0 */
+            background-color: #ff6a00; /* Màu nền khi hover (Ví dụ: Màu cam) */
+            z-index: -1; /* Đảm bảo nó nằm dưới chữ */
+            
+            /* Transition cho hiệu ứng sweep */
+            transition: width 0.3s ease-in-out; 
+        }
+
+        /* === KHI HOVER: Mở rộng width của pseudo-element và đổi màu chữ === */
+        .btn-sweep:hover::before {
+            width: 100%; /* Mở rộng toàn bộ nút */
+            right: 0; 
+        }
+
+        .btn-sweep:hover {
+            color: #ffffff !important; /* Đổi màu chữ sang trắng khi hover */
+            border-color: #ff6a00 !important; /* Đổi màu border khi hover */
+        }
+    
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+        <div class="container-fluid"> 
+            <a class="navbar-brand" href="/">
+                <img src="/images/Logo.png" alt="" class="navbar-logo ">
+                FastFoodCompany
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                
+                <a href="@Url.Action("Index","Cart")" class="btn btn-outline-primary btn-sm me-3 rounded-pill">
+                    🛒 Giỏ 
+                </a>
+
+                <div class="d-flex align-items-center d-none" id="user-logged-in-state">
+                    
+                    <span class="d-flex align-items-center me-3">
+                        <span class="user-avatar me-2" id="user-avatar-initial"></span>
+                        <strong id="user-display-name"></strong>
+                    </span>
+                    
+                    <a class="btn btn-outline-secondary btn-sm me-2 d-none d-lg-block rounded-pill btn-sweep" href="@Url.Action("Profile", "Account")">
+                        Lịch sử Đơn hàng
+                    </a>
+                                        
+                    <a class="btn btn-outline-secondary btn-sm me-3 d-none d-lg-block rounded-pill btn-sweep" href="@Url.Action("Profile", "Account")">
+                        Cập nhật Tài khoản
+                    </a>
+                                        
+                    <button class="btn btn-sm btn-danger rounded-pill btn-sweep" id="logout-button">
+                        Đăng xuất
+                    </button>
+                </div>
+
+                <div id="user-logged-out-state" class="d-flex align-items-center">
+                    <a href="@Url.Action("Login","Account")" class="btn btn-outline-primary btn-sm me-2 rounded-pill">Đăng nhập</a>
+                    <a href="@Url.Action("Register","Account")" class="btn btn-gradient btn-sm rounded-pill">Đăng ký</a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+    <div class="footer-wrapper-white">
+        @await Component.InvokeAsync("FastFoodFooter") 
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Khai báo hằng số
+        const MENU_LOGIN_URL = '@Url.Action("Login", "Account")'; 
+        const CART_ADD_API_URL = 'https://localhost:7132/api/Cart/add';
+
+        // =================================================================
+        // HÀM TẢI SỐ LƯỢNG GIỎ HÀNG TỪ API (Cho Navbar)
+        // (*** ĐÃ SỬA LỖI 401 ***)
+        // =================================================================
+
+        window.loadCartCount = async function (user) {
+            const cartCountSpan = document.getElementById("cartCount");
+            
+            // 1. Lấy token
+            const token = localStorage.getItem('jwtToken');
+
+            // 2. Kiểm tra (nếu không có user HOẶC token, thì không gọi API)
+            if (!user || !token) { 
+                if(cartCountSpan) cartCountSpan.textContent = 0;
+                return;
+            }
+
+            // 3. Mã hóa username (quan trọng)
+            const encodedUser = encodeURIComponent(user);
+            const apiUrl = `https://localhost:7132/api/Cart/${encodedUser}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: { 
+                        // 4. Sửa 'accept' và thêm 'Authorization'
+                        'accept': 'application/json', // API cart trả về JSON (cartData)
+                        'Authorization': `Bearer ${token}` 
+                    }
+                });
+                
+                if (!response.ok) {
+                    // Thêm xử lý 401 (token hết hạn)
+                    if (response.status === 401) {
+                         console.error("Token hết hạn hoặc không hợp lệ khi tải cart count.");
+                         if(cartCountSpan) cartCountSpan.textContent = 0; 
+                         return;
+                    }
+                    console.error("Lỗi khi tải giỏ hàng từ API:", response.status, response.statusText);
+                    if(cartCountSpan) cartCountSpan.textContent = 0; 
+                    return;
+                }
+
+                const cartData = await response.json();
+                
+                // Đếm tổng số lượng sản phẩm, không phải số loại
+                const totalItems = cartData.items ? 
+                                     cartData.items.reduce((total, item) => total + (item.quantity || 0), 0) : 
+                                     0;
+
+                if (cartCountSpan) {
+                    cartCountSpan.textContent = totalItems;
+                }
+
+            } catch (error) {
+                console.error('Lỗi kết nối hoặc xử lý JSON:', error);
+                if(cartCountSpan) cartCountSpan.textContent = 0; 
+            }
+        }
+        
+        // =================================================================
+        // LOGIC KHỞI TẠO VÀ GẮN SỰ KIỆN (Chạy khi DOM tải xong)
+        // =================================================================
+
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            const loggedInState = document.getElementById("user-logged-in-state");
+            const loggedOutState = document.getElementById("user-logged-out-state");
+            const displayNameSpan = document.getElementById("user-display-name");
+            const avatarSpan = document.getElementById("user-avatar-initial"); 
+            const cartLink = document.querySelector('a[href="@Url.Action("Index","Cart")"]'); 
+
+            const username = localStorage.getItem("username"); 
+
+            // --- Logic Navbar (Ẩn/Hiện UI dựa trên trạng thái đăng nhập) ---
+            if (username) {
+                if(displayNameSpan) displayNameSpan.textContent = username; 
+                if(avatarSpan && username.length > 0) avatarSpan.textContent = username.charAt(0).toUpperCase();
+                
+                if(loggedInState) loggedInState.classList.remove("d-none");  
+                if(loggedOutState) loggedOutState.classList.add("d-none"); 
+                
+                if(cartLink) {
+                    cartLink.innerHTML = `🛒 Giỏ (<span id="cartCount">0</span>)`;
+                }
+            } else {
+                if(loggedInState) loggedInState.classList.add("d-none");  
+                if(loggedOutState) loggedOutState.classList.remove("d-none"); 
+                
+                if(cartLink) {
+                    cartLink.innerHTML = `🛒 Giỏ`;
+                }
+            }
+            
+            // --- Code Chatbot (Giữ nguyên) ---
+            const CHAT_API_URL = 'https://localhost:7132/api/Chat/Send';
+            const chatToggleButton = document.getElementById("chat-toggle-button");
+            const chatWindow = document.getElementById("chat-window");
+            const chatCloseButton = document.getElementById("chat-close-button");
+            const chatBody = document.getElementById("chat-body");
+            const chatInput = document.getElementById("chat-input");
+            const chatSendButton = document.getElementById("chat-send-button");
+            if (chatToggleButton && chatWindow && chatCloseButton) {
+                
+                chatToggleButton.addEventListener("click", function() {
+                    chatWindow.classList.toggle("show");
+                });
+
+                chatCloseButton.addEventListener("click", function() {
+                    chatWindow.classList.remove("show");
+                });
+            }
+            async function handleChatSend() {
+                const message = chatInput.value.trim();
+                if (message === '') return; 
+                addMessageToChat(message, 'user');
+                chatInput.value = '';
+                chatSendButton.disabled = true; 
+                const postData = {
+                    context: message
+                };
+                try {
+                    const response = await fetch(CHAT_API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'accept': 'text/plain',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(postData)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    if (result && result.responseContext) {
+                        addMessageToChat(result.responseContext, 'bot');
+                    } else {
+                        addMessageToChat("Lỗi: Không nhận được phản hồi hợp lệ.", 'bot');
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi gọi API Chat:', error);
+                    addMessageToChat("Xin lỗi, đã có lỗi kết nối. Vui lòng thử lại.", 'bot');
+                } finally {
+                    chatSendButton.disabled = false;
+                }
+            }
+            if (chatSendButton && chatInput && chatBody) {
+                
+                chatSendButton.addEventListener('click', handleChatSend);
+
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault(); 
+                        handleChatSend();
+                    }
+                });
+            }
+            function addMessageToChat(message, type = 'bot') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message-${type}`; 
+                messageDiv.innerText = message; 
+                chatBody.appendChild(messageDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+            // --- Kết thúc Chatbot ---
+
+            
+            // 🎯 Gọi hàm tải số lượng giỏ hàng (chỉ gọi khi đã đăng nhập)
+            if (username) {
+                window.loadCartCount(username); 
+            }
+
+            // --- Xử lý nút Đăng xuất ---
+            const logoutButton = document.getElementById("logout-button");
+            if(logoutButton) {
+                logoutButton.addEventListener("click", function (e) {
+                    e.preventDefault(); 
+                    localStorage.removeItem("username");
+                    localStorage.removeItem("jwtToken"); 
+                    localStorage.removeItem("frontend_cart"); 
+                    localStorage.removeItem("CART_ITEMS"); 
+                    window.location.href = MENU_LOGIN_URL;
+                });
+            }
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+        <button id="chat-toggle-button" class="chat-toggle-button">
+            💬
+        </button>
+
+        <div id="chat-window" class="chat-window-container">
+            <div class="chat-header">
+                <h5>Hỗ trợ trực tuyến</h5>
+                <button id="chat-close-button" class="chat-close-btn">&times;</button>
+            </div>
+            
+            <div id="chat-body" class="chat-body">
+                <div class="chat-message-bot">Chào bạn!! Chúng tôi là đội ngũ phát triển phần mềm này chúng tôi có thể giúp bạn tất cả mọi thứ bạn có thể hỏi ngay bây giờ!</div>
+            </div>
+            
+            <div class="chat-footer">
+                <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." />
+                <button id="chat-send-button">Gửi</button>
+            </div>
+        </div>
+    </body>
+
+</html>
