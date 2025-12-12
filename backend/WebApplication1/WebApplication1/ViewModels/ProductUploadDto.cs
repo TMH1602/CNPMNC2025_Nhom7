@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.ViewModels
 {
-    // DTO được thiết kế để nhận dữ liệu FORM (multipart/form-data)
     public class ProductUploadDto
     {
         [Required]
@@ -17,8 +16,6 @@ namespace WebApplication1.ViewModels
         public string? Description { get; set; }
         public string? Category { get; set; }
 
-        // 💡 Trường nhận File thực tế (Image)
-        // Đây là cách bạn nhận tệp được tải lên qua HTTP
         public IFormFile? ImageFile { get; set; }
     }
 }

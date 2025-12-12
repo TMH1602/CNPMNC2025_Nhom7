@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "R3+45++AonBZp42OJLu0Z3q9UeGexJgKb+2DmgsIkkc=",
+  "Hash": "ryvh/jvjFUNh/AATw68bMh9gRRlG2CTo6URjPIz0LSA=",
   "Source": "FastFoodCompareAppEnhanced_v3.1",
   "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "FastFoodCompareAppEnhanced_v3.1\\wwwroot",
       "Source": "FastFoodCompareAppEnhanced_v3.1",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\auth.css",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\auth.css",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "css/auth#[.{fingerprint}]?.css",
       "AssetKind": "All",
@@ -38,10 +38,10 @@
       "OriginalItemSpec": "wwwroot\\css\\auth.css"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\site.css",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\site.css",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "css/site#[.{fingerprint}]?.css",
       "AssetKind": "All",
@@ -59,10 +59,10 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\ads1.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\ads1.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/ads1#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -80,10 +80,10 @@
       "OriginalItemSpec": "wwwroot\\images\\ads1.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/BackGround#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -101,10 +101,10 @@
       "OriginalItemSpec": "wwwroot\\images\\BackGround.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/BackGround1#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -122,10 +122,10 @@
       "OriginalItemSpec": "wwwroot\\images\\BackGround1.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\banner.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\banner.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/banner#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -143,10 +143,10 @@
       "OriginalItemSpec": "wwwroot\\images\\banner.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/bg3#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -164,10 +164,10 @@
       "OriginalItemSpec": "wwwroot\\images\\bg3.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/burger#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -185,10 +185,10 @@
       "OriginalItemSpec": "wwwroot\\images\\burger.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\fries.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\fries.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/fries#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -206,10 +206,10 @@
       "OriginalItemSpec": "wwwroot\\images\\fries.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/Logo#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -227,10 +227,10 @@
       "OriginalItemSpec": "wwwroot\\images\\Logo.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.png",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.png",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/Logo#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -248,10 +248,10 @@
       "OriginalItemSpec": "wwwroot\\images\\Logo.png"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/pizza#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -269,10 +269,10 @@
       "OriginalItemSpec": "wwwroot\\images\\pizza.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\restaurant_bg.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\restaurant_bg.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/restaurant_bg#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -290,10 +290,10 @@
       "OriginalItemSpec": "wwwroot\\images\\restaurant_bg.jpg"
     },
     {
-      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\salad.jpg",
+      "Identity": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\salad.jpg",
       "SourceId": "FastFoodCompareAppEnhanced_v3.1",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\",
       "BasePath": "_content/FastFoodCompareAppEnhanced_v3.1",
       "RelativePath": "images/salad#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -314,7 +314,7 @@
   "Endpoints": [
     {
       "Route": "css/auth.5vihgnfrrj.css",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\auth.css",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\auth.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -335,7 +335,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -359,7 +359,7 @@
     },
     {
       "Route": "css/auth.css",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\auth.css",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\auth.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -380,7 +380,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -396,7 +396,7 @@
     },
     {
       "Route": "css/site.81u1op8a80.css",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\site.css",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -417,7 +417,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -441,7 +441,7 @@
     },
     {
       "Route": "css/site.css",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\site.css",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -462,7 +462,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -478,7 +478,7 @@
     },
     {
       "Route": "images/ads1.5ipweew5fc.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\ads1.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\ads1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -499,7 +499,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -523,7 +523,7 @@
     },
     {
       "Route": "images/ads1.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\ads1.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\ads1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -544,7 +544,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -560,7 +560,7 @@
     },
     {
       "Route": "images/BackGround.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -581,7 +581,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -597,7 +597,7 @@
     },
     {
       "Route": "images/BackGround.zo821t8a30.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -618,7 +618,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -642,7 +642,7 @@
     },
     {
       "Route": "images/BackGround1.e4mgo0u2kc.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -663,7 +663,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -687,7 +687,7 @@
     },
     {
       "Route": "images/BackGround1.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\BackGround1.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -708,7 +708,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -724,7 +724,7 @@
     },
     {
       "Route": "images/banner.94gw4e6ldz.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\banner.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\banner.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -745,7 +745,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -769,7 +769,7 @@
     },
     {
       "Route": "images/banner.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\banner.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\banner.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -790,7 +790,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -806,7 +806,7 @@
     },
     {
       "Route": "images/bg3.capdk7bpdy.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -827,7 +827,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 25 Nov 2025 06:16:25 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -851,7 +851,7 @@
     },
     {
       "Route": "images/bg3.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\bg3.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -872,7 +872,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 25 Nov 2025 06:16:25 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -888,7 +888,7 @@
     },
     {
       "Route": "images/burger.5ipweew5fc.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -909,7 +909,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -933,7 +933,7 @@
     },
     {
       "Route": "images/burger.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\burger.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -954,7 +954,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -970,7 +970,7 @@
     },
     {
       "Route": "images/fries.3mnz1n8q84.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\fries.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\fries.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -991,7 +991,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1015,7 +1015,7 @@
     },
     {
       "Route": "images/fries.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\fries.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\fries.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1036,7 +1036,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1052,7 +1052,7 @@
     },
     {
       "Route": "images/Logo.3roumigk33.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1073,7 +1073,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1097,7 +1097,7 @@
     },
     {
       "Route": "images/Logo.f69gfwkrdt.png",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.png",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1118,7 +1118,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Nov 2025 06:20:41 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1142,7 +1142,7 @@
     },
     {
       "Route": "images/Logo.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1163,7 +1163,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1179,7 +1179,7 @@
     },
     {
       "Route": "images/Logo.png",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.png",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\Logo.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1200,7 +1200,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Nov 2025 06:20:41 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1216,7 +1216,7 @@
     },
     {
       "Route": "images/pizza.2vhx7f4sw2.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1237,7 +1237,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1261,7 +1261,7 @@
     },
     {
       "Route": "images/pizza.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\pizza.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1282,7 +1282,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1298,7 +1298,7 @@
     },
     {
       "Route": "images/restaurant_bg.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\restaurant_bg.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\restaurant_bg.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1319,7 +1319,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1335,7 +1335,7 @@
     },
     {
       "Route": "images/restaurant_bg.zo821t8a30.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\restaurant_bg.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\restaurant_bg.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1356,7 +1356,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1380,7 +1380,7 @@
     },
     {
       "Route": "images/salad.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\salad.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\salad.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1401,7 +1401,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1417,7 +1417,7 @@
     },
     {
       "Route": "images/salad.xgznk9qlim.jpg",
-      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\salad.jpg",
+      "AssetFile": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\frontend\\website\\FastFoodCompareAppEnhanced_v3.1\\wwwroot\\images\\salad.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1438,7 +1438,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 11 Nov 2025 06:05:10 GMT"
+          "Value": "Sat, 06 Dec 2025 09:52:18 GMT"
         },
         {
           "Name": "Cache-Control",

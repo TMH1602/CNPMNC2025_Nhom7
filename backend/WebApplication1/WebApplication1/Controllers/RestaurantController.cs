@@ -20,12 +20,11 @@ namespace WebApplication1.Controllers
         [HttpGet("Restaurant/Processing")]
         public async Task<ActionResult<IEnumerable<OrderHistoryDto>>> GetProcessingOrders()
         {
-            // 💡 LẤY CÁC ĐƠN HÀNG CÓ STATUS LÀ "Processed"
             var orders = await _context.Orders
-                .Where(o => o.Status == "Paid") // Hoặc dùng OrderStatus.Processed nếu bạn dùng Enum
+                .Where(o => o.Status == "Paid")
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
-                .OrderBy(o => o.OrderDate) // Sắp xếp theo thứ tự cũ nhất làm trước
+                .OrderBy(o => o.OrderDate)
                 .ToListAsync();
 
             if (!orders.Any())
@@ -53,12 +52,11 @@ namespace WebApplication1.Controllers
         [HttpGet("Restaurant/DoneHistory")]
         public async Task<ActionResult<IEnumerable<OrderHistoryDto>>> GetDoneOrderHistory()
         {
-            // 💡 LẤY CÁC ĐƠN HÀNG CÓ STATUS LÀ "Done"
             var history = await _context.Orders
                 .Where(o => o.Status == "Done")
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
-                .OrderByDescending(o => o.OrderDate) // Sắp xếp từ mới nhất đến cũ nhất
+                .OrderByDescending(o => o.OrderDate) 
                 .ToListAsync();
 
             if (!history.Any())
@@ -86,7 +84,6 @@ namespace WebApplication1.Controllers
         [HttpPost("Restaurant/CheckDone/{orderId}")]
         public async Task<IActionResult> CheckOrderDone(int orderId)
         {
-            // 1. Tìm đơn hàng
             var order = await _context.Orders.FindAsync(orderId);
 
             if (order == null)
@@ -94,7 +91,6 @@ namespace WebApplication1.Controllers
                 return NotFound($"Order ID {orderId} not found.");
             }
 
-            // 2. Kiểm tra trạng thái hiện tại
             if (order.Status == "Done")
             {
                 return BadRequest($"Order ID {orderId} is already marked as Done.");
@@ -102,12 +98,9 @@ namespace WebApplication1.Controllers
 
             if (order.Status != "Paid")
             {
-                // Tránh chuyển các đơn hàng Pending, Cancelled trực tiếp thành Done
                 return BadRequest($"Đơn hàng {orderId} chưa được thanh toán cho nên không thể nào có thể done được");
             }
-
-            // 3. Cập nhật trạng thái
-            order.Status = "Done"; // Chuyển "Processed" thành "Done"
+            order.Status = "Done";
 
             await _context.SaveChangesAsync();
 

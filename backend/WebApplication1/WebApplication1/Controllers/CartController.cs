@@ -20,10 +20,6 @@ public class CartController : ControllerBase
         _context = context;
     }
 
-    // ************************************************************
-    // 1. Endpoint: GET /api/Cart/{username}
-    // Lấy giỏ hàng CHƯA XỬ LÝ (IsProcessed = false)
-    // ************************************************************
     [HttpGet("{username}")]
     [Authorize]
     public async Task<ActionResult<CartDto>> GetCart(string username)
@@ -31,12 +27,10 @@ public class CartController : ControllerBase
         var cart = await _context.Carts
             .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
-            // 💡 CHỈ LẤY giỏ hàng KHÔNG được xử lý
             .FirstOrDefaultAsync(c => c.Username == username && c.IsProcessed == false);
 
         if (cart == null)
         {
-            // Trả về Not Found nếu không có giỏ hàng hoạt động
             return NotFound($"Active cart for user {username} not found.");
         }
         var productId = cart.CartItems.FirstOrDefault()?.ProductId;
@@ -49,7 +43,6 @@ public class CartController : ControllerBase
         {
             return BadRequest("Không thể tìm được giỏ hàng của người dùng ");
         }
-        // Ánh xạ từ Model sang CartDto/ViewModel
         var cartViewModel = new CartDto
         {
             Id = cart.Id,
@@ -57,10 +50,8 @@ public class CartController : ControllerBase
             Items = cart.CartItems.Select(ci => new CartItemDto
             {
                 ProductId = ci.ProductId,
-                // Truy cập trực tiếp thông tin sản phẩm từ navigation property
                 ProductName = ci.Product.Name,
                 Price = ci.Product.Price,
-                // Lấy ImageUrl trực tiếp từ đối tượng Product đã được Include
                 ImageUrl = ci.Product.ImageUrl,
                 Quantity = ci.Quantity
             }).ToList()
@@ -69,10 +60,6 @@ public class CartController : ControllerBase
         return Ok(cartViewModel);
     }
 
-    // ************************************************************
-    // 2. Endpoint: POST /api/Cart/add
-    // Thêm NHIỀU sản phẩm vào giỏ hàng
-    // ************************************************************
     [HttpPost("add")]
     public async Task<IActionResult> AddToCart([FromBody] AddItemsToCartDto request)
     {
@@ -151,10 +138,6 @@ public class CartController : ControllerBase
         });
     }
 
-    // ************************************************************
-    // 3. Endpoint: POST /api/Cart/remove
-    // Xóa/Giảm số lượng sản phẩm khỏi giỏ hàng
-    // ************************************************************
     [HttpPost("remove")]
     public async Task<IActionResult> RemoveFromCart(string username, int productId, int quantity)
     {
@@ -163,7 +146,6 @@ public class CartController : ControllerBase
             return BadRequest("Quantity must be positive for removal.");
         }
 
-        // Tìm Cart CHƯA XỬ LÝ
         var cart = await _context.Carts
             .Include(c => c.CartItems)
             .FirstOrDefaultAsync(c => c.Username == username && c.IsProcessed == false);
@@ -184,13 +166,11 @@ public class CartController : ControllerBase
 
         if (cartItem.Quantity <= quantity)
         {
-            // Xóa hoàn toàn mục sản phẩm
             _context.CartItems.Remove(cartItem);
             message = $"Product ID {productId} has been completely removed from the cart.";
         }
         else
         {
-            // Chỉ giảm số lượng
             cartItem.Quantity -= quantity;
             message = $"Removed {quantity} units of Product ID {productId}. New quantity: {cartItem.Quantity}.";
         }
@@ -206,17 +186,12 @@ public class CartController : ControllerBase
         });
     }
 
-    // ************************************************************
-    // 4. Endpoint: POST /api/Cart/checkout
-    // Chuyển giỏ hàng thành Đơn hàng (Lưu lịch sử)
-    // ************************************************************
     [HttpPost("checkout")]
     public async Task<IActionResult> Checkout(string username)
     {
         var cart = await _context.Carts
             .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
-            // Tìm giỏ hàng CHƯA XỬ LÝ để thanh toán
             .FirstOrDefaultAsync(c => c.Username == username && c.IsProcessed == false);
 
         if (cart == null || !cart.CartItems.Any())
@@ -224,7 +199,6 @@ public class CartController : ControllerBase
             return BadRequest("Active cart is empty or not found.");
         }
 
-        // 1. Tạo Order mới
         var newOrder = new Order
         {
             Username = username,
@@ -235,7 +209,6 @@ public class CartController : ControllerBase
         decimal totalAmount = 0;
         var orderDetails = new List<OrderDetail>();
 
-        // 2. Chuyển CartItems thành OrderDetails
         foreach (var item in cart.CartItems)
         {
             var detail = new OrderDetail
@@ -253,15 +226,11 @@ public class CartController : ControllerBase
 
         _context.Orders.Add(newOrder);
 
-        // 3. 🔥 ĐÁNH DẤU GIỎ HÀNG ĐÃ XỬ LÝ
         cart.IsProcessed = true;
 
-        // Không cần xóa CartItems vì chúng ta giữ lại Cart (với IsProcessed = true)
-        // và sẽ tạo một Cart mới khi user add product lần tiếp theo.
 
         await _context.SaveChangesAsync();
 
-        // 4. Trả về Anonymous Object an toàn
         return CreatedAtAction(nameof(GetOrderHistory), new { username = username }, new
         {
             OrderId = newOrder.Id,
@@ -271,10 +240,6 @@ public class CartController : ControllerBase
         });
     }
 
-    // ************************************************************
-    // 5. Endpoint: GET /api/Cart/history/{username}
-    // Lấy lịch sử đơn hàng của người dùng
-    // ************************************************************
     [HttpGet("history/{username}")]
     public async Task<ActionResult<IEnumerable<OrderHistoryDto>>> GetOrderHistory(string username)
     {
@@ -307,10 +272,7 @@ public class CartController : ControllerBase
 
         return Ok(historyViewModels);
     }
-    // ************************************************************
-    // 6. Endpoint: GET /api/Cart/AllCarts
-    // Lấy tất cả giỏ hàng (bao gồm cả đã xử lý)
-    // ************************************************************
+
     [HttpGet("AllCarts")]
     public async Task<ActionResult<IEnumerable<AllCartsDto>>> GetAllCarts()
     {
@@ -324,7 +286,6 @@ public class CartController : ControllerBase
             return NotFound("No carts found in the system.");
         }
 
-        // Trong phương thức GetAllCarts
         var allCartsViewModel = allCarts.Select(cart => new AllCartsDto
         {
             CartId = cart.Id,
@@ -332,10 +293,8 @@ public class CartController : ControllerBase
             TotalItems = cart.CartItems.Count,
             TotalQuantity = cart.CartItems.Sum(ci => ci.Quantity),
 
-            // 🔥 SỬ DỤNG THUỘC TÍNH MỚI
             IsProcessed = cart.IsProcessed,
 
-            // Ánh xạ danh sách Items
             Items = cart.CartItems.Select(ci => new CartItemDto
             {
                 ProductId = ci.ProductId,

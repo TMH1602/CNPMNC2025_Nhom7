@@ -1,6 +1,5 @@
-﻿// File: WebApplication1.Controllers/VnPayController.cs
-using System.Linq;
-using Microsoft.EntityFrameworkCore; // Quan trọng để dùng .Include()
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -34,8 +33,6 @@ namespace WebApplication1.Controllers
         {
             var order = await _context.Orders.FindAsync(orderId);
             if (order == null || order.Status == "Paid") return BadRequest("Order không hợp lệ hoặc đã được thanh toán.");
-
-            // Tạo thông tin OrderInfo
             string orderInfo = $"Thanhtoandonhang{order.Id}";
 
             string paymentUrl = _vnPayService.CreatePaymentUrl(
@@ -53,17 +50,13 @@ namespace WebApplication1.Controllers
         {
             var order = await _context.Orders.FindAsync(orderId);
             if (order == null || order.Status == "Paid") return BadRequest("Order không hợp lệ hoặc đã được thanh toán.");
-
-            // Tạo thông tin OrderInfo
             string orderInfo = $"Thanhtoandonhang{order.Id}";
-
             string paymentUrl = _vnPayService2.CreatePaymentUrl2(
                 order.Id,
                 order.TotalAmount,
                 orderInfo,
                 HttpContext
             );
-
             return Ok(new { PaymentUrl = paymentUrl });
         }
 
@@ -71,46 +64,31 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> VnpayReturn()
         {
             var collections = Request.Query;
-
-            // 1. Kiểm tra Hash
             if (!_vnPayService.ValidateVnPayHash(collections))
             {
                 return BadRequest("Invalid Hash Signature. 🚨");
             }
-
-            // 2. Lấy thông tin giao dịch
             int orderId = int.Parse(collections["vnp_TxnRef"]!);
             string responseCode = collections["vnp_ResponseCode"]!;
             string transactionStatus = collections["vnp_TransactionStatus"]!;
-
-            // --- SỬA ĐỔI: Dùng Include để lấy chi tiết sản phẩm cho Email ---
             var order = await _context.Orders
-                .Include(o => o.OrderDetails)       // Lấy chi tiết đơn
-                .ThenInclude(od => od.Product)      // Lấy thông tin sản phẩm (Tên, Mã)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
-            // ---------------------------------------------------------------
-
             if (order == null) return NotFound("Order not found.");
-
-            // 3. Xử lý trạng thái
             if (responseCode == "00" && transactionStatus == "00")
             {
-                // Giao dịch thành công
                 if (order.Status != "Paid")
                 {
                     order.Status = "Paid";
-
                     await _context.SaveChangesAsync();
-
-                    // Gửi email xác nhận (lúc này order đã có đủ thông tin Product)
                     await SendConfirmationEmail(order);
                 }
                 return Redirect("https://localhost:5000/Checkout/Success");
             }
             else
             {
-                // Thanh toán thất bại hoặc bị hủy
-                order.Status = "Processed"; // Hoặc trạng thái "Failed" tùy logic của bạn
+                order.Status = "Processed";
                 await _context.SaveChangesAsync();
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
             }
@@ -120,31 +98,20 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> VnpayReturn2()
         {
             var collections = Request.Query;
-
-            // 1. Kiểm tra Hash
             if (!_vnPayService.ValidateVnPayHash(collections))
             {
                 return BadRequest("Invalid Hash Signature. 🚨");
             }
-
-            // 2. Lấy thông tin giao dịch
             int orderId = int.Parse(collections["vnp_TxnRef"]!);
             string responseCode = collections["vnp_ResponseCode"]!;
             string transactionStatus = collections["vnp_TransactionStatus"]!;
-
-            // --- SỬA ĐỔI: Dùng Include tương tự như trên ---
             var order = await _context.Orders
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
-            // ----------------------------------------------
-
             if (order == null) return NotFound("Order not found.");
-
-            // 3. Xử lý trạng thái
             if (responseCode == "00" && transactionStatus == "00")
             {
-                // Giao dịch thành công
                 if (order.Status != "Paid")
                 {
                     order.Status = "Paid";
@@ -155,7 +122,6 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                // Thanh toán thất bại hoặc bị hủy
                 order.Status = "Processed";
                 await _context.SaveChangesAsync();
                 return BadRequest($"Payment failed for Order {orderId}. Response Code: {responseCode}. ❌");
@@ -164,9 +130,7 @@ namespace WebApplication1.Controllers
 
         private async Task SendConfirmationEmail(Order order)
         {
-            // 1. Tìm thông tin người dùng để lấy Email
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == order.Username);
-
             if (user != null && !string.IsNullOrEmpty(user.Email))
             {
                 string emailSubject = $"🎉 Xác nhận Đơn hàng #{order.Id} đã thanh toán thành công!";
@@ -178,7 +142,6 @@ namespace WebApplication1.Controllers
 
         private string CreateOrderConfirmationEmailBody(Order order)
         {
-            // Tạo các dòng trong bảng (Thêm cột Mã SP)
             var itemDetails = string.Join("", order.OrderDetails.Select(od =>
                 $@"<tr>
                     <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>

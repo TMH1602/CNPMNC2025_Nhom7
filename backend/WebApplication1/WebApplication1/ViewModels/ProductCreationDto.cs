@@ -2,7 +2,6 @@
 
 namespace WebApplication1.ViewModels
 {
-    // DTO này chỉ chứa các trường cần thiết để TẠO MỚI một Product
     public class ProductCreationDto
     {
         [Required(ErrorMessage = "Tên sản phẩm là bắt buộc.")]

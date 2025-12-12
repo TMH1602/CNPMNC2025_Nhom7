@@ -3,24 +3,116 @@
   "WorkspaceRootPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\data\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\services\\vnpayservice2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\vnpayservice2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\services\\vnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\vnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\allcartsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\allcartsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\cartadditionitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\cartadditionitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\cartdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\cartdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\cartitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\cartitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\openaichatdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\openaichatdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\orderhistorydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\orderhistorydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\productcreationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\productcreationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\productdeleteddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\productdeleteddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\productuploaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\productuploaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\viewmodels\\userinputdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\viewmodels\\userinputdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\services\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\services\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\controllers\\restaurantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\restaurantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\controllers\\vnpaycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\vnpaycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\data\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|c:\\users\\lenovo\\documents\\github\\cnpmnc2025_nhom7\\backend\\webapplication1\\webapplication1\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA1DBC16-4720-4C0D-AC85-B0BA0EF5C031}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\models\\orderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +122,290 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 21,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "VnPayService2.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Services\\VnPayService2.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\VnPayService2.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Services\\VnPayService2.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\VnPayService2.cs",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAowIcAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:56:10.717Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "VnPayService.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Services\\VnPayService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\VnPayService.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Services\\VnPayService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\VnPayService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:56:10.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AllCartsDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\AllCartsDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\AllCartsDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\AllCartsDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\AllCartsDto.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:56:00.994Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CartAdditionItemDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartAdditionItemDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\CartAdditionItemDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartAdditionItemDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\CartAdditionItemDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:54.874Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CartDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\CartDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\CartDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:49.385Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CartItemDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartItemDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\CartItemDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\CartItemDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\CartItemDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:45.052Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "OrderHistoryDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OrderHistoryDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\OrderHistoryDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OrderHistoryDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\OrderHistoryDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:36.589Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "OrderItemDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OrderItemDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\OrderItemDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OrderItemDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\OrderItemDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:35.955Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ProductDeletedDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductDeletedDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\ProductDeletedDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductDeletedDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\ProductDeletedDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:21.507Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UserInputDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\UserInputDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\UserInputDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\UserInputDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\UserInputDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:32.336Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ProductUploadDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductUploadDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\ProductUploadDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductUploadDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\ProductUploadDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:55:26.153Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\.gitignore",
+              "RelativeDocumentMoniker": "WebApplication1\\.gitignore",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\.gitignore",
+              "RelativeToolTip": "WebApplication1\\.gitignore",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAsAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-12T18:52:30.84Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ProductCreationDto.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductCreationDto.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\ProductCreationDto.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\ProductCreationDto.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\ProductCreationDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:52:30.163Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "OpenAIChatDTOs.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OpenAIChatDTOs.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\ViewModels\\OpenAIChatDTOs.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\ViewModels\\OpenAIChatDTOs.cs",
+              "RelativeToolTip": "WebApplication1\\ViewModels\\OpenAIChatDTOs.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:52:29.6Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IEmailService.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Services\\IEmailService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Services\\IEmailService.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Services\\IEmailService.cs",
+              "RelativeToolTip": "WebApplication1\\Services\\IEmailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:52:28.282Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Order.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Models\\Order.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Models\\Order.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Models\\Order.cs",
+              "RelativeToolTip": "WebApplication1\\Models\\Order.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:52:27.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "CartController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\CartController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\CartController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\CartController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\CartController.cs",
+              "ViewState": "AgIAABsBAAAAAAAAAAAwwCkBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:50:45.506Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ChatController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\ChatController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\ChatController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\ChatController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\ChatController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEMAAABiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:41:16.109Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\ProductsController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\ProductsController.cs",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAwwIsAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:37:44.351Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "RestaurantController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\RestaurantController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\RestaurantController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\RestaurantController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\RestaurantController.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAgwGYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:36:54.728Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "VnPayController.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Controllers\\VnPayController.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\VnPayController.cs",
+              "RelativeToolTip": "WebApplication1\\Controllers\\VnPayController.cs",
+              "ViewState": "AgIAAJEAAAAAAAAAAAAwwJAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T18:35:32.196Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "WebApplication1\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\appsettings.Development.json",
+              "RelativeToolTip": "WebApplication1\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-12T18:35:06.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\appsettings.json",
+              "RelativeDocumentMoniker": "WebApplication1\\appsettings.json",
+              "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\appsettings.json",
+              "RelativeToolTip": "WebApplication1\\appsettings.json",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABgAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-12T18:33:10.801Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
               "Title": "OrderDetail.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Models\\OrderDetail.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\OrderDetail.cs",
@@ -42,60 +413,55 @@
               "RelativeToolTip": "WebApplication1\\Models\\OrderDetail.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T06:46:28.813Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-09T06:46:28.813Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 25,
               "Title": "DbContext.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Data\\DbContext.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Data\\DbContext.cs",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Data\\DbContext.cs",
               "RelativeToolTip": "WebApplication1\\Data\\DbContext.cs",
-              "ViewState": "AgIAAHQAAAAAAAAAAAAUwAkAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHMAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T06:43:56.226Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-09T06:43:56.226Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 26,
               "Title": "DbInitializer.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Data\\DbInitializer.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Data\\DbInitializer.cs",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Data\\DbInitializer.cs",
               "RelativeToolTip": "WebApplication1\\Data\\DbInitializer.cs",
-              "ViewState": "AgIAAKkAAAAAAAAAAAAQwLkAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAJsAAAAAAAAAAAAqwLkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T06:43:55.196Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-09T06:43:55.196Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 17,
               "Title": "Account.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Models\\Account.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Models\\Account.cs",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Models\\Account.cs",
               "RelativeToolTip": "WebApplication1\\Models\\Account.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAA2wAcAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T06:43:50.325Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-09T06:43:50.325Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 19,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\LENOVO\\Documents\\GitHub\\CNPMNC2025_Nhom7\\backend\\WebApplication1\\WebApplication1\\Controllers\\AuthController.cs",
               "RelativeToolTip": "WebApplication1\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAACEAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAEcBAAAAAAAAAAAwwFoBAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T06:42:00.098Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-09T06:42:00.098Z"
             }
           ]
         }
