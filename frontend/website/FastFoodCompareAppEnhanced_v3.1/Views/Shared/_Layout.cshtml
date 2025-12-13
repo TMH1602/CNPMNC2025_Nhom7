@@ -408,7 +408,7 @@
 
             // 3. Mã hóa username (quan trọng)
             const encodedUser = encodeURIComponent(user);
-            const apiUrl = `https://localhost:7132/api/Cart/${encodedUser}`;
+            const apiUrl = `http://localhost:7132/api/Cart/${encodedUser}`;
 
             try {
                 const response = await fetch(apiUrl, {

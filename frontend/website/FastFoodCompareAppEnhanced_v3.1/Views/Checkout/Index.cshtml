@@ -127,10 +127,10 @@
         // *** SỬA 3: MÃ HÓA USERNAME ĐỂ DÙNG TRONG URL ***
         const encodedUsername = encodeURIComponent(username);
 
-        const USER_API_URL = `https://localhost:7132/api/Auth/account/${encodedUsername}`;
-        const CART_API_URL = `https://localhost:7132/api/Cart/${encodedUsername}`;
-        const CHECKOUT_API_URL = `https://localhost:7132/api/Cart/checkout?username=${encodedUsername}`;
-        const VNPAY_API_BASE_URL = 'https://localhost:7132/api/VnPay/CreatePayment';
+        const USER_API_URL = `http://localhost:7132/api/Auth/account/${encodedUsername}`;
+        const CART_API_URL = `http://localhost:7132/api/Cart/${encodedUsername}`;
+        const CHECKOUT_API_URL = `http://localhost:7132/api/Cart/checkout?username=${encodedUsername}`;
+        const VNPAY_API_BASE_URL = 'http://localhost:7132/api/VnPay/CreatePayment';
 
         // *** SỬA 4: TẠO HEADER CHUNG ĐỂ GỬI TOKEN ***
         const authHeader = {

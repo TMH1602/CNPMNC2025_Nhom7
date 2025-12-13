@@ -156,11 +156,11 @@
         const token = localStorage.getItem("jwtToken"); 
         
         const LOGIN_URL = "@Url.Action("Login", "Account")";
-        const API_BASE_URL = "https://localhost:7132/api/Auth";
+        const API_BASE_URL = "http://localhost:7132/api/Auth";
 
         const encodedUsername = encodeURIComponent(username);
         
-        const HISTORY_API_URL = `https://localhost:7132/api/Cart/history/${encodedUsername}`;
+        const HISTORY_API_URL = `http://localhost:7132/api/Cart/history/${encodedUsername}`;
         const PROFILE_API_URL = `${API_BASE_URL}/account/${encodedUsername}`;
 
         const contentPanel = document.getElementById('content-panel');

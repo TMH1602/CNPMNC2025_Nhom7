@@ -246,7 +246,7 @@
 <script>
     const LOCAL_CART_KEY = 'frontend_cart'; // Key cho giỏ hàng local
     const MENU_LOGIN_URL = 'Account/login'; 
-    const CART_ADD_API_URL = 'https://localhost:7132/api/Cart/add';
+    const CART_ADD_API_URL = 'http://localhost:7132/api/Cart/add';
     
     // Biến lưu trữ toàn bộ dữ liệu menu đã lọc (isActive: true)
     let activeMenuItems = []; 
@@ -290,7 +290,7 @@
         }
 
         const encodedUser = encodeURIComponent(user);
-        const apiUrl = `https://localhost:7132/api/Cart/${encodedUser}`; // Mã hóa user
+        const apiUrl = `http://localhost:7132/api/Cart/${encodedUser}`; // Mã hóa user
 
         try {
             const response = await fetch(apiUrl, {
@@ -618,7 +618,7 @@
         }
 
         // --- Code Chatbot (Giữ nguyên) ---
-        const CHAT_API_URL = 'https://localhost:7132/api/Chat/Send';
+        const CHAT_API_URL = 'http://localhost:7132/api/Chat/Send';
             const chatToggleButton = document.getElementById("chat-toggle-button");
             const chatWindow = document.getElementById("chat-window");
             const chatCloseButton = document.getElementById("chat-close-button");
@@ -735,7 +735,7 @@
         });
 
         // --- Tải danh sách sản phẩm (Có lọc isActive) ---
-        fetch('https://localhost:7132/api/Menu')
+        fetch('http://localhost:7132/api/Menu')
             .then(response => {
                 if (!response.ok) throw new Error('Lỗi kết nối API.');
                 return response.json();
