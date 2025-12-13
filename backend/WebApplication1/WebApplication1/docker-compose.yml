@@ -1,0 +1,9 @@
+version: '3.4'
+services:
+  my-api:
+    build: .
+    image: lamdinh17/fastfood-api:v1
+    ports:
+      - "7132:8080"
+    env_file:
+      - .env
