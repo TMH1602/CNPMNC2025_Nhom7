@@ -85,6 +85,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
+        var context = services.GetRequiredService<WebApplication1.Data.ApplicationDbContext>(); // <--- Sửa lại namespace cho đúng với project của bạn
+        context.Database.Migrate();
         DbInitializer.Initialize(services);
     }
     catch (Exception ex)
@@ -100,7 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 
 app.UseCors("AllowFrontendOrigin");

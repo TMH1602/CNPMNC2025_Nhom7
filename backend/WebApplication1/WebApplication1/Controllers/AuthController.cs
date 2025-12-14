@@ -11,6 +11,8 @@ using BCrypt.Net;
 using Microsoft.AspNetCore.Authorization; 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Memory;
+using WebApplication1.Services;
+using CloudinaryDotNet.Actions;
 namespace MyWebApiWithSwagger.Controllers
 {
 
@@ -21,13 +23,15 @@ namespace MyWebApiWithSwagger.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly IMemoryCache _cache;
+        private readonly IEmailService _emailService;
         public AuthController(ApplicationDbContext context,
                             IConfiguration config,
-                            IMemoryCache cache) 
+                            IMemoryCache cache,IEmailService emailService) 
         {
             _context = context;
             _config = config;
-            _cache = cache; 
+            _cache = cache;
+            _emailService = emailService;
         }
 
 
@@ -233,7 +237,7 @@ namespace MyWebApiWithSwagger.Controllers
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
-
+            await SendConfirmationEmail(newUser);
             var response = new UserAccountResponse
             {
                 UserId = newUser.Id,
@@ -405,7 +409,29 @@ namespace MyWebApiWithSwagger.Controllers
 
             return Ok(new DeleteAccountResponse { IsSuccess = true, Message = "Tài khoản của bạn đã được xóa thành công. 👋" });
         }
+        private async Task SendConfirmationEmail(User user)
+        {
+            if (!string.IsNullOrEmpty(user.Email))
+            {
+                string emailSubject = $"Chào mừng bạn đã đến với chúng tôi!!";
+                string emailBody = CreateOrderConfirmationEmailBody(user);
 
+                await _emailService.SendEmailAsync(user.Email, emailSubject, emailBody);
+            }
+        }
+        private string CreateOrderConfirmationEmailBody(User user)
+        {
+            return $@"
+                <html>
+                <body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
+                    <div style='max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 8px;'>
+                        <h1 style='color: #4CAF50; text-align: center;'>Chúng mình xin chào bạn {user.Username}!</h1>
+                        <p>Cảm ơn bạn đã tin tưởng và đăng ký tại Công ty chúng tôi chúc các bạn có trải nghiệm mua sắm thật tuyệt vời.</p>
+                        <p>Trân trọng,<br>Đội ngũ hỗ trợ.</p>
+                    </div>
+                </body>
+                </html>";
+        }
         private string GenerateJwtToken(User user, DateTime expiryTime)
         {
             var securityKey = new SymmetricSecurityKey(
