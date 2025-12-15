@@ -75,7 +75,7 @@ namespace WebApplication1.Services
             // Đảm bảo không có dấu và xử lý lỗi encoding trước khi hash
             string encodedOrderInfo = HttpUtility.UrlEncode(orderInfo, Encoding.GetEncoding("iso-8859-1"));
 
-            string expireDate = DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss");
+            string expireDate = DateTime.Now.AddHours(31).ToString("yyyyMMddHHmmss");
 
             // 2. Chuẩn bị tham số (SortedList tự động sắp xếp A-Z cho Hash)
             var vnpParams = new SortedList<string, string>
